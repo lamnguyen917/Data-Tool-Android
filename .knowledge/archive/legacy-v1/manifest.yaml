@@ -1,0 +1,37 @@
+# Registry of knowledge entries (processed layer)
+
+version: 1
+updated: 2026-07-17
+
+entries:
+  - id: unity-crawl
+    title: Unity Asset Store — crawl knowledge
+    status: verified
+    processed: processed/unity-asset-store.md
+    raw: raw/unity-asset-store-observations.md
+    index:
+      - index/by-id.yaml
+      - index/by-tag.yaml
+    tags:
+      - unity
+      - asset-store
+      - crawl
+      - graphql
+      - html
+      - redirect
+
+  - id: amazon-book-crawl
+    title: Amazon — book product crawl knowledge
+    status: verified
+    processed: processed/amazon-book.md
+    raw: raw/amazon-book-observations.md
+    index:
+      - index/by-id.yaml
+      - index/by-tag.yaml
+    tags:
+      - amazon
+      - books
+      - crawl
+      - html
+      - asin
+      - isbn

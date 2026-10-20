@@ -1,0 +1,2 @@
+- All text and label must be written in English
+- All comments must be written in English

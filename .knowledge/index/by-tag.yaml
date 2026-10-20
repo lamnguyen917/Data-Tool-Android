@@ -1,0 +1,39 @@
+# Wiki index (by tag)
+# AI: pick a tag → follow `ids` → resolve paths in `by-id.yaml`.
+
+unity:
+  ids: [unity-crawl]
+asset-store:
+  ids: [unity-crawl]
+amazon:
+  ids: [amazon-book-crawl]
+books:
+  ids: [amazon-book-crawl]
+asin:
+  ids: [amazon-book-crawl]
+isbn:
+  ids: [amazon-book-crawl]
+steam:
+  ids: [steam-crawl]
+store:
+  ids: [steam-crawl]
+appid:
+  ids: [steam-crawl]
+igdb:
+  ids: [igdb-crawl]
+games:
+  ids: [igdb-crawl, steam-crawl]
+slug:
+  ids: [igdb-crawl]
+api:
+  ids: [igdb-crawl]
+json:
+  ids: [steam-crawl, igdb-crawl]
+crawl:
+  ids: [unity-crawl, amazon-book-crawl, steam-crawl, igdb-crawl]
+graphql:
+  ids: [unity-crawl]
+html:
+  ids: [unity-crawl, amazon-book-crawl, steam-crawl]
+redirect:
+  ids: [unity-crawl]

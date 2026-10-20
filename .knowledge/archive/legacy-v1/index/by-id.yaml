@@ -1,0 +1,28 @@
+# Knowledge index (by id)
+# AI: resolve `id` → open `path` under `.knowledge/`.
+
+unity-crawl:
+  title: Unity Asset Store — crawl knowledge
+  path: processed/unity-asset-store.md
+  raw: raw/unity-asset-store-observations.md
+  status: verified
+  summary: >
+    HTML crawl via /packages/unknown/{id} redirects; parse embedded JSON +
+    ld+json; GraphQL unusable without browser CSRF.
+  open_when:
+    - asset store crawl
+    - package id resolve
+    - graphql csrf
+
+amazon-book-crawl:
+  title: Amazon — book product crawl knowledge
+  path: processed/amazon-book.md
+  raw: raw/amazon-book-observations.md
+  status: verified
+  summary: >
+    HTML crawl via /dp/{ASIN}; slug optional; parse productTitle, bylineInfo,
+    detailBullets; watch for bot-block pages.
+  open_when:
+    - amazon book crawl
+    - asin isbn resolve
+    - amazon dp url

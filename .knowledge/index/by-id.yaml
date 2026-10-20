@@ -1,0 +1,58 @@
+# Wiki index (by id)
+# AI: resolve `id` → open `path` under `.knowledge/`.
+
+unity-crawl:
+  title: Unity Asset Store — crawl
+  path: pages/unity-asset-store-crawl.md
+  source: sources/unity-asset-store-observations.md
+  status: verified
+  summary: >
+    HTML crawl via /packages/unknown/{id} redirects; parse embedded JSON +
+    ld+json; GraphQL unusable without browser CSRF.
+  open_when:
+    - asset store crawl
+    - package id resolve
+    - graphql csrf
+
+amazon-book-crawl:
+  title: Amazon — book product crawl
+  path: pages/amazon-book-crawl.md
+  source: sources/amazon-book-observations.md
+  status: verified
+  summary: >
+    HTML crawl via /dp/{ASIN}; slug optional; parse productTitle, bylineInfo,
+    detailBullets; watch for bot-block pages.
+  open_when:
+    - amazon book crawl
+    - asin isbn resolve
+    - amazon dp url
+
+steam-crawl:
+  title: Steam Store — crawl
+  path: pages/steam-store-crawl.md
+  source: sources/steam-store-observations.md
+  status: verified
+  summary: >
+    Prefer /api/appdetails JSON by AppID; slug optional on /app/{id}/;
+    developers/publishers/release from API; Series/Distributor usually empty;
+    keyword search via /api/storesearch.
+  open_when:
+    - steam store crawl
+    - steam appid
+    - steam developer publisher
+    - steam search
+
+igdb-crawl:
+  title: IGDB — crawl
+  path: pages/igdb-crawl.md
+  source: sources/igdb-observations.md
+  status: verified
+  summary: >
+    IGDB API v4 POST /games with Twitch Bearer token; public /games/{slug} URLs;
+    involved_companies for dev/publisher; release_dates; no Distributor field;
+    www HTML blocked by Cloudflare.
+  open_when:
+    - igdb crawl
+    - igdb slug
+    - igdb api apicalypse
+    - igdb search
