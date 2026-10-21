@@ -1,0 +1,643 @@
+<div id="data-tool-wireframe" class="viz-carousel viz-dotted-background" aria-label="Data Tool main screen wireframe variants">
+  <section data-variant="Focused input" aria-label="Focused input wireframe">
+    <div class="dt-phone" data-phone="focused">
+      <header class="dt-topbar">
+        <div>
+          <span class="dt-eyebrow">DATA TOOL</span>
+          <h2>Collect</h2>
+        </div>
+        <button class="dt-icon-button" type="button" aria-label="Open help" data-tooltip="Help">
+          <i data-lucide="circle-help" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <main class="dt-content">
+        <label class="dt-label" for="focused-source">Data source</label>
+        <select class="dt-select" id="focused-source">
+          <option value="unity">Unity Asset Store</option>
+          <option value="amazon">Amazon Books</option>
+          <option value="steam">Steam Store</option>
+          <option value="igdb">IGDB</option>
+        </select>
+
+        <div class="dt-field-heading">
+          <label class="dt-label" for="focused-input">Product IDs or URLs</label>
+          <span class="dt-count" id="focused-count">3 items</span>
+        </div>
+        <textarea class="dt-textarea" id="focused-input" rows="5" spellcheck="false">96478
+36050
+invalid-item</textarea>
+
+        <div class="dt-actions" aria-label="Input actions">
+          <button type="button" data-action="paste"><i data-lucide="clipboard" aria-hidden="true"></i>Paste</button>
+          <button type="button" data-action="search"><i data-lucide="search" aria-hidden="true"></i>Search</button>
+          <button type="button" data-action="clear"><i data-lucide="trash-2" aria-hidden="true"></i>Clear</button>
+        </div>
+
+        <div class="dt-validation" role="status" aria-live="polite">
+          <span class="dt-status-dot" aria-hidden="true"></span>
+          <span id="focused-validation"><strong>2 ready</strong> · 1 item needs attention</span>
+        </div>
+
+        <section class="dt-queue-preview" aria-label="Queue preview">
+          <div class="dt-section-heading">
+            <h3>Queue preview</h3>
+            <button type="button" data-action="review">Review all</button>
+          </div>
+          <div class="dt-queue-row">
+            <div class="dt-leading-icon"><i data-lucide="package" aria-hidden="true"></i></div>
+            <div class="dt-row-copy">
+              <strong>96478</strong>
+              <span>Unity Asset Store</span>
+            </div>
+            <span class="dt-ready-label">Ready</span>
+          </div>
+          <div class="dt-queue-row dt-invalid-row">
+            <div class="dt-leading-icon"><i data-lucide="triangle-alert" aria-hidden="true"></i></div>
+            <div class="dt-row-copy">
+              <strong>invalid-item</strong>
+              <span>Invalid package ID</span>
+            </div>
+            <button class="dt-small-action" type="button">Edit</button>
+          </div>
+        </section>
+      </main>
+
+      <div class="dt-bottom-action">
+        <div>
+          <span>Ready to process</span>
+          <strong id="focused-ready-count">2 items</strong>
+        </div>
+        <button class="dt-primary-action" type="button" data-action="start">Start processing</button>
+      </div>
+
+      <nav class="dt-bottom-nav" aria-label="Primary navigation">
+        <button class="is-active" type="button" aria-current="page"><i data-lucide="inbox" aria-hidden="true"></i><span>Collect</span></button>
+        <button type="button"><i data-lucide="list-checks" aria-hidden="true"></i><span>Results</span></button>
+        <button type="button"><i data-lucide="settings" aria-hidden="true"></i><span>Settings</span></button>
+      </nav>
+
+      <div class="dt-search-layer" data-search-layer hidden>
+        <header class="dt-overlay-header">
+          <button class="dt-icon-button" type="button" data-action="close-search" aria-label="Close search">
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
+          </button>
+          <h2>Search products</h2>
+        </header>
+        <div class="dt-overlay-content">
+          <label class="dt-label" for="focused-search">Keyword</label>
+          <div class="dt-search-field">
+            <i data-lucide="search" aria-hidden="true"></i>
+            <input id="focused-search" type="search" value="terrain" />
+          </div>
+          <p class="dt-result-count">3 results</p>
+          <label class="dt-search-result">
+            <input type="checkbox" checked />
+            <span><strong>MicroSplat</strong><small>Package 96478</small></span>
+          </label>
+          <label class="dt-search-result">
+            <input type="checkbox" />
+            <span><strong>Terrain Composer 2</strong><small>Package 65563</small></span>
+          </label>
+          <label class="dt-search-result">
+            <input type="checkbox" />
+            <span><strong>Gaia Pro</strong><small>Package 155852</small></span>
+          </label>
+        </div>
+        <div class="dt-overlay-action"><button type="button" data-action="add-search">Add 1 item</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-variant="Queue first" aria-label="Queue first wireframe" hidden>
+    <div class="dt-phone" data-phone="queue">
+      <header class="dt-topbar dt-queue-topbar">
+        <div>
+          <span class="dt-eyebrow">DATA TOOL</span>
+          <h2>Collection queue</h2>
+        </div>
+        <button class="dt-icon-button" type="button" aria-label="Open settings" data-tooltip="Settings">
+          <i data-lucide="sliders-horizontal" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <main class="dt-content">
+        <div class="dt-quick-add">
+          <label class="dt-label" for="queue-source">Source</label>
+          <select class="dt-select" id="queue-source">
+            <option value="steam">Steam Store</option>
+            <option value="unity">Unity Asset Store</option>
+            <option value="amazon">Amazon Books</option>
+            <option value="igdb">IGDB</option>
+          </select>
+          <label class="dt-label" for="queue-input">Add a product</label>
+          <div class="dt-inline-input">
+            <input id="queue-input" type="text" value="606950" aria-describedby="queue-helper" />
+            <button type="button" data-action="queue-add">Add</button>
+          </div>
+          <span class="dt-helper" id="queue-helper">Enter an ID or paste a product URL.</span>
+        </div>
+
+        <div class="dt-section-heading dt-queue-title">
+          <div>
+            <h3>Items</h3>
+            <span class="dt-subtitle" id="queue-subtitle">3 items · Steam Store</span>
+          </div>
+          <button type="button" data-action="queue-search"><i data-lucide="search" aria-hidden="true"></i>Search</button>
+        </div>
+
+        <div class="dt-item-card">
+          <div class="dt-drag-handle" aria-hidden="true"><i data-lucide="grip-vertical"></i></div>
+          <div class="dt-row-copy"><strong>606950</strong><span>Ready to process</span></div>
+          <button class="dt-icon-button" type="button" aria-label="Remove 606950"><i data-lucide="x" aria-hidden="true"></i></button>
+        </div>
+        <div class="dt-item-card">
+          <div class="dt-drag-handle" aria-hidden="true"><i data-lucide="grip-vertical"></i></div>
+          <div class="dt-row-copy"><strong>7510</strong><span>Ready to process</span></div>
+          <button class="dt-icon-button" type="button" aria-label="Remove 7510"><i data-lucide="x" aria-hidden="true"></i></button>
+        </div>
+        <div class="dt-item-card dt-invalid-card">
+          <div class="dt-drag-handle" aria-hidden="true"><i data-lucide="grip-vertical"></i></div>
+          <div class="dt-row-copy"><strong>ABC</strong><span>App ID must contain digits only</span></div>
+          <button class="dt-small-action" type="button">Fix</button>
+        </div>
+
+        <button class="dt-secondary-block" type="button" data-action="import-list">
+          <i data-lucide="list-plus" aria-hidden="true"></i>Import a list
+        </button>
+      </main>
+
+      <div class="dt-bottom-action dt-stacked-action">
+        <div class="dt-action-summary">
+          <span><strong>2</strong> ready</span>
+          <span><strong>1</strong> needs attention</span>
+        </div>
+        <button class="dt-primary-action" type="button" data-action="queue-start">Process 2 items</button>
+      </div>
+
+      <nav class="dt-bottom-nav" aria-label="Primary navigation">
+        <button class="is-active" type="button" aria-current="page"><i data-lucide="inbox" aria-hidden="true"></i><span>Collect</span></button>
+        <button type="button"><i data-lucide="list-checks" aria-hidden="true"></i><span>Results</span></button>
+        <button type="button"><i data-lucide="settings" aria-hidden="true"></i><span>Settings</span></button>
+      </nav>
+    </div>
+  </section>
+</div>
+
+<style>
+  #data-tool-wireframe {
+    --dt-page: light-dark(#eeeeec, #20201f);
+    --dt-surface: light-dark(#ffffff, #111111);
+    --dt-surface-2: light-dark(#f5f5f3, #1d1d1b);
+    --dt-text: light-dark(#1a1a19, #f3f3ef);
+    --dt-muted: light-dark(#6b6b65, #aaa9a2);
+    --dt-line: light-dark(#d5d5d0, #41413d);
+    --dt-strong: light-dark(#242422, #eeeeea);
+    --dt-on-strong: light-dark(#ffffff, #171716);
+    --dt-danger: light-dark(#9a3412, #fdba74);
+    --dt-danger-soft: light-dark(#fff7ed, #2b1b12);
+    --dt-phone-radius: 28px;
+    --dt-space: 16px;
+    color-scheme: light dark;
+    padding: 10px 0 68px;
+  }
+
+  #data-tool-wireframe [data-variant] {
+    min-height: 780px;
+    padding: 14px;
+    display: grid;
+    place-items: start center;
+  }
+
+  #data-tool-wireframe [data-variant][hidden] { display: none !important; }
+
+  #data-tool-wireframe .dt-phone {
+    position: relative;
+    width: min(374px, calc(100% - 4px));
+    height: 744px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--dt-surface);
+    color: var(--dt-text);
+    border: 1px solid var(--dt-line);
+    border-radius: var(--dt-phone-radius);
+    box-shadow: 0 18px 45px light-dark(rgb(0 0 0 / 0.14), rgb(0 0 0 / 0.4));
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  #data-tool-wireframe[data-density="compact"] .dt-phone { --dt-space: 12px; }
+
+  #data-tool-wireframe .dt-topbar {
+    min-height: 78px;
+    padding: 18px var(--dt-space) 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--dt-line);
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe h2,
+  #data-tool-wireframe h3,
+  #data-tool-wireframe p { margin: 0; }
+  #data-tool-wireframe h2 { font-size: 20px; line-height: 1.25; font-weight: 500; }
+  #data-tool-wireframe h3 { font-size: 14px; line-height: 1.3; font-weight: 500; }
+
+  #data-tool-wireframe .dt-eyebrow {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--dt-muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+  }
+
+  #data-tool-wireframe button,
+  #data-tool-wireframe input,
+  #data-tool-wireframe select,
+  #data-tool-wireframe textarea { font: inherit; color: inherit; }
+
+  #data-tool-wireframe button { cursor: inherit; }
+
+  #data-tool-wireframe .dt-icon-button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--dt-text);
+  }
+
+  #data-tool-wireframe .dt-icon-button:hover { background: var(--dt-surface-2); }
+
+  #data-tool-wireframe .dt-content {
+    flex: 1;
+    min-height: 0;
+    padding: var(--dt-space);
+    overflow: hidden;
+  }
+
+  #data-tool-wireframe .dt-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  #data-tool-wireframe .dt-select,
+  #data-tool-wireframe .dt-textarea,
+  #data-tool-wireframe .dt-inline-input input,
+  #data-tool-wireframe .dt-search-field,
+  #data-tool-wireframe .dt-search-field input {
+    border: 1px solid var(--dt-line);
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe .dt-select,
+  #data-tool-wireframe .dt-textarea,
+  #data-tool-wireframe .dt-inline-input input {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  #data-tool-wireframe .dt-select { height: 44px; padding: 0 12px; margin-bottom: 14px; }
+  #data-tool-wireframe .dt-textarea { padding: 10px 12px; resize: none; line-height: 1.5; }
+
+  #data-tool-wireframe .dt-field-heading,
+  #data-tool-wireframe .dt-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  #data-tool-wireframe .dt-count,
+  #data-tool-wireframe .dt-helper,
+  #data-tool-wireframe .dt-subtitle,
+  #data-tool-wireframe .dt-result-count { color: var(--dt-muted); font-size: 12px; }
+
+  #data-tool-wireframe .dt-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  #data-tool-wireframe .dt-actions button,
+  #data-tool-wireframe .dt-section-heading > button,
+  #data-tool-wireframe .dt-secondary-block {
+    min-height: 40px;
+    border: 1px solid var(--dt-line);
+    border-radius: 9px;
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe .dt-actions button,
+  #data-tool-wireframe .dt-section-heading > button,
+  #data-tool-wireframe .dt-secondary-block,
+  #data-tool-wireframe .dt-primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  #data-tool-wireframe .dt-validation {
+    min-height: 42px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 9px;
+    background: var(--dt-surface-2);
+    font-size: 12px;
+  }
+
+  #data-tool-wireframe .dt-status-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--dt-strong);
+  }
+
+  #data-tool-wireframe .dt-queue-preview { margin-top: 14px; }
+  #data-tool-wireframe .dt-section-heading { margin-bottom: 8px; }
+  #data-tool-wireframe .dt-section-heading > button { min-height: 32px; padding: 0 10px; }
+
+  #data-tool-wireframe .dt-queue-row,
+  #data-tool-wireframe .dt-item-card {
+    min-height: 54px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--dt-line);
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe .dt-queue-row:first-of-type { border-radius: 10px 10px 0 0; }
+  #data-tool-wireframe .dt-queue-row + .dt-queue-row { margin-top: -1px; border-radius: 0 0 10px 10px; }
+  #data-tool-wireframe .dt-invalid-row,
+  #data-tool-wireframe .dt-invalid-card { background: var(--dt-danger-soft); }
+
+  #data-tool-wireframe .dt-leading-icon,
+  #data-tool-wireframe .dt-drag-handle {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 8px;
+    background: var(--dt-surface-2);
+    color: var(--dt-muted);
+  }
+
+  #data-tool-wireframe .dt-row-copy { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  #data-tool-wireframe .dt-row-copy strong { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #data-tool-wireframe .dt-row-copy span { color: var(--dt-muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #data-tool-wireframe .dt-invalid-row .dt-row-copy span,
+  #data-tool-wireframe .dt-invalid-card .dt-row-copy span { color: var(--dt-danger); }
+  #data-tool-wireframe .dt-ready-label { color: var(--dt-muted); font-size: 11px; }
+
+  #data-tool-wireframe .dt-small-action {
+    min-height: 34px;
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  #data-tool-wireframe .dt-bottom-action {
+    padding: 10px var(--dt-space);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid var(--dt-line);
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe .dt-bottom-action > div:first-child { display: grid; gap: 1px; }
+  #data-tool-wireframe .dt-bottom-action span { color: var(--dt-muted); font-size: 11px; }
+  #data-tool-wireframe .dt-bottom-action strong { font-size: 13px; font-weight: 500; }
+
+  #data-tool-wireframe .dt-primary-action {
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--dt-strong);
+    color: var(--dt-on-strong);
+  }
+
+  #data-tool-wireframe .dt-primary-action:disabled { opacity: 0.45; }
+
+  #data-tool-wireframe .dt-bottom-nav {
+    min-height: 66px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--dt-line);
+    background: var(--dt-surface);
+  }
+
+  #data-tool-wireframe .dt-bottom-nav button {
+    padding: 8px 4px 7px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3px;
+    border: 0;
+    background: transparent;
+    color: var(--dt-muted);
+    font-size: 11px;
+  }
+
+  #data-tool-wireframe .dt-bottom-nav button.is-active { color: var(--dt-text); font-weight: 500; }
+
+  #data-tool-wireframe .dt-search-layer {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--dt-surface);
+    border-radius: inherit;
+  }
+
+  #data-tool-wireframe .dt-search-layer[hidden] { display: none; }
+
+  #data-tool-wireframe .dt-overlay-header {
+    min-height: 72px;
+    padding: 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--dt-line);
+  }
+
+  #data-tool-wireframe .dt-overlay-content { flex: 1; padding: var(--dt-space); }
+  #data-tool-wireframe .dt-search-field { height: 46px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border-radius: 10px; }
+  #data-tool-wireframe .dt-search-field input { width: 100%; border: 0; outline: 0; background: transparent; }
+  #data-tool-wireframe .dt-result-count { margin: 14px 0 8px; }
+
+  #data-tool-wireframe .dt-search-result {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--dt-line);
+  }
+
+  #data-tool-wireframe .dt-search-result input { width: 18px; height: 18px; }
+  #data-tool-wireframe .dt-search-result span { display: grid; gap: 3px; }
+  #data-tool-wireframe .dt-search-result strong { font-size: 13px; font-weight: 500; }
+  #data-tool-wireframe .dt-search-result small { color: var(--dt-muted); font-size: 11px; }
+  #data-tool-wireframe .dt-overlay-action { padding: 12px var(--dt-space) 22px; border-top: 1px solid var(--dt-line); }
+  #data-tool-wireframe .dt-overlay-action button { width: 100%; min-height: 46px; border: 0; border-radius: 10px; background: var(--dt-strong); color: var(--dt-on-strong); font-weight: 500; }
+
+  #data-tool-wireframe .dt-quick-add {
+    padding: 12px;
+    border: 1px solid var(--dt-line);
+    border-radius: 12px;
+    background: var(--dt-surface-2);
+  }
+
+  #data-tool-wireframe .dt-quick-add .dt-select { margin-bottom: 10px; }
+  #data-tool-wireframe .dt-inline-input { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+  #data-tool-wireframe .dt-inline-input input { min-width: 0; height: 44px; padding: 0 11px; }
+  #data-tool-wireframe .dt-inline-input button { min-width: 68px; border: 0; border-radius: 10px; background: var(--dt-strong); color: var(--dt-on-strong); font-weight: 500; }
+  #data-tool-wireframe .dt-helper { display: block; margin-top: 6px; }
+  #data-tool-wireframe .dt-queue-title { margin: 16px 0 8px; }
+  #data-tool-wireframe .dt-item-card { border-radius: 10px; margin-bottom: 8px; }
+  #data-tool-wireframe .dt-item-card .dt-icon-button { width: 36px; height: 36px; }
+  #data-tool-wireframe .dt-secondary-block { width: 100%; margin-top: 2px; }
+  #data-tool-wireframe .dt-stacked-action { display: grid; }
+  #data-tool-wireframe .dt-stacked-action .dt-primary-action { width: 100%; }
+  #data-tool-wireframe .dt-action-summary { display: flex !important; justify-content: space-between; }
+
+  @media (max-width: 390px) {
+    #data-tool-wireframe { padding-inline: 0; }
+    #data-tool-wireframe [data-variant] { padding-inline: 6px; }
+    #data-tool-wireframe .dt-phone { height: 738px; border-radius: 20px; }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('data-tool-wireframe');
+    const focusedPhone = root.querySelector('[data-phone="focused"]');
+    const queuePhone = root.querySelector('[data-phone="queue"]');
+    const focusedInput = root.querySelector('#focused-input');
+    const focusedSource = root.querySelector('#focused-source');
+    const queueInput = root.querySelector('#queue-input');
+    const queueSource = root.querySelector('#queue-source');
+    const searchLayer = focusedPhone.querySelector('[data-search-layer]');
+    const saved = window.openai?.widgetState?.privateContent || {};
+
+    if (typeof saved.focusedInput === 'string') focusedInput.value = saved.focusedInput;
+    if (typeof saved.focusedSource === 'string') focusedSource.value = saved.focusedSource;
+    if (typeof saved.queueInput === 'string') queueInput.value = saved.queueInput;
+    if (typeof saved.queueSource === 'string') queueSource.value = saved.queueSource;
+
+    function persist() {
+      window.openai?.setWidgetState?.({
+        modelContent: { selectedSource: focusedSource.value },
+        privateContent: {
+          focusedInput: focusedInput.value,
+          focusedSource: focusedSource.value,
+          queueInput: queueInput.value,
+          queueSource: queueSource.value
+        }
+      }).catch(() => {});
+    }
+
+    function lines() {
+      return focusedInput.value.split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+    }
+
+    function renderFocused() {
+      const items = lines();
+      const valid = items.filter(value => /^\d{3,}$/.test(value)).length;
+      const invalid = items.length - valid;
+      root.querySelector('#focused-count').textContent = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
+      root.querySelector('#focused-ready-count').textContent = `${valid} ${valid === 1 ? 'item' : 'items'}`;
+      root.querySelector('#focused-validation').innerHTML = invalid
+        ? `<strong>${valid} ready</strong> · ${invalid} ${invalid === 1 ? 'item needs' : 'items need'} attention`
+        : `<strong>${valid} ready</strong> · All items are valid`;
+      const start = focusedPhone.querySelector('[data-action="start"]');
+      start.disabled = valid === 0;
+      start.textContent = valid ? 'Start processing' : 'Add valid items';
+    }
+
+    focusedInput.addEventListener('input', () => { renderFocused(); persist(); });
+    focusedSource.addEventListener('change', persist);
+    queueInput.addEventListener('input', persist);
+    queueSource.addEventListener('change', persist);
+
+    focusedPhone.addEventListener('click', event => {
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      if (!action) return;
+      if (action === 'paste') focusedInput.value = '96478\n36050\n155852';
+      if (action === 'clear') focusedInput.value = '';
+      if (action === 'search') searchLayer.hidden = false;
+      if (action === 'close-search' || action === 'add-search') searchLayer.hidden = true;
+      if (action === 'add-search') focusedInput.value = `${focusedInput.value.trim()}\n96478`.trim();
+      if (action === 'start') {
+        const button = focusedPhone.querySelector('[data-action="start"]');
+        button.textContent = 'Queued';
+        setTimeout(() => { button.textContent = 'Start processing'; }, 1200);
+      }
+      renderFocused();
+      persist();
+    });
+
+    queuePhone.addEventListener('click', event => {
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      if (action === 'queue-add' && queueInput.value.trim()) {
+        root.querySelector('#queue-subtitle').textContent = '4 items · Steam Store';
+        queueInput.value = '';
+        persist();
+      }
+      if (action === 'queue-start') {
+        const button = queuePhone.querySelector('[data-action="queue-start"]');
+        button.textContent = 'Queue started';
+        setTimeout(() => { button.textContent = 'Process 2 items'; }, 1200);
+      }
+    });
+
+    root.querySelectorAll('.dt-bottom-nav').forEach(nav => {
+      nav.addEventListener('click', event => {
+        const button = event.target.closest('button');
+        if (!button) return;
+        nav.querySelectorAll('button').forEach(item => {
+          item.classList.toggle('is-active', item === button);
+          item.removeAttribute('aria-current');
+        });
+        button.setAttribute('aria-current', 'page');
+      });
+    });
+
+    const design = { cornerRadius: 28, density: 'comfortable' };
+    function renderDesign() {
+      root.style.setProperty('--dt-phone-radius', `${design.cornerRadius}px`);
+      root.dataset.density = design.density;
+    }
+    renderDesign();
+    renderFocused();
+
+    if (globalThis.Tweak) {
+      const tweak = new Tweak({ container: root, onChange: renderDesign });
+      tweak.addSlider(design, 'cornerRadius', { label: 'Device corner radius', min: 8, max: 36, unit: 'px', reference: '--dt-phone-radius' });
+      tweak.addSelect(design, 'density', { label: 'Content density', options: ['comfortable', 'compact'], reference: 'wireframe.density' });
+    }
+  })();
+</script>

@@ -1,15 +1,26 @@
-# Data Tool Mobile — tài liệu dự án
+# Android — trạng thái dự án
 
-Đây là bộ tài liệu dành riêng cho ứng dụng Android native. Mọi luồng sử dụng, kiến trúc và thiết kế giao diện đều lấy thiết bị cảm ứng làm nền tảng.
+Ứng dụng sử dụng **Kotlin**, **Jetpack Compose** và **Material 3**.
 
-## Tài liệu
+## Cấu hình hiện tại
 
-| Tài liệu | Nội dung |
-|----------|----------|
-| [`android/README.md`](./android/README.md) | Trạng thái mã nguồn và quy ước cập nhật tài liệu |
-| [`android/01-product-overview.md`](./android/01-product-overview.md) | Mục tiêu sản phẩm và luồng nghiệp vụ mobile |
-| [`android/02-architecture.md`](./android/02-architecture.md) | Kiến trúc Android mục tiêu, dữ liệu và xử lý nền |
-| [`android/03-ui-design.md`](./android/03-ui-design.md) | Điều hướng, màn hình và quy tắc tương tác mobile |
-| [`.knowledge/`](../.knowledge/) | Kiến thức kỹ thuật độc lập nền tảng về các nguồn crawl |
+| Mục | Giá trị |
+|-----|---------|
+| Application ID | `com.elp.datatool` |
+| Module | `app` |
+| Min SDK | 24 |
+| Target / Compile SDK | 37 |
+| Java compatibility | 11 |
 
-Khi hành vi trong mã nguồn thay đổi, cập nhật tài liệu Android tương ứng trong cùng pull request.
+## Trạng thái triển khai
+
+Mã nguồn hiện mới có `MainActivity`, theme và màn hình Compose mẫu. Adapter, lưu trữ, xử lý hàng đợi và các màn hình sản phẩm trong tài liệu dưới đây là **thiết kế mục tiêu**, chưa phải tính năng đã hoàn thành.
+
+## Thứ tự đọc
+
+1. [`01-product-overview.md`](./01-product-overview.md) — phạm vi và luồng nghiệp vụ.
+2. [`02-architecture.md`](./02-architecture.md) — ranh giới các lớp và dữ liệu.
+3. [`03-ui-design.md`](./03-ui-design.md) — đặc tả giao diện mobile.
+4. [`.knowledge/index/by-id.yaml`](../../.knowledge/index/by-id.yaml) — tra cứu cách làm việc với từng nguồn dữ liệu.
+
+Mỗi tính năng chỉ được đánh dấu đã triển khai khi có mã nguồn và kiểm thử tương ứng.
