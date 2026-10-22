@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elp.datatool.domain.model.ProductResult
+import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.repository.ResultRepository
+import com.elp.datatool.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -13,7 +15,12 @@ import kotlinx.coroutines.flow.stateIn
 class ResultDetailViewModel(
     savedStateHandle: SavedStateHandle,
     repository: ResultRepository,
+    private val settings: SettingsRepository,
 ) : ViewModel() {
+
+    /** Text for "Copy details", built from the template in Settings. */
+    fun detailsText(result: ProductResult): String =
+        CopyFormatter.details(result, settings.settings.value.copyDetailsTemplate)
 
     private val key: String = checkNotNull(savedStateHandle[KEY_ARG])
 

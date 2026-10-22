@@ -23,6 +23,8 @@ Giao diện Compose đã được dựng theo wireframe trong [`.visualizations/
 
 Đã có: `UnityAssetStoreAdapter` (`data/adapter/unity`), HTTP client OkHttp (`data/remote`), hàng đợi xử lý `DefaultCollectionQueue` (giới hạn song song, timeout, tự thử lại lỗi tạm thời, hủy, thử lại thủ công), cache theo mã sản phẩm có thời hạn, ảnh bằng Coil. Kiểm thử parser dùng fixture trong `app/src/test/resources/unity`.
 
+Sao chép kết quả: **Copy line** (CSV/TSV, chọn và sắp xếp cột) và **Copy details** (template có placeholder `{title}`, `{sku}`…), cấu hình trong Cài đặt → Copy; logic định dạng ở `domain/copy/CopyFormatter.kt`.
+
 Còn là **thiết kế mục tiêu**: database và DataStore (kết quả, cài đặt đang lưu trong bộ nhớ, mất khi tắt ứng dụng), WorkManager cho hàng đợi bền vững, xuất file.
 
 ## Thứ tự đọc

@@ -1,5 +1,7 @@
 package com.elp.datatool.data.repository
 
+import com.elp.datatool.domain.copy.CopyField
+import com.elp.datatool.domain.copy.LineFormat
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -89,4 +91,7 @@ class InMemorySettingsRepository : SettingsRepository {
     override fun setParallelRequests(value: Int) = state.update { it.copy(parallelRequests = value) }
     override fun setTimeoutSeconds(value: Int) = state.update { it.copy(timeoutSeconds = value) }
     override fun setAutoRetry(enabled: Boolean) = state.update { it.copy(autoRetry = enabled) }
+    override fun setCopyLineFormat(format: LineFormat) = state.update { it.copy(copyLineFormat = format) }
+    override fun setCopyLineFields(fields: List<CopyField>) = state.update { it.copy(copyLineFields = fields) }
+    override fun setCopyDetailsTemplate(template: String) = state.update { it.copy(copyDetailsTemplate = template) }
 }

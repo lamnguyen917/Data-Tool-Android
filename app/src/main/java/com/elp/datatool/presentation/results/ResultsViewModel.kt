@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.ResultStatus
+import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ResultRepository
+import com.elp.datatool.domain.repository.SettingsRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +36,10 @@ sealed interface ResultsEvent {
     data class Deleted(val count: Int) : ResultsEvent
     data class Share(val results: List<ProductResult>) : ResultsEvent
     data object ExportUnavailable : ResultsEvent
+    data class Copy(val text: String, val kind: CopyKind, val count: Int = 1) : ResultsEvent
 }
+
+enum class CopyKind { LINE, DETAILS }
 
 private data class Controls(
     val query: String = "",
@@ -47,6 +52,7 @@ private data class Controls(
 class ResultsViewModel(
     private val repository: ResultRepository,
     private val queue: CollectionQueue,
+    private val settings: SettingsRepository,
 ) : ViewModel() {
 
     private val controls = MutableStateFlow(Controls())
@@ -100,6 +106,34 @@ class ResultsViewModel(
     fun onExportSelected() {
         // TODO: Write the export through the Storage Access Framework once the exporter exists.
         _events.trySend(ResultsEvent.ExportUnavailable)
+    }
+
+    fun onCopyLine(key: String) {
+        val result = repository.get(key) ?: return
+        val current = settings.settings.value
+        _events.trySend(
+            ResultsEvent.Copy(CopyFormatter.line(result, current.copyLineFields, current.copyLineFormat), CopyKind.LINE)
+        )
+    }
+
+    fun onCopyDetails(key: String) {
+        val result = repository.get(key) ?: return
+        _events.trySend(
+            ResultsEvent.Copy(CopyFormatter.details(result, settings.settings.value.copyDetailsTemplate), CopyKind.DETAILS)
+        )
+    }
+
+    /** Copies one line per selected result that has collected data, in the order shown. */
+    fun onCopySelectedLines() {
+        val keys = controls.value.selectedKeys
+        val current = settings.settings.value
+        val selected = uiState.value.visibleResults
+            .filter { it.key in keys && it.status == ResultStatus.COMPLETED }
+        if (selected.isEmpty()) return
+        val text = selected.joinToString("\n") {
+            CopyFormatter.line(it, current.copyLineFields, current.copyLineFormat)
+        }
+        _events.trySend(ResultsEvent.Copy(text, CopyKind.LINE, selected.size))
     }
 
     fun onRetry(key: String) {

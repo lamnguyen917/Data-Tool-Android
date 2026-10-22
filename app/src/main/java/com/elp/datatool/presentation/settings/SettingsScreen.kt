@@ -48,9 +48,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.elp.datatool.BuildConfig
 import com.elp.datatool.R
+import com.elp.datatool.domain.copy.CopyFormatter
+import com.elp.datatool.domain.copy.LineFormat
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.ThemeMode
 import com.elp.datatool.presentation.components.DtTopBar
+import com.elp.datatool.presentation.components.labelRes
 import com.elp.datatool.ui.theme.DataToolTheme
 import com.elp.datatool.ui.theme.EyebrowTextStyle
 import kotlin.math.roundToInt
@@ -62,7 +65,11 @@ private const val MAX_PARALLEL = 8
 private enum class PendingConfirm { CLEAR_CACHE, CLEAR_HISTORY }
 
 @Composable
-fun SettingsRoute(viewModel: SettingsViewModel) {
+fun SettingsRoute(
+    viewModel: SettingsViewModel,
+    onOpenCopyLine: () -> Unit,
+    onOpenCopyDetails: () -> Unit,
+) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -86,6 +93,8 @@ fun SettingsRoute(viewModel: SettingsViewModel) {
         onAutoRetryChange = viewModel::onAutoRetryChange,
         onClearCache = viewModel::onClearCache,
         onClearHistory = viewModel::onClearHistory,
+        onOpenCopyLine = onOpenCopyLine,
+        onOpenCopyDetails = onOpenCopyDetails,
     )
 }
 
@@ -98,6 +107,8 @@ fun SettingsScreen(
     onAutoRetryChange: (Boolean) -> Unit,
     onClearCache: () -> Unit,
     onClearHistory: () -> Unit,
+    onOpenCopyLine: () -> Unit,
+    onOpenCopyDetails: () -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -180,6 +191,28 @@ fun SettingsScreen(
                 Spacer(Modifier.width(12.dp))
                 Switch(checked = settings.autoRetry, onCheckedChange = null)
             }
+
+            SectionHeader(R.string.settings_copy)
+            ActionRow(
+                title = stringResource(R.string.settings_copy_line),
+                description = stringResource(
+                    R.string.settings_copy_line_summary,
+                    stringResource(if (settings.copyLineFormat == LineFormat.CSV) R.string.format_csv else R.string.format_tsv),
+                    settings.copyLineFields.map { stringResource(it.labelRes) }.joinToString(", "),
+                ),
+                onClick = onOpenCopyLine,
+            )
+            ActionRow(
+                title = stringResource(R.string.settings_copy_details),
+                description = stringResource(
+                    if (settings.copyDetailsTemplate == CopyFormatter.DEFAULT_DETAILS_TEMPLATE) {
+                        R.string.settings_copy_details_default
+                    } else {
+                        R.string.settings_copy_details_custom
+                    }
+                ),
+                onClick = onOpenCopyDetails,
+            )
 
             SectionHeader(R.string.settings_local_data)
             ActionRow(
@@ -316,6 +349,8 @@ private fun SettingsScreenPreview() {
             onAutoRetryChange = {},
             onClearCache = {},
             onClearHistory = {},
+            onOpenCopyLine = {},
+            onOpenCopyDetails = {},
         )
     }
 }

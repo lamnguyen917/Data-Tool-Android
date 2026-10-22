@@ -1,5 +1,7 @@
 package com.elp.datatool.domain.repository
 
+import com.elp.datatool.domain.copy.CopyField
+import com.elp.datatool.domain.copy.LineFormat
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ProductResult
@@ -49,4 +51,7 @@ interface SettingsRepository {
     fun setParallelRequests(value: Int)
     fun setTimeoutSeconds(value: Int)
     fun setAutoRetry(enabled: Boolean)
+    fun setCopyLineFormat(format: LineFormat)
+    fun setCopyLineFields(fields: List<CopyField>)
+    fun setCopyDetailsTemplate(template: String)
 }

@@ -1,6 +1,5 @@
 package com.elp.datatool.presentation.results
 
-import android.content.ClipData
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -43,7 +42,6 @@ import coil3.compose.SubcomposeAsyncImage
 import com.elp.datatool.domain.model.ProductAttributes
 import com.elp.datatool.presentation.components.descriptionRes
 import com.elp.datatool.presentation.components.labelRes
-import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -63,6 +61,8 @@ import com.elp.datatool.presentation.components.StatusLabel
 import com.elp.datatool.presentation.components.displayTitle
 import com.elp.datatool.presentation.components.nameRes
 import com.elp.datatool.presentation.components.productIdLabel
+import com.elp.datatool.presentation.components.copyText
+import com.elp.datatool.presentation.components.shouldConfirmCopy
 import com.elp.datatool.presentation.components.toShareText
 import com.elp.datatool.ui.icons.DtIcons
 import com.elp.datatool.ui.theme.CaptionTextStyle
@@ -94,9 +94,8 @@ fun ResultDetailRoute(
         },
         onCopy = { item ->
             scope.launch {
-                val text = item.toShareText(context)
-                clipboard.setClipEntry(ClipEntry(ClipData.newPlainText(item.displayKey(), text)))
-                snackbarHostState.showSnackbar(context.getString(R.string.detail_copied))
+                clipboard.copyText(context.getString(R.string.app_name), viewModel.detailsText(item))
+                if (shouldConfirmCopy) snackbarHostState.showSnackbar(context.getString(R.string.copied_details))
             }
         },
         onOpenLink = { url ->
@@ -318,7 +317,7 @@ private fun DetailActions(canOpenLink: Boolean, onCopy: () -> Unit, onOpenLink: 
                     .weight(1f)
                     .heightIn(min = 46.dp),
             ) {
-                ButtonContent(DtIcons.Copy, stringResource(R.string.action_copy))
+                ButtonContent(DtIcons.FileText, stringResource(R.string.action_copy_details))
             }
             Button(
                 onClick = onOpenLink,
@@ -340,8 +339,6 @@ private fun ButtonContent(icon: ImageVector, label: String) {
     Spacer(Modifier.width(6.dp))
     Text(label)
 }
-
-private fun ProductResult.displayKey(): String = "$productId (${source.id})"
 
 @Preview(showBackground = true, heightDp = 780)
 @Composable

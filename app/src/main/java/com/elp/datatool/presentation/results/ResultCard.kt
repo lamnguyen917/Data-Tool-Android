@@ -7,6 +7,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -62,6 +64,8 @@ fun ResultCard(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onRetry: () -> Unit,
+    onCopyLine: () -> Unit,
+    onCopyDetails: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isError = result.status == ResultStatus.ERROR
@@ -174,8 +178,34 @@ fun ResultCard(
                         )
                     }
                 }
+
+                // Copy actions are hidden in selection mode, where the selection bar copies instead.
+                if (result.status == ResultStatus.COMPLETED && !selectionMode) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    ) {
+                        CopyButton(DtIcons.Copy, stringResource(R.string.action_copy_line), onCopyLine, Modifier.weight(1f))
+                        CopyButton(DtIcons.FileText, stringResource(R.string.action_copy_details), onCopyDetails, Modifier.weight(1f))
+                    }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun CopyButton(icon: ImageVector, label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier.heightIn(min = 40.dp),
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        contentPadding = PaddingValues(horizontal = 8.dp),
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(15.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1)
     }
 }
 

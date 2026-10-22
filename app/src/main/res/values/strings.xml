@@ -23,6 +23,36 @@
     <string name="action_delete">Delete</string>
     <string name="action_copy">Copy</string>
     <string name="action_open_link">Open link</string>
+    <string name="action_copy_line">Copy line</string>
+    <string name="action_copy_details">Copy details</string>
+    <string name="action_reset">Reset to default</string>
+
+    <!-- Copy feedback -->
+    <string name="copied_line">Line copied</string>
+    <string name="copied_details">Details copied</string>
+    <plurals name="copied_lines">
+        <item quantity="one">%d line copied</item>
+        <item quantity="other">%d lines copied</item>
+    </plurals>
+
+    <!-- Copy fields (column names and template placeholders) -->
+    <string name="field_sku">SKU</string>
+    <string name="field_title">Title</string>
+    <string name="field_categories">Categories</string>
+    <string name="field_author">Author</string>
+    <string name="field_url">URL</string>
+    <string name="field_source">Source</string>
+    <string name="field_price">Price</string>
+    <string name="field_rating">Rating</string>
+    <string name="field_version">Version</string>
+    <string name="field_latest_release">Latest release</string>
+    <string name="field_first_published">First published</string>
+    <string name="field_unity_versions">Unity versions</string>
+    <string name="field_file_size">File size</string>
+    <string name="field_asset_count">Assets</string>
+    <string name="field_tags">Tags</string>
+    <string name="field_image_url">Image URL</string>
+    <string name="field_description">Description</string>
 
     <!-- Data sources -->
     <string name="source_unity">Unity Asset Store</string>
@@ -187,7 +217,6 @@
         <item quantity="one">%1$s (%2$d rating)</item>
         <item quantity="other">%1$s (%2$d ratings)</item>
     </plurals>
-    <string name="detail_copied">Copied to clipboard</string>
     <string name="detail_no_app">No app can open this link</string>
     <string name="detail_not_found_title">Result not found</string>
     <string name="detail_not_found_body">This result is no longer available.</string>
@@ -205,6 +234,30 @@
     <string name="settings_timeout_option">%1$ds</string>
     <string name="settings_auto_retry">Retry temporary errors</string>
     <string name="settings_auto_retry_desc">Network and timeout errors are retried automatically.</string>
+    <string name="settings_copy">Copy</string>
+    <string name="settings_copy_line">Copy line format</string>
+    <string name="settings_copy_line_summary">%1$s · %2$s</string>
+    <string name="settings_copy_details">Copy details template</string>
+    <string name="settings_copy_details_default">Default template</string>
+    <string name="settings_copy_details_custom">Custom template</string>
+    <string name="format_csv">CSV</string>
+    <string name="format_tsv">TSV</string>
+    <string name="copy_line_title">Copy line</string>
+    <string name="copy_line_format">Format</string>
+    <string name="copy_line_format_hint">TSV pastes into separate spreadsheet columns. CSV uses commas and quotes values when needed.</string>
+    <string name="copy_line_columns">Columns</string>
+    <string name="copy_line_columns_empty">Add at least one column.</string>
+    <string name="copy_line_available">Available fields</string>
+    <string name="copy_line_move_up">Move %1$s up</string>
+    <string name="copy_line_move_down">Move %1$s down</string>
+    <string name="copy_line_remove">Remove %1$s</string>
+    <string name="copy_line_add">Add %1$s</string>
+    <string name="copy_details_title">Copy details</string>
+    <string name="copy_details_template">Template</string>
+    <string name="copy_details_hint">Placeholders such as {title} are replaced with the result values. Lines whose placeholders are all empty are left out.</string>
+    <string name="copy_details_insert">Insert placeholder</string>
+    <string name="copy_preview">Preview</string>
+    <string name="copy_preview_sample">Using %1$s</string>
     <string name="settings_local_data">Local data</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_clear_cache_desc">Removes cached product pages.</string>

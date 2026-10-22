@@ -18,8 +18,14 @@ object AppViewModelProvider {
         initializer {
             CollectViewModel(container().productSearchRepository, container().collectionQueue)
         }
-        initializer { ResultsViewModel(container().resultRepository, container().collectionQueue) }
-        initializer { ResultDetailViewModel(createSavedStateHandle(), container().resultRepository) }
+        initializer {
+            val container = container()
+            ResultsViewModel(container.resultRepository, container.collectionQueue, container.settingsRepository)
+        }
+        initializer {
+            val container = container()
+            ResultDetailViewModel(createSavedStateHandle(), container.resultRepository, container.settingsRepository)
+        }
         initializer {
             val container = container()
             SettingsViewModel(container.settingsRepository, container.resultRepository, container.responseCache)

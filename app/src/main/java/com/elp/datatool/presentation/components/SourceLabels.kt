@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.elp.datatool.R
+import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.ProductResult
@@ -69,6 +70,28 @@ val FetchErrorKind.descriptionRes: Int
         FetchErrorKind.NOT_FOUND -> R.string.error_not_found_desc
         FetchErrorKind.PARSE -> R.string.error_parse_desc
         FetchErrorKind.UNSUPPORTED -> R.string.error_unsupported_desc
+    }
+
+@get:StringRes
+val CopyField.labelRes: Int
+    get() = when (this) {
+        CopyField.SKU -> R.string.field_sku
+        CopyField.TITLE -> R.string.field_title
+        CopyField.CATEGORIES -> R.string.field_categories
+        CopyField.AUTHOR -> R.string.field_author
+        CopyField.URL -> R.string.field_url
+        CopyField.SOURCE -> R.string.field_source
+        CopyField.PRICE -> R.string.field_price
+        CopyField.RATING -> R.string.field_rating
+        CopyField.VERSION -> R.string.field_version
+        CopyField.LATEST_RELEASE -> R.string.field_latest_release
+        CopyField.FIRST_PUBLISHED -> R.string.field_first_published
+        CopyField.UNITY_VERSIONS -> R.string.field_unity_versions
+        CopyField.FILE_SIZE -> R.string.field_file_size
+        CopyField.ASSET_COUNT -> R.string.field_asset_count
+        CopyField.TAGS -> R.string.field_tags
+        CopyField.IMAGE_URL -> R.string.field_image_url
+        CopyField.DESCRIPTION -> R.string.field_description
     }
 
 /** "Package ID 96478" style label. */

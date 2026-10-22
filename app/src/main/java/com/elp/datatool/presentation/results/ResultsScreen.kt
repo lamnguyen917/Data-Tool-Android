@@ -44,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -59,6 +60,8 @@ import com.elp.datatool.domain.model.ResultStatus
 import com.elp.datatool.presentation.components.BottomActionBar
 import com.elp.datatool.presentation.components.DtTopBar
 import com.elp.datatool.presentation.components.EmptyState
+import com.elp.datatool.presentation.components.copyText
+import com.elp.datatool.presentation.components.shouldConfirmCopy
 import com.elp.datatool.presentation.components.toShareText
 import com.elp.datatool.ui.icons.DtIcons
 import com.elp.datatool.ui.theme.CaptionTextStyle
@@ -73,10 +76,24 @@ fun ResultsRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val clipboard = LocalClipboard.current
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
+                is ResultsEvent.Copy -> {
+                    clipboard.copyText(context.getString(R.string.app_name), event.text)
+                    if (shouldConfirmCopy) snackbarHostState.showSnackbar(
+                        when {
+                            event.kind == CopyKind.DETAILS -> context.getString(R.string.copied_details)
+                            event.count > 1 -> context.resources.getQuantityString(
+                                R.plurals.copied_lines, event.count, event.count
+                            )
+                            else -> context.getString(R.string.copied_line)
+                        }
+                    )
+                }
+
                 is ResultsEvent.Deleted -> snackbarHostState.showSnackbar(
                     context.resources.getQuantityString(R.plurals.results_deleted, event.count, event.count)
                 )
@@ -105,6 +122,9 @@ fun ResultsRoute(
         },
         onCardLongClick = viewModel::onLongPress,
         onRetry = viewModel::onRetry,
+        onCopyLine = viewModel::onCopyLine,
+        onCopyDetails = viewModel::onCopyDetails,
+        onCopySelected = viewModel::onCopySelectedLines,
         onShare = viewModel::onShareSelected,
         onExport = viewModel::onExportSelected,
         onDelete = viewModel::onDeleteSelected,
@@ -122,6 +142,9 @@ fun ResultsScreen(
     onCardClick: (String) -> Unit,
     onCardLongClick: (String) -> Unit,
     onRetry: (String) -> Unit,
+    onCopyLine: (String) -> Unit,
+    onCopyDetails: (String) -> Unit,
+    onCopySelected: () -> Unit,
     onShare: () -> Unit,
     onExport: () -> Unit,
     onDelete: () -> Unit,
@@ -155,6 +178,7 @@ fun ResultsScreen(
             if (state.selectionMode) {
                 SelectionBar(
                     count = state.selectedKeys.size,
+                    onCopy = onCopySelected,
                     onShare = onShare,
                     onExport = onExport,
                     onDelete = { confirmDelete = true },
@@ -206,6 +230,8 @@ fun ResultsScreen(
                     onClick = { onCardClick(result.key) },
                     onLongClick = { onCardLongClick(result.key) },
                     onRetry = { onRetry(result.key) },
+                    onCopyLine = { onCopyLine(result.key) },
+                    onCopyDetails = { onCopyDetails(result.key) },
                     modifier = Modifier.animateItem(),
                 )
             }
@@ -337,6 +363,7 @@ private fun StatusChip(labelRes: Int, count: Int, selected: Boolean, onClick: ()
 @Composable
 private fun SelectionBar(
     count: Int,
+    onCopy: () -> Unit,
     onShare: () -> Unit,
     onExport: () -> Unit,
     onDelete: () -> Unit,
@@ -348,6 +375,7 @@ private fun SelectionBar(
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.weight(1f),
             )
+            SelectionAction(DtIcons.Copy, stringResource(R.string.action_copy), count > 0, onCopy)
             SelectionAction(DtIcons.Share, stringResource(R.string.action_share), count > 0, onShare)
             SelectionAction(DtIcons.Download, stringResource(R.string.action_export), count > 0, onExport)
             SelectionAction(DtIcons.Trash, stringResource(R.string.action_delete), count > 0, onDelete)
@@ -402,6 +430,9 @@ private fun ResultsScreenPreview() {
             onCardClick = {},
             onCardLongClick = {},
             onRetry = {},
+            onCopyLine = {},
+            onCopyDetails = {},
+            onCopySelected = {},
             onShare = {},
             onExport = {},
             onDelete = {},
@@ -432,6 +463,9 @@ private fun ResultsSelectionPreview() {
             onCardClick = {},
             onCardLongClick = {},
             onRetry = {},
+            onCopyLine = {},
+            onCopyDetails = {},
+            onCopySelected = {},
             onShare = {},
             onExport = {},
             onDelete = {},

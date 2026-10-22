@@ -76,6 +76,18 @@ object DtIcons {
     val Check by lazy { icon("Check", "M20 6 9 17l-5-5", strokeWidth = 2.5f) }
     val ChevronDown by lazy { icon("ChevronDown", "m6 9 6 6 6-6") }
     val ChevronRight by lazy { icon("ChevronRight", "m9 18 6-6-6-6") }
+    val ChevronUp by lazy { icon("ChevronUp", "m18 15-6-6-6 6") }
+    val Plus by lazy { icon("Plus", "M5 12h14", "M12 5v14") }
+    val FileText by lazy {
+        icon(
+            "FileText",
+            "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z",
+            "M14 2v4a2 2 0 0 0 2 2h4",
+            "M10 9H8",
+            "M16 13H8",
+            "M16 17H8",
+        )
+    }
     val Sort by lazy { icon("Sort", "m21 16-4 4-4-4", "M17 20V4", "m3 8 4-4 4 4", "M7 4v16") }
     val Image by lazy {
         icon(

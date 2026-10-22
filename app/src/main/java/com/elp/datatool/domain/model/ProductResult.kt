@@ -1,5 +1,9 @@
 package com.elp.datatool.domain.model
 
+import com.elp.datatool.domain.copy.CopyField
+import com.elp.datatool.domain.copy.CopyFormatter
+import com.elp.datatool.domain.copy.LineFormat
+
 /** Normalized metadata collected for one product. */
 data class ProductResult(
     val source: DataSource,
@@ -90,4 +94,7 @@ data class AppSettings(
     val parallelRequests: Int = 3,
     val timeoutSeconds: Int = 30,
     val autoRetry: Boolean = true,
+    val copyLineFormat: LineFormat = CopyFormatter.DEFAULT_LINE_FORMAT,
+    val copyLineFields: List<CopyField> = CopyFormatter.DEFAULT_LINE_FIELDS,
+    val copyDetailsTemplate: String = CopyFormatter.DEFAULT_DETAILS_TEMPLATE,
 )

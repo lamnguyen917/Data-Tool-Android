@@ -39,6 +39,8 @@ import com.elp.datatool.presentation.collect.SearchProductsRoute
 import com.elp.datatool.presentation.results.ResultDetailRoute
 import com.elp.datatool.presentation.results.ResultDetailViewModel
 import com.elp.datatool.presentation.results.ResultsRoute
+import com.elp.datatool.presentation.settings.CopyDetailsSettingsRoute
+import com.elp.datatool.presentation.settings.CopyLineSettingsRoute
 import com.elp.datatool.presentation.settings.SettingsRoute
 import com.elp.datatool.ui.icons.DtIcons
 
@@ -48,6 +50,8 @@ object Routes {
     const val RESULTS = "results"
     const val DETAIL = "results/detail/{${ResultDetailViewModel.KEY_ARG}}"
     const val SETTINGS = "settings"
+    const val COPY_LINE_SETTINGS = "settings/copy-line"
+    const val COPY_DETAILS_SETTINGS = "settings/copy-details"
 
     fun detail(key: String) = "results/detail/${Uri.encode(key)}"
 }
@@ -118,7 +122,23 @@ fun DataToolNavHost(navController: NavHostController = rememberNavController()) 
                 )
             }
             composable(Routes.SETTINGS) {
-                SettingsRoute(viewModel = viewModel(factory = AppViewModelProvider.Factory))
+                SettingsRoute(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    onOpenCopyLine = { navController.navigate(Routes.COPY_LINE_SETTINGS) },
+                    onOpenCopyDetails = { navController.navigate(Routes.COPY_DETAILS_SETTINGS) },
+                )
+            }
+            composable(Routes.COPY_LINE_SETTINGS) {
+                CopyLineSettingsRoute(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(Routes.COPY_DETAILS_SETTINGS) {
+                CopyDetailsSettingsRoute(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    onBack = { navController.popBackStack() },
+                )
             }
         }
     }
