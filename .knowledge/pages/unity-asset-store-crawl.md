@@ -2,7 +2,7 @@
 id: unity-crawl
 title: Unity Asset Store — crawl
 status: verified
-updated: 2026-07-20
+updated: 2026-10-22
 tags:
   - unity
   - asset-store
@@ -10,6 +10,8 @@ tags:
   - graphql
   - html
   - redirect
+  - search
+  - nextjs
 source: ../sources/unity-asset-store-observations.md
 ---
 
@@ -115,11 +117,52 @@ resolve_seed_url(input)
 | Slug / productId | slug / productId |
 | First published | `firstPublishedDate` (or version published date) |
 
-## Keyword search (secondary)
+### Embedded product state (verified 2026-10-22)
 
-- Method: DuckDuckGo HTML `site:assetstore.unity.com/packages {keyword}`
-- Yields `/packages/…-{id}` links → package id + URL (+ slug as a title hint)
-- Fragile; prefer seed URL + redirects when you already have a numeric package id
+```text
+<script>… __component__.ReactDOMrender({ "data": { "ENTITY": { … } } }, document.getElementById("Product/ProductDetailController")) …</script>
+
+data.ENTITY
+├─ Product[{id}]          name, description (HTML), rating{average,count}, originalPrice{finalPrice,currency,isFree},
+│                         mainImage{big,small}, firstPublishedDate, supportedUnityVersions, downloadSize, assetCount,
+│                         publisher / category / currentVersion / popularTags[] → references
+├─ ProductPublisher[{id}] name
+├─ Category[{id}]         longName  ("Tools/Particles & Effects")
+├─ ProductVersion[{id}]   name, publishedDate
+└─ ProductTag[{id}]       name
+```
+
+- A reference is `{"type":"id","id":["ProductPublisher","13035"]}` → `ENTITY.ProductPublisher["13035"]`.
+- Find the JSON argument by bracket matching from `ReactDOMrender(`; do not rely on regex over the whole script.
+- Image URLs are protocol-relative (`//assetstorev1-prd-cdn.unity3d.com/…`) → prefix `https:`.
+
+### Unknown package id
+
+`/packages/unknown/{id}` for a non-existent id returns **200** with the store home page (no redirect, `og:url` = site root, no Product state). Treat "no Product state and no ld+json Product" + non-package `og:url` as **not found**.
+
+## Keyword search
+
+**Primary:** server-rendered search page (verified 2026-10-22).
+
+```text
+GET https://assetstore.unity.com/search?q={keyword}
+→ Next.js page; RSC payload in <script>self.__next_f.push([1,"<chunk>"])</script>
+→ JSON-decode each chunk string, concatenate
+→ first "results":[…] array whose items have uri "assetstore://product/{id}"
+```
+
+| Field | Source |
+|-------|--------|
+| Package id | `raw.permanentid` or suffix of `uri` |
+| Title | `raw.ec_name` / `title` |
+| Publisher | `raw.publisher_name` |
+| Thumbnail | `raw.ec_thumbnails` |
+| Price / rating | `raw.ec_price`, `raw.ec_rating`, `raw.ec_rating_count` |
+
+- One page holds up to 96 results; featured items are mixed in at the top (same as the website).
+- The page is large (~1.3 MB); debounce search-as-you-type.
+
+**Fallback:** DuckDuckGo HTML `site:assetstore.unity.com/packages {keyword}` → `/packages/…-{id}` links. Fragile; only if the search page format changes.
 
 ## GraphQL — dead end (do not retry without new evidence)
 

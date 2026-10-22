@@ -7,8 +7,10 @@ unity-crawl:
   source: sources/unity-asset-store-observations.md
   status: verified
   summary: >
-    HTML crawl via /packages/unknown/{id} redirects; parse embedded JSON +
-    ld+json; GraphQL unusable without browser CSRF.
+    HTML crawl via /packages/unknown/{id} redirects; parse embedded
+    ReactDOMrender ENTITY state + ld+json; unknown id → 200 home page;
+    keyword search via /search?q= RSC payload (Coveo results);
+    GraphQL unusable without browser CSRF.
   open_when:
     - asset store crawl
     - package id resolve

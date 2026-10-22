@@ -1,3 +1,223 @@
 <resources>
     <string name="app_name">Data Tool</string>
+    <string name="eyebrow_data_tool">DATA TOOL</string>
+
+    <!-- Navigation -->
+    <string name="nav_collect">Collect</string>
+    <string name="nav_results">Results</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_paste">Paste</string>
+    <string name="action_search">Search</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_select">Select</string>
+    <string name="action_done">Done</string>
+    <string name="action_share">Share</string>
+    <string name="action_export">Export</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_open_link">Open link</string>
+
+    <!-- Data sources -->
+    <string name="source_unity">Unity Asset Store</string>
+    <string name="source_amazon">Amazon Books</string>
+    <string name="source_steam">Steam Store</string>
+    <string name="source_igdb">IGDB</string>
+    <string name="source_short_unity">UNITY</string>
+    <string name="source_short_amazon">AMAZON</string>
+    <string name="source_short_steam">STEAM</string>
+    <string name="source_short_igdb">IGDB</string>
+    <string name="id_label_unity">Package ID</string>
+    <string name="id_label_amazon">ASIN</string>
+    <string name="id_label_steam">App ID</string>
+    <string name="id_label_igdb">Game ID</string>
+    <string name="invalid_unity">Invalid package ID</string>
+    <string name="invalid_amazon">Enter a 10-character ASIN or product URL</string>
+    <string name="invalid_steam">App ID must contain digits only</string>
+    <string name="invalid_igdb">Enter a game ID, slug or IGDB URL</string>
+    <string name="product_id_format">%1$s %2$s</string>
+
+    <!-- Placeholder messages for features that are not built yet -->
+    <string name="msg_export_unavailable">Export is not available yet</string>
+    <string name="msg_source_unsupported">Collecting from %1$s is not available yet</string>
+
+    <!-- Collection errors: short label and explanation -->
+    <string name="error_network">Network error</string>
+    <string name="error_network_desc">Could not connect. Check the internet connection and retry.</string>
+    <string name="error_timeout">Timed out</string>
+    <string name="error_timeout_desc">The page took too long to load. Retry later or increase the timeout in Settings.</string>
+    <string name="error_rate_limited">Too many requests</string>
+    <string name="error_rate_limited_desc">The site is limiting requests. Wait a moment, then retry.</string>
+    <string name="error_http">Server error</string>
+    <string name="error_http_desc">The site returned an error. Retry later.</string>
+    <string name="error_blocked">Blocked by the site</string>
+    <string name="error_blocked_desc">The site refused the request. Wait a while before retrying.</string>
+    <string name="error_not_found">Not found</string>
+    <string name="error_not_found_desc">No product exists with this ID. Check the ID and collect it again.</string>
+    <string name="error_parse">Unrecognized page</string>
+    <string name="error_parse_desc">The product page format was not recognized.</string>
+    <string name="error_unsupported">Source not supported</string>
+    <string name="error_unsupported_desc">Collecting from this source is not available yet.</string>
+
+    <!-- Collect -->
+    <string name="collect_title">Collect</string>
+    <string name="collect_help">Help</string>
+    <string name="collect_help_title">How to collect</string>
+    <string name="collect_help_body">Choose a data source, then enter one product ID or product URL per line. Use Search to find products by keyword. Items that need attention are listed in the queue preview.</string>
+    <string name="collect_source_label">Data source</string>
+    <string name="collect_input_label">Product IDs or URLs</string>
+    <string name="collect_input_placeholder">One ID or URL per line</string>
+    <string name="collect_validation_empty">Add one product ID or URL per line.</string>
+    <string name="collect_validation_all_valid">All items are valid</string>
+    <string name="collect_ready">%1$d ready</string>
+    <string name="collect_queue_preview">Queue preview</string>
+    <string name="collect_review_all">Review all</string>
+    <string name="collect_show_less">Show less</string>
+    <string name="collect_status_ready">Ready</string>
+    <string name="collect_ready_to_process">Ready to process</string>
+    <string name="collect_start">Start processing</string>
+    <string name="collect_add_valid_items">Add valid items</string>
+    <string name="collect_clipboard_empty">Clipboard is empty</string>
+    <string name="collect_processing">Processing</string>
+    <string name="collect_processing_progress">%1$d of %2$d</string>
+    <string name="collect_cancel">Cancel</string>
+    <string name="collect_cancel_title">Stop processing?</string>
+    <string name="collect_cancel_body">Pending items will not be collected. Items that are already collected are kept.</string>
+    <string name="collect_stop">Stop</string>
+    <string name="collect_finished">Finished</string>
+    <string name="collect_cancelled">Cancelled</string>
+    <string name="collect_summary">%1$d collected · %2$d failed</string>
+    <string name="collect_view_results">View results</string>
+
+    <plurals name="items_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+    <plurals name="collect_validation_attention">
+        <item quantity="one">%d item needs attention</item>
+        <item quantity="other">%d items need attention</item>
+    </plurals>
+
+    <!-- Search products -->
+    <string name="search_title">Search products</string>
+    <string name="search_keyword">Keyword</string>
+    <string name="search_placeholder">Search %1$s</string>
+    <string name="search_clear">Clear search</string>
+    <string name="search_idle_title">Find a product</string>
+    <string name="search_idle_body">Enter a keyword to search %1$s.</string>
+    <string name="search_empty_title">No results</string>
+    <string name="search_empty_body">Try another keyword.</string>
+    <string name="search_error_title">Search failed</string>
+    <string name="search_error_body">Check the connection and try again.</string>
+    <string name="search_unsupported_title">Search not available</string>
+    <string name="search_unsupported_body">Searching %1$s is not available yet.</string>
+    <string name="search_add_none">Select products to add</string>
+
+    <plurals name="search_result_count">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <plurals name="search_add">
+        <item quantity="one">Add %d item</item>
+        <item quantity="other">Add %d items</item>
+    </plurals>
+
+    <!-- Results -->
+    <string name="results_title">Results</string>
+    <string name="results_search_placeholder">Search results</string>
+    <string name="filter_all">All</string>
+    <string name="filter_completed">Completed</string>
+    <string name="filter_errors">Errors</string>
+    <string name="filter_label">%1$s %2$d</string>
+    <string name="sort_newest">Newest</string>
+    <string name="sort_oldest">Oldest</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_error">Error</string>
+    <string name="status_processing">Processing</string>
+    <string name="results_processing_description">Collecting product data…</string>
+    <string name="results_empty_title">No matching results</string>
+    <string name="results_empty_body">Try another keyword or status filter.</string>
+    <string name="results_no_data_title">No results yet</string>
+    <string name="results_no_data_body">Collected products will appear here.</string>
+    <string name="results_go_collect">Go to Collect</string>
+    <string name="results_selected">%1$d selected</string>
+    <string name="results_open_details">Open details</string>
+    <string name="results_delete_title">Delete results?</string>
+    <string name="share_chooser_title">Share results</string>
+
+    <plurals name="results_count">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <plurals name="results_delete_body">
+        <item quantity="one">%d result will be removed from this device.</item>
+        <item quantity="other">%d results will be removed from this device.</item>
+    </plurals>
+    <plurals name="results_deleted">
+        <item quantity="one">%d result deleted</item>
+        <item quantity="other">%d results deleted</item>
+    </plurals>
+
+    <!-- Result details -->
+    <string name="detail_title">Result details</string>
+    <string name="detail_overview">Overview</string>
+    <string name="detail_publisher">Publisher</string>
+    <string name="detail_category">Category</string>
+    <string name="detail_url">Product URL</string>
+    <string name="detail_error">Error</string>
+    <string name="detail_details">Details</string>
+    <string name="attr_price">Price</string>
+    <string name="attr_price_free">Free</string>
+    <string name="attr_rating">Rating</string>
+    <string name="attr_version">Version</string>
+    <string name="attr_latest_release">Latest release</string>
+    <string name="attr_first_published">First published</string>
+    <string name="attr_unity_versions">Unity versions</string>
+    <string name="attr_file_size">File size</string>
+    <string name="attr_asset_count">Assets</string>
+    <string name="attr_tags">Tags</string>
+
+    <plurals name="attr_rating_value">
+        <item quantity="one">%1$s (%2$d rating)</item>
+        <item quantity="other">%1$s (%2$d ratings)</item>
+    </plurals>
+    <string name="detail_copied">Copied to clipboard</string>
+    <string name="detail_no_app">No app can open this link</string>
+    <string name="detail_not_found_title">Result not found</string>
+    <string name="detail_not_found_body">This result is no longer available.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_processing">Processing</string>
+    <string name="settings_parallel">Parallel requests</string>
+    <string name="settings_parallel_value">%1$d at a time</string>
+    <string name="settings_timeout">Request timeout</string>
+    <string name="settings_timeout_option">%1$ds</string>
+    <string name="settings_auto_retry">Retry temporary errors</string>
+    <string name="settings_auto_retry_desc">Network and timeout errors are retried automatically.</string>
+    <string name="settings_local_data">Local data</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_clear_cache_desc">Removes cached product pages.</string>
+    <string name="settings_clear_cache_confirm">Clear cache?</string>
+    <string name="settings_clear_cache_confirm_body">Cached product pages will be removed. Collected results are kept.</string>
+    <string name="settings_cache_cleared">Cache cleared</string>
+    <string name="settings_clear_history">Clear history</string>
+    <string name="settings_clear_history_desc">Deletes all collected results.</string>
+    <string name="settings_clear_history_confirm">Clear history?</string>
+    <string name="settings_clear_history_confirm_body">All collected results on this device will be deleted. This cannot be undone.</string>
+    <string name="settings_history_cleared">History cleared</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_licenses">Open-source licenses</string>
+    <string name="settings_licenses_desc">Icons from Lucide (ISC license)</string>
 </resources>

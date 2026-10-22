@@ -14,7 +14,16 @@
 
 ## Trạng thái triển khai
 
-Mã nguồn hiện mới có `MainActivity`, theme và màn hình Compose mẫu. Adapter, lưu trữ, xử lý hàng đợi và các màn hình sản phẩm trong tài liệu dưới đây là **thiết kế mục tiêu**, chưa phải tính năng đã hoàn thành.
+Giao diện Compose đã được dựng theo wireframe trong [`.visualizations/wireframe.html`](../.visualizations/wireframe.html): **Thu thập**, **Tìm sản phẩm**, **Kết quả** (card, lọc, chọn nhiều), **Chi tiết kết quả** và **Cài đặt**, cùng điều hướng và theme sáng/tối.
+
+| Nguồn | Tìm kiếm | Thu thập |
+|-------|----------|----------|
+| Unity Asset Store | ✅ `/search?q=` (RSC payload) | ✅ `/packages/unknown/{id}` + embedded state / ld+json |
+| Amazon Books, Steam Store, IGDB | — | — (báo “not available yet”) |
+
+Đã có: `UnityAssetStoreAdapter` (`data/adapter/unity`), HTTP client OkHttp (`data/remote`), hàng đợi xử lý `DefaultCollectionQueue` (giới hạn song song, timeout, tự thử lại lỗi tạm thời, hủy, thử lại thủ công), cache theo mã sản phẩm có thời hạn, ảnh bằng Coil. Kiểm thử parser dùng fixture trong `app/src/test/resources/unity`.
+
+Còn là **thiết kế mục tiêu**: database và DataStore (kết quả, cài đặt đang lưu trong bộ nhớ, mất khi tắt ứng dụng), WorkManager cho hàng đợi bền vững, xuất file.
 
 ## Thứ tự đọc
 
