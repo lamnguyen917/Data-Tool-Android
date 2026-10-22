@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="776" viewBox="0 0 375 776" role="img" aria-label="Results screen, visual cards variant">
+  <title>Data Tool – Results screen, visual cards variant</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+  </style>
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+    <symbol id="i-layout-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+        <defs>
+          <clipPath id="clip-r1"><rect x="0.5" y="0.5" width="374" height="775" rx="28"/></clipPath>
+          <clipPath id="clip-r1-list"><rect x="0" y="222" width="375" height="488"/></clipPath>
+        </defs>
+        <g clip-path="url(#clip-r1)">
+          <rect class="bg" width="375" height="776"/>
+
+          <!-- Top bar -->
+          <text class="eb" x="16" y="32">DATA TOOL</text>
+          <text class="s20 w5" x="16" y="56">Results</text>
+          <text class="s12 w5 end" x="351" y="47">Select</text>
+          <line class="hr" x1="0" y1="76.5" x2="375" y2="76.5"/>
+
+          <!-- Search -->
+          <rect class="card2" x="14.5" y="90.5" width="346" height="43" rx="11"/>
+          <use href="#i-search" class="ic-mu" x="26" y="104" width="16" height="16"/>
+          <text class="s14 mu" x="50" y="117">Search results</text>
+
+          <!-- Filters -->
+          <rect class="strong" x="14.5" y="144.5" width="53" height="35" rx="17.5"/>
+          <text class="s12 on mid" x="41" y="166">All 4</text>
+          <rect class="card" x="75.5" y="144.5" width="93" height="35" rx="17.5"/>
+          <text class="s12 mid" x="122" y="166">Completed <tspan style="fill:var(--muted)">3</tspan></text>
+          <rect class="card" x="176.5" y="144.5" width="71" height="35" rx="17.5"/>
+          <text class="s12 mid" x="212" y="166">Errors <tspan style="fill:var(--muted)">1</tspan></text>
+
+          <!-- List heading -->
+          <text class="s12 mu" x="14" y="209">4 results</text>
+          <use href="#i-sort" class="ic-mu" x="300" y="198" width="14" height="14"/>
+          <text class="s12 w5 mu" x="318" y="209">Newest</text>
+
+          <g clip-path="url(#clip-r1-list)">
+            <!-- Card: MicroSplat -->
+            <path class="bg2" d="M14 236a14 14 0 0 1 14-14h319a14 14 0 0 1 14 14v68H14z"/>
+            <use href="#i-image" class="ic-mu" x="177.5" y="245" width="20" height="20"/>
+            <text class="s10 mu mid" x="187.5" y="283" style="letter-spacing:.12em">UNITY</text>
+            <rect class="frame" x="14.5" y="222.5" width="346" height="221" rx="14"/>
+            <text class="s10 mu" x="26" y="318">Unity Asset Store</text>
+            <text class="s14 w5" x="26" y="336">MicroSplat</text>
+            <use href="#i-check" class="ic-ok" x="285" y="309" width="11" height="11"/>
+            <text class="s10 w5 ok end" x="349" y="318">Completed</text>
+            <text class="s11 mu" x="26" y="356">Terrain shading system with modular features</text>
+            <text class="s11 mu" x="26" y="371">and extensions.</text>
+            <use href="#i-hash" class="ic-mu" x="26" y="384" width="11" height="11"/>
+            <text class="s10 mu" x="41" y="393">96478</text>
+            <use href="#i-user" class="ic-mu" x="84" y="384" width="11" height="11"/>
+            <text class="s10 mu" x="99" y="393">Jason Booth</text>
+            <line class="hr" x1="26" y1="404.5" x2="349" y2="404.5"/>
+            <text class="s10 mu" x="26" y="427">Tools / Terrain</text>
+            <use href="#i-chevron-right" class="ic" x="331" y="416" width="16" height="16"/>
+
+            <!-- Card: Terrain Composer 2 -->
+            <path class="bg2" d="M14 468a14 14 0 0 1 14-14h319a14 14 0 0 1 14 14v68H14z"/>
+            <use href="#i-image" class="ic-mu" x="177.5" y="477" width="20" height="20"/>
+            <text class="s10 mu mid" x="187.5" y="515" style="letter-spacing:.12em">UNITY</text>
+            <rect class="frame" x="14.5" y="454.5" width="346" height="221" rx="14"/>
+            <text class="s10 mu" x="26" y="550">Unity Asset Store</text>
+            <text class="s14 w5" x="26" y="568">Terrain Composer 2</text>
+            <use href="#i-check" class="ic-ok" x="285" y="541" width="11" height="11"/>
+            <text class="s10 w5 ok end" x="349" y="550">Completed</text>
+            <text class="s11 mu" x="26" y="588">Node-based terrain creation and automation</text>
+            <text class="s11 mu" x="26" y="603">toolkit.</text>
+            <use href="#i-hash" class="ic-mu" x="26" y="616" width="11" height="11"/>
+            <text class="s10 mu" x="41" y="625">65563</text>
+            <use href="#i-user" class="ic-mu" x="84" y="616" width="11" height="11"/>
+            <text class="s10 mu" x="99" y="625">Nathaniel Doldersum</text>
+            <line class="hr" x1="26" y1="636.5" x2="349" y2="636.5"/>
+            <text class="s10 mu" x="26" y="659">Tools / Terrain</text>
+            <use href="#i-chevron-right" class="ic" x="331" y="648" width="16" height="16"/>
+
+            <!-- Card: Gaia Pro (partially visible, list scrolls) -->
+            <path class="bg2" d="M14 700a14 14 0 0 1 14-14h319a14 14 0 0 1 14 14v68H14z"/>
+            <rect class="frame" x="14.5" y="686.5" width="346" height="221" rx="14"/>
+          </g>
+
+          <!-- Bottom nav -->
+          <rect class="bg" x="0" y="710" width="375" height="66"/>
+          <line class="hr" x1="0" y1="710.5" x2="375" y2="710.5"/>
+          <use href="#i-inbox" class="ic-mu" x="52.5" y="722" width="20" height="20"/>
+          <text class="s11 mu mid" x="62.5" y="758">Collect</text>
+          <use href="#i-layout-list" class="ic" x="177.5" y="722" width="20" height="20"/>
+          <text class="s11 w5 mid" x="187.5" y="758">Results</text>
+          <use href="#i-settings" class="ic-mu" x="302.5" y="722" width="20" height="20"/>
+          <text class="s11 mu mid" x="312.5" y="758">Settings</text>
+        </g>
+        <rect class="frame" x="0.5" y="0.5" width="374" height="775" rx="28"/>
+      </svg>

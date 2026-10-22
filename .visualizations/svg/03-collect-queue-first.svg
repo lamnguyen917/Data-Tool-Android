@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="744" viewBox="0 0 375 744" role="img" aria-label="Collect screen, queue first variant">
+  <title>Data Tool – Collect screen, queue first variant</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+  </style>
+  <defs>
+    <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4h-7"/><path d="M10 4H3"/><path d="M21 12h-9"/><path d="M8 12H3"/><path d="M21 20h-5"/><path d="M12 20H3"/><path d="M14 2v4"/><path d="M8 10v4"/><path d="M16 18v4"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-list-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="M18 9v6"/><path d="M21 12h-6"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+    <symbol id="i-list-checks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+        <defs><clipPath id="clip-c3"><rect x="0.5" y="0.5" width="374" height="743" rx="28"/></clipPath></defs>
+        <g clip-path="url(#clip-c3)">
+          <rect class="bg" width="375" height="744"/>
+
+          <!-- Top bar -->
+          <text class="eb" x="16" y="32">DATA TOOL</text>
+          <text class="s20 w5" x="16" y="57">Collection queue</text>
+          <use href="#i-sliders" class="ic" x="327" y="30" width="22" height="22"/>
+          <line class="hr" x1="0" y1="78.5" x2="375" y2="78.5"/>
+
+          <!-- Quick add -->
+          <rect class="card2" x="16.5" y="94.5" width="342" height="181" rx="12"/>
+          <text class="s12 w5" x="28" y="120">Source</text>
+          <rect class="card" x="28.5" y="128.5" width="318" height="43" rx="10"/>
+          <text class="s14" x="40" y="155">Steam Store</text>
+          <use href="#i-chevron-down" class="ic-mu" x="319" y="142" width="16" height="16"/>
+          <text class="s12 w5" x="28" y="196">Add a product</text>
+          <rect class="card" x="28.5" y="204.5" width="242" height="43" rx="10"/>
+          <text class="s14" x="40" y="231">606950</text>
+          <rect class="strong" x="279" y="204" width="68" height="44" rx="10"/>
+          <text class="s14 w5 on mid" x="313" y="231">Add</text>
+          <text class="s12 mu" x="28" y="266">Enter an ID or paste a product URL.</text>
+
+          <!-- Items heading -->
+          <text class="s14 w5" x="16" y="306">Items</text>
+          <text class="s12 mu" x="16" y="323">3 items · Steam Store</text>
+          <rect class="card" x="268.5" y="294.5" width="90" height="31" rx="9"/>
+          <use href="#i-search" class="ic" x="282" y="303" width="14" height="14"/>
+          <text class="s12 w5" x="302" y="314">Search</text>
+
+          <!-- Item cards -->
+          <rect class="card" x="16.5" y="340.5" width="342" height="53" rx="10"/>
+          <rect class="bg2" x="26" y="351" width="32" height="32" rx="8"/>
+          <use href="#i-grip" class="ic-mu" x="34" y="359" width="16" height="16"/>
+          <text class="s13 w5" x="68" y="363">606950</text>
+          <text class="s11 mu" x="68" y="378">Ready to process</text>
+          <use href="#i-x" class="ic" x="331" y="359" width="16" height="16"/>
+
+          <rect class="card" x="16.5" y="402.5" width="342" height="53" rx="10"/>
+          <rect class="bg2" x="26" y="413" width="32" height="32" rx="8"/>
+          <use href="#i-grip" class="ic-mu" x="34" y="421" width="16" height="16"/>
+          <text class="s13 w5" x="68" y="425">7510</text>
+          <text class="s11 mu" x="68" y="440">Ready to process</text>
+          <use href="#i-x" class="ic" x="331" y="421" width="16" height="16"/>
+
+          <rect class="dcard" x="16.5" y="464.5" width="342" height="53" rx="10"/>
+          <rect class="bg2" x="26" y="475" width="32" height="32" rx="8"/>
+          <use href="#i-grip" class="ic-mu" x="34" y="483" width="16" height="16"/>
+          <text class="s13 w5" x="68" y="487">ABC</text>
+          <text class="s11 dg" x="68" y="502">App ID must contain digits only</text>
+          <text class="s12 w5 end" x="349" y="495">Fix</text>
+
+          <!-- Import -->
+          <rect class="card" x="16.5" y="526.5" width="342" height="39" rx="9"/>
+          <use href="#i-list-plus" class="ic" x="139" y="538" width="16" height="16"/>
+          <text class="s12 w5" x="161" y="550">Import a list</text>
+
+          <!-- Bottom action (stacked) -->
+          <line class="hr" x1="0" y1="590.5" x2="375" y2="590.5"/>
+          <text class="s11 mu" x="16" y="613"><tspan class="s13 w5" style="fill:var(--text)">2</tspan> ready</text>
+          <text class="s11 mu end" x="359" y="613"><tspan class="s13 w5" style="fill:var(--text)">1</tspan> needs attention</text>
+          <rect class="strong" x="16" y="624" width="343" height="44" rx="10"/>
+          <text class="s12 w5 on mid" x="187.5" y="650">Process 2 items</text>
+
+          <!-- Bottom nav -->
+          <line class="hr" x1="0" y1="678.5" x2="375" y2="678.5"/>
+          <use href="#i-inbox" class="ic" x="52.5" y="690" width="20" height="20"/>
+          <text class="s11 w5 mid" x="62.5" y="726">Collect</text>
+          <use href="#i-list-checks" class="ic-mu" x="177.5" y="690" width="20" height="20"/>
+          <text class="s11 mu mid" x="187.5" y="726">Results</text>
+          <use href="#i-settings" class="ic-mu" x="302.5" y="690" width="20" height="20"/>
+          <text class="s11 mu mid" x="312.5" y="726">Settings</text>
+        </g>
+        <rect class="frame" x="0.5" y="0.5" width="374" height="743" rx="28"/>
+      </svg>

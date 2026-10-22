@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="744" viewBox="0 0 375 744" role="img" aria-label="Collect screen, product search overlay">
+  <title>Data Tool – Collect screen, product search overlay</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+  </style>
+  <defs>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  </defs>
+        <defs><clipPath id="clip-c2"><rect x="0.5" y="0.5" width="374" height="743" rx="28"/></clipPath></defs>
+        <g clip-path="url(#clip-c2)">
+          <rect class="bg" width="375" height="744"/>
+
+          <!-- Header -->
+          <use href="#i-arrow-left" class="ic" x="22" y="25" width="22" height="22"/>
+          <text class="s20 w5" x="58" y="43">Search products</text>
+          <line class="hr" x1="0" y1="72.5" x2="375" y2="72.5"/>
+
+          <!-- Keyword field -->
+          <text class="s12 w5" x="16" y="102">Keyword</text>
+          <rect class="card" x="16.5" y="110.5" width="342" height="45" rx="10"/>
+          <use href="#i-search" class="ic-mu" x="28" y="125" width="16" height="16"/>
+          <text class="s14" x="52" y="138">terrain</text>
+
+          <text class="s12 mu" x="16" y="182">3 results</text>
+
+          <!-- Result rows -->
+          <rect class="strong" x="16" y="210" width="18" height="18" rx="4"/>
+          <use href="#i-check" class="ic-on" x="18" y="212" width="14" height="14"/>
+          <text class="s13 w5" x="46" y="214">MicroSplat</text>
+          <text class="s11 mu" x="46" y="230">Package 96478</text>
+          <line class="hr" x1="16" y1="248.5" x2="359" y2="248.5"/>
+
+          <rect class="card" x="16.5" y="268.5" width="17" height="17" rx="4"/>
+          <text class="s13 w5" x="46" y="272">Terrain Composer 2</text>
+          <text class="s11 mu" x="46" y="288">Package 65563</text>
+          <line class="hr" x1="16" y1="306.5" x2="359" y2="306.5"/>
+
+          <rect class="card" x="16.5" y="326.5" width="17" height="17" rx="4"/>
+          <text class="s13 w5" x="46" y="330">Gaia Pro</text>
+          <text class="s11 mu" x="46" y="346">Package 155852</text>
+          <line class="hr" x1="16" y1="364.5" x2="359" y2="364.5"/>
+
+          <!-- Bottom action -->
+          <line class="hr" x1="0" y1="666.5" x2="375" y2="666.5"/>
+          <rect class="strong" x="16" y="678" width="343" height="46" rx="10"/>
+          <text class="s14 w5 on mid" x="187.5" y="706">Add 1 item</text>
+        </g>
+        <rect class="frame" x="0.5" y="0.5" width="374" height="743" rx="28"/>
+      </svg>

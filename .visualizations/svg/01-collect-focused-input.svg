@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="744" viewBox="0 0 375 744" role="img" aria-label="Collect screen, focused input variant">
+  <title>Data Tool – Collect screen, focused input variant</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+  </style>
+  <defs>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></symbol>
+    <symbol id="i-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+    <symbol id="i-list-checks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+        <defs><clipPath id="clip-c1"><rect x="0.5" y="0.5" width="374" height="743" rx="28"/></clipPath></defs>
+        <g clip-path="url(#clip-c1)">
+          <rect class="bg" width="375" height="744"/>
+
+          <!-- Top bar -->
+          <text class="eb" x="16" y="32">DATA TOOL</text>
+          <text class="s20 w5" x="16" y="57">Collect</text>
+          <use href="#i-help" class="ic" x="327" y="30" width="22" height="22"/>
+          <line class="hr" x1="0" y1="78.5" x2="375" y2="78.5"/>
+
+          <!-- Data source -->
+          <text class="s12 w5" x="16" y="108">Data source</text>
+          <rect class="card" x="16.5" y="116.5" width="342" height="43" rx="10"/>
+          <text class="s14" x="28" y="143">Unity Asset Store</text>
+          <use href="#i-chevron-down" class="ic-mu" x="331" y="130" width="16" height="16"/>
+
+          <!-- Product IDs -->
+          <text class="s12 w5" x="16" y="186">Product IDs or URLs</text>
+          <text class="s12 mu end" x="359" y="186">3 items</text>
+          <rect class="card" x="16.5" y="194.5" width="342" height="121" rx="10"/>
+          <text class="s14" x="28" y="219">96478</text>
+          <text class="s14" x="28" y="240">36050</text>
+          <text class="s14" x="28" y="261">invalid-item</text>
+          <line class="hr" x1="28" y1="266" x2="28" y2="282" style="stroke:var(--text)"/>
+
+          <!-- Input actions -->
+          <rect class="card" x="16.5" y="326.5" width="108" height="39" rx="9"/>
+          <use href="#i-clipboard" class="ic" x="44" y="338" width="16" height="16"/>
+          <text class="s12 w5" x="66" y="350">Paste</text>
+          <rect class="card" x="133.5" y="326.5" width="108" height="39" rx="9"/>
+          <use href="#i-search" class="ic" x="157" y="338" width="16" height="16"/>
+          <text class="s12 w5" x="179" y="350">Search</text>
+          <rect class="card" x="250.5" y="326.5" width="108" height="39" rx="9"/>
+          <use href="#i-trash" class="ic" x="279" y="338" width="16" height="16"/>
+          <text class="s12 w5" x="301" y="350">Clear</text>
+
+          <!-- Validation -->
+          <rect class="bg2" x="16" y="376" width="343" height="42" rx="9"/>
+          <circle class="dot" cx="32" cy="397" r="4"/>
+          <text class="s12" x="44" y="401"><tspan class="w6">2 ready</tspan> · 1 item needs attention</text>
+
+          <!-- Queue preview -->
+          <text class="s14 w5" x="16" y="453">Queue preview</text>
+          <rect class="card" x="279.5" y="432.5" width="79" height="31" rx="9"/>
+          <text class="s12 w5 mid" x="319" y="452">Review all</text>
+
+          <clipPath id="clip-c1-rows"><rect x="16" y="474" width="343" height="107" rx="10"/></clipPath>
+          <g clip-path="url(#clip-c1-rows)">
+            <rect class="bg" x="16" y="474" width="343" height="54"/>
+            <rect class="dsoft" x="16" y="527" width="343" height="54"/>
+          </g>
+          <rect class="frame" x="16.5" y="474.5" width="342" height="106" rx="10"/>
+          <line class="hr" x1="16" y1="527.5" x2="359" y2="527.5"/>
+
+          <rect class="bg2" x="26" y="485" width="32" height="32" rx="8"/>
+          <use href="#i-package" class="ic-mu" x="34" y="493" width="16" height="16"/>
+          <text class="s13 w5" x="68" y="497">96478</text>
+          <text class="s11 mu" x="68" y="512">Unity Asset Store</text>
+          <text class="s11 mu end" x="349" y="505">Ready</text>
+
+          <rect class="bg2" x="26" y="538" width="32" height="32" rx="8"/>
+          <use href="#i-alert" class="ic-mu" x="34" y="546" width="16" height="16"/>
+          <text class="s13 w5" x="68" y="550">invalid-item</text>
+          <text class="s11 dg" x="68" y="565">Invalid package ID</text>
+          <text class="s12 w5 end" x="349" y="558">Edit</text>
+
+          <!-- Bottom action -->
+          <line class="hr" x1="0" y1="614.5" x2="375" y2="614.5"/>
+          <text class="s11 mu" x="16" y="641">Ready to process</text>
+          <text class="s13 w5" x="16" y="659">2 items</text>
+          <rect class="strong" x="214" y="624" width="145" height="44" rx="10"/>
+          <text class="s12 w5 on mid" x="286.5" y="650">Start processing</text>
+
+          <!-- Bottom nav -->
+          <line class="hr" x1="0" y1="678.5" x2="375" y2="678.5"/>
+          <use href="#i-inbox" class="ic" x="52.5" y="690" width="20" height="20"/>
+          <text class="s11 w5 mid" x="62.5" y="726">Collect</text>
+          <use href="#i-list-checks" class="ic-mu" x="177.5" y="690" width="20" height="20"/>
+          <text class="s11 mu mid" x="187.5" y="726">Results</text>
+          <use href="#i-settings" class="ic-mu" x="302.5" y="690" width="20" height="20"/>
+          <text class="s11 mu mid" x="312.5" y="726">Settings</text>
+        </g>
+        <rect class="frame" x="0.5" y="0.5" width="374" height="743" rx="28"/>
+      </svg>
