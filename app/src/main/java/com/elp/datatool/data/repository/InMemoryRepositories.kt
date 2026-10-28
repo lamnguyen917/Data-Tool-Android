@@ -9,6 +9,8 @@ import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.SearchHit
 import com.elp.datatool.domain.model.ThemeMode
+import com.elp.datatool.domain.model.VerifiedPage
+import com.elp.datatool.domain.repository.BrowserVerifiedSearch
 import com.elp.datatool.domain.repository.ProductSearchRepository
 import com.elp.datatool.domain.repository.ResponseCache
 import com.elp.datatool.domain.repository.ResultRepository
@@ -45,13 +47,27 @@ class InMemoryResultRepository(
     }
 }
 
-/** Routes searches to the adapter of the selected source. */
-class AdapterSearchRepository(adapters: List<SourceAdapter>) : ProductSearchRepository {
+/**
+ * Routes searches to the adapter of the selected source.
+ * [importCookies] receives browser cookies after the user completes a site challenge.
+ */
+class AdapterSearchRepository(
+    adapters: List<SourceAdapter>,
+    private val importCookies: (url: String, cookieHeader: String) -> Unit = { _, _ -> },
+) : ProductSearchRepository {
     private val adapters = adapters.associateBy { it.source }
 
     override suspend fun search(source: DataSource, query: String): List<SearchHit> {
         val adapter = adapters[source] ?: throw FetchException(FetchErrorKind.UNSUPPORTED)
         return adapter.search(query)
+    }
+
+    override suspend fun searchFromVerifiedPage(source: DataSource, page: VerifiedPage): List<SearchHit> {
+        val adapter = adapters[source] as? BrowserVerifiedSearch
+            ?: throw FetchException(FetchErrorKind.UNSUPPORTED)
+        val hits = adapter.searchFromVerifiedPage(page)
+        if (page.cookieHeader.isNotBlank()) importCookies(page.url, page.cookieHeader)
+        return hits
     }
 }
 

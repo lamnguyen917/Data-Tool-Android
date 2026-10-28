@@ -37,9 +37,56 @@ The Rust parser is one of the more complete references: it supports candidate se
 
 ### Current live-search limitation
 
-Live verification with `RHJ-101` on 2026-10-28 found that AV Entertainments redirects `/dvd/search` to `/cart/verifybot`, which requires Google reCAPTCHA. Browser-like headers, an `AVECustID` session cookie, and a same-origin referrer did not remove the challenge. The site also disallows `/dvd/search` in `robots.txt`, so the adapter reports `BLOCKED` and does not attempt a CAPTCHA bypass.
+Live verification with `RHJ-101` on 2026-10-28 found that AV Entertainments redirects `/dvd/search` to `/cart/verifybot`, which requires Google reCAPTCHA. Browser-like headers, an `AVECustID` session cookie, and a same-origin referrer did not remove the challenge. The site also disallows `/dvd/search` in `robots.txt`. The adapter therefore reports `BLOCKED` and never solves or automates the CAPTCHA. Instead, the user can complete it in an in-app browser (see [User-completed verification in WebView](#user-completed-verification-in-webview)).
 
 Direct product collection remains functional. The verified `RHJ-101` URL uses `pro=30719`; an Android live smoke run returned SKU `RHJ-101` and the expected `Red Hot Jam Vol.101` title.
+
+### User-completed verification in WebView
+
+When a search is blocked by VerifyBot, the user can open the challenge page in an in-app `WebView` and tick "I am not a robot" themselves, exactly as in a normal browser. The app does not interact with the reCAPTCHA widget, call solver services, or spoof browser fingerprints.
+
+Flow:
+
+```text
+Search screen ── AveAdapter.search(query)
+   │                └─ VerifyBot → FetchException(BLOCKED, challengeUrl = search URL)
+   ▼
+"Verification required" state ── [Verify in browser]
+   ▼
+BrowserVerificationScreen (WebView loads challengeUrl)
+   │  user completes reCAPTCHA; site redirects back to /dvd/search
+   │  onPageFinished on the same scheme + host + path as challengeUrl
+   │  → read document.documentElement.outerHTML
+   │  → read CookieManager cookies for the page
+   ▼
+CollectViewModel.onVerifiedPage(VerifiedPage)
+   ▼
+AdapterSearchRepository.searchFromVerifiedPage
+   ├─ AveAdapter.searchFromVerifiedPage: accept only HTTPS AV Entertainments /dvd/search,
+   │    parse candidates with AveParser, remember SKU → product URL
+   └─ HttpClient.importBrowserCookies: copy browser cookies into the OkHttp session
+   ▼
+Search results shown; selected SKUs go to the Collect input
+```
+
+Implementation notes:
+
+| Concern | Behavior |
+|---------|----------|
+| Challenge signal | `FetchException.challengeUrl`, set by `AveAdapter.loadCandidates` for `BLOCKED` searches |
+| Opt-in contract | Adapters implement `BrowserVerifiedSearch`; other sources return `UNSUPPORTED` |
+| Completion detection | Main-frame page finished on the challenge URL's scheme, host, and path |
+| Navigation guard | Top-level navigation is limited to HTTPS on the challenge host; reCAPTCHA sub-frames are allowed |
+| WebView settings | JavaScript and DOM storage enabled (required by reCAPTCHA); third-party cookies accepted; user agent equals `HttpClient.USER_AGENT` so imported cookies match the HTTP session |
+| Page trust | `AveAdapter` rejects verified pages outside `https://www.aventertainments.com/dvd/search` with `PARSE` |
+| SKU resolution | Every successful search (HTTP or verified page) stores `normalized SKU → product URL` in memory; `fetch(sku)` uses it before searching, so queued SKUs do not hit VerifyBot again |
+| Cookie reuse | Best effort only. VerifyBot may bind its pass to IP, user agent, or a short lifetime, so later HTTP searches can still be blocked and require another verification |
+
+Limits:
+
+- Intended for interactive, user-initiated searches, not bulk crawling of `/dvd/search`.
+- The SKU → URL map lives in memory and is lost when the process ends.
+- If the site changes the post-verification redirect target, completion detection must be updated.
 
 ## Android implementation
 
@@ -51,6 +98,7 @@ The Android port is registered as `DataSource.AVE` and includes:
 - Japanese page resolution and locale-indexed metadata under language tag `ja`;
 - stable `studio`, `release_date`, and `series` attributes;
 - block-page detection and explicit not-found/parse errors;
+- user-completed VerifyBot verification in an in-app WebView, with a SKU → product URL memory for later fetches;
 - request-key cache aliases for direct URL input;
 - MockWebServer integration tests and local EN/JP/search fixtures.
 

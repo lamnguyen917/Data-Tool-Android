@@ -4,10 +4,13 @@ import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.LineFormat
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
+import com.elp.datatool.domain.model.FetchErrorKind
+import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.QueueState
 import com.elp.datatool.domain.model.SearchHit
 import com.elp.datatool.domain.model.ThemeMode
+import com.elp.datatool.domain.model.VerifiedPage
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -20,6 +23,15 @@ interface SourceAdapter {
     suspend fun fetch(productId: String): ProductResult
 }
 
+/**
+ * Adapters whose search challenge (for example reCAPTCHA) can be completed by the user in the
+ * in-app browser. The app never solves the challenge itself; it only parses the page the user
+ * reached afterwards.
+ */
+interface BrowserVerifiedSearch {
+    suspend fun searchFromVerifiedPage(page: VerifiedPage): List<SearchHit>
+}
+
 interface ResultRepository {
     val results: StateFlow<List<ProductResult>>
     fun get(key: String): ProductResult?
@@ -30,6 +42,10 @@ interface ResultRepository {
 
 interface ProductSearchRepository {
     suspend fun search(source: DataSource, query: String): List<SearchHit>
+
+    /** Reads search results from a page the user opened after completing a site challenge. */
+    suspend fun searchFromVerifiedPage(source: DataSource, page: VerifiedPage): List<SearchHit> =
+        throw FetchException(FetchErrorKind.UNSUPPORTED)
 }
 
 /** Runs collection batches and single retries, writing into [ResultRepository]. */

@@ -43,7 +43,7 @@ class AppContainer(application: Application) {
     val resultRepository: ResultRepository = InMemoryResultRepository()
     val settingsRepository: SettingsRepository = PreferencesSettingsRepository(application.applicationContext)
     val responseCache: ResponseCache = productCache
-    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(adapters)
+    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(adapters, httpClient::importBrowserCookies)
     val collectionQueue: CollectionQueue = DefaultCollectionQueue(
         adapters = adapters,
         results = resultRepository,

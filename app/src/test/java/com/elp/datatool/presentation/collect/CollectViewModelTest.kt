@@ -7,6 +7,7 @@ import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.QueueState
 import com.elp.datatool.domain.model.SearchHit
+import com.elp.datatool.domain.model.VerifiedPage
 import com.elp.datatool.domain.repository.ProductSearchRepository
 import com.elp.datatool.presentation.FakeCollectionQueue
 import com.elp.datatool.presentation.MainDispatcherRule
@@ -103,7 +104,7 @@ class CollectViewModelTest {
             override suspend fun search(source: DataSource, query: String): List<SearchHit> =
                 throw FetchException(FetchErrorKind.BLOCKED)
         }
-        val viewModel = CollectViewModel(repository, queue)
+        val viewModel = CollectViewModel(repository, queue, settings)
         viewModel.onSourceChange(DataSource.AVE)
 
         viewModel.onQueryChange("RHJ-101")
@@ -112,6 +113,33 @@ class CollectViewModelTest {
 
         assertEquals(SearchStatus.FAILED, viewModel.searchState.value.status)
         assertEquals(FetchErrorKind.BLOCKED, viewModel.searchState.value.error)
+    }
+
+    @Test
+    fun search_challengeCanBeCompletedWithVerifiedPage() = runTest {
+        val challengeUrl = "https://www.aventertainments.com/dvd/search?keyword=RHJ-101"
+        val repository = object : ProductSearchRepository {
+            override suspend fun search(source: DataSource, query: String): List<SearchHit> =
+                throw FetchException(FetchErrorKind.BLOCKED, challengeUrl = challengeUrl)
+
+            override suspend fun searchFromVerifiedPage(source: DataSource, page: VerifiedPage) =
+                listOf(SearchHit(source, "RHJ-101", "Red Hot Jam Vol.101"))
+        }
+        val viewModel = CollectViewModel(repository, queue, settings)
+        viewModel.onSourceChange(DataSource.AVE)
+
+        viewModel.onQueryChange("RHJ-101")
+        viewModel.onSearchSubmit()
+        advanceUntilIdle()
+        assertEquals(challengeUrl, viewModel.searchState.value.challengeUrl)
+
+        viewModel.onVerifiedPage(VerifiedPage(url = challengeUrl, html = "<html></html>"))
+        advanceUntilIdle()
+
+        val state = viewModel.searchState.value
+        assertEquals(SearchStatus.LOADED, state.status)
+        assertEquals(listOf("RHJ-101"), state.hits.map { it.productId })
+        assertEquals(null, state.challengeUrl)
     }
 
     @Test

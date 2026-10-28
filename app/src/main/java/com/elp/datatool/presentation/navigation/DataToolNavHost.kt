@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.elp.datatool.R
 import com.elp.datatool.presentation.AppViewModelProvider
+import com.elp.datatool.presentation.collect.BrowserVerificationRoute
 import com.elp.datatool.presentation.collect.CollectRoute
 import com.elp.datatool.presentation.collect.CollectViewModel
 import com.elp.datatool.presentation.collect.SearchProductsRoute
@@ -47,6 +48,7 @@ import com.elp.datatool.ui.icons.DtIcons
 object Routes {
     const val COLLECT = "collect"
     const val SEARCH = "collect/search"
+    const val SEARCH_VERIFY = "collect/search/verify"
     const val RESULTS = "results"
     const val DETAIL = "results/detail/{${ResultDetailViewModel.KEY_ARG}}"
     const val SETTINGS = "settings"
@@ -103,7 +105,16 @@ fun DataToolNavHost(navController: NavHostController = rememberNavController()) 
                 // Share the Collect ViewModel so selected products land in the same input.
                 val collectEntry = remember(entry) { navController.getBackStackEntry(Routes.COLLECT) }
                 val viewModel: CollectViewModel = viewModel(collectEntry, factory = AppViewModelProvider.Factory)
-                SearchProductsRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
+                SearchProductsRoute(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                    onOpenVerification = { navController.navigate(Routes.SEARCH_VERIFY) },
+                )
+            }
+            composable(Routes.SEARCH_VERIFY) { entry ->
+                val collectEntry = remember(entry) { navController.getBackStackEntry(Routes.COLLECT) }
+                val viewModel: CollectViewModel = viewModel(collectEntry, factory = AppViewModelProvider.Factory)
+                BrowserVerificationRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
             }
             composable(Routes.RESULTS) {
                 ResultsRoute(

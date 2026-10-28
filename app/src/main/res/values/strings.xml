@@ -161,6 +161,11 @@
     <string name="search_unsupported_title">Search not available</string>
     <string name="search_unsupported_body">Searching %1$s is not available yet.</string>
     <string name="search_add_none">Select products to add</string>
+    <string name="search_verify_title">Verification required</string>
+    <string name="search_verify_body">%1$s asks you to confirm you are not a robot. Open the page and complete the check yourself to see the results.</string>
+    <string name="search_verify_action">Verify in browser</string>
+    <string name="verify_title">Verify you are human</string>
+    <string name="verify_hint">Complete the check on the page. Results load automatically when the site returns to the search page.</string>
 
     <plurals name="search_result_count">
         <item quantity="one">%d result</item>

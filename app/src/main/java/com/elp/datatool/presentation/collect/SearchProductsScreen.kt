@@ -64,6 +64,7 @@ import com.elp.datatool.ui.theme.DataToolTheme
 fun SearchProductsRoute(
     viewModel: CollectViewModel,
     onBack: () -> Unit,
+    onOpenVerification: () -> Unit,
 ) {
     val collectState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchState by viewModel.searchState.collectAsStateWithLifecycle()
@@ -71,6 +72,7 @@ fun SearchProductsRoute(
         source = collectState.source,
         state = searchState,
         onBack = onBack,
+        onOpenVerification = onOpenVerification,
         onQueryChange = viewModel::onQueryChange,
         onSubmit = viewModel::onSearchSubmit,
         onToggleHit = viewModel::onToggleHit,
@@ -91,6 +93,7 @@ fun SearchProductsScreen(
     onToggleHit: (String) -> Unit,
     onAddSelected: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenVerification: () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -184,6 +187,14 @@ fun SearchProductsScreen(
                     icon = DtIcons.Search,
                     title = stringResource(R.string.search_idle_title),
                     message = stringResource(R.string.search_idle_body, sourceName),
+                )
+
+                state.status == SearchStatus.FAILED && state.challengeUrl != null -> EmptyState(
+                    icon = DtIcons.Alert,
+                    title = stringResource(R.string.search_verify_title),
+                    message = stringResource(R.string.search_verify_body, sourceName),
+                    actionLabel = stringResource(R.string.search_verify_action),
+                    onAction = onOpenVerification,
                 )
 
                 state.status == SearchStatus.FAILED -> EmptyState(

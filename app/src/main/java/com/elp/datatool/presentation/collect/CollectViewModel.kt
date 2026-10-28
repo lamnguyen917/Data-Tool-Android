@@ -8,6 +8,7 @@ import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.QueueState
 import com.elp.datatool.domain.model.SearchHit
 import com.elp.datatool.domain.model.ValidationResult
+import com.elp.datatool.domain.model.VerifiedPage
 import com.elp.datatool.domain.model.parseInputLines
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ProductSearchRepository
@@ -50,6 +51,8 @@ data class SearchUiState(
     val hits: List<SearchHit> = emptyList(),
     val selectedIds: Set<String> = emptySet(),
     val error: FetchErrorKind? = null,
+    /** Set when the site asks for human verification that the user can complete in-app. */
+    val challengeUrl: String? = null,
 )
 
 sealed interface CollectEvent {
@@ -170,27 +173,43 @@ class CollectViewModel(
         val source = _uiState.value.source
         searchJob = viewModelScope.launch {
             if (debounce) delay(SEARCH_DEBOUNCE_MS)
-            _searchState.update { it.copy(status = SearchStatus.LOADING, error = null) }
-            var error: FetchErrorKind? = null
-            val status = try {
-                val hits = searchRepository.search(source, query)
-                _searchState.update { it.copy(hits = hits) }
-                SearchStatus.LOADED
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: FetchException) {
-                error = e.kind
-                if (e.kind == FetchErrorKind.UNSUPPORTED) SearchStatus.UNSUPPORTED else SearchStatus.FAILED
-            } catch (_: Exception) {
-                SearchStatus.FAILED
-            }
-            _searchState.update {
-                it.copy(
-                    status = status,
-                    hits = if (status == SearchStatus.LOADED) it.hits else emptyList(),
-                    error = error,
-                )
-            }
+            runSearch { searchRepository.search(source, query) }
+        }
+    }
+
+    /** Shows the results the user reached in the in-app browser after completing verification. */
+    fun onVerifiedPage(page: VerifiedPage) {
+        searchJob?.cancel()
+        val source = _uiState.value.source
+        searchJob = viewModelScope.launch {
+            runSearch { searchRepository.searchFromVerifiedPage(source, page) }
+        }
+    }
+
+    private suspend fun runSearch(load: suspend () -> List<SearchHit>) {
+        _searchState.update { it.copy(status = SearchStatus.LOADING, error = null, challengeUrl = null) }
+        var error: FetchErrorKind? = null
+        var challengeUrl: String? = null
+        val status = try {
+            val hits = load()
+            _searchState.update { it.copy(hits = hits) }
+            SearchStatus.LOADED
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: FetchException) {
+            error = e.kind
+            challengeUrl = e.challengeUrl
+            if (e.kind == FetchErrorKind.UNSUPPORTED) SearchStatus.UNSUPPORTED else SearchStatus.FAILED
+        } catch (_: Exception) {
+            SearchStatus.FAILED
+        }
+        _searchState.update {
+            it.copy(
+                status = status,
+                hits = if (status == SearchStatus.LOADED) it.hits else emptyList(),
+                error = error,
+                challengeUrl = challengeUrl,
+            )
         }
     }
 

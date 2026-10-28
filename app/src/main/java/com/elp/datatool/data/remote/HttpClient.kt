@@ -13,6 +13,7 @@ import okhttp3.Callback
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -38,6 +39,19 @@ class HttpClient(private val client: OkHttpClient) {
                 else -> throw FetchException(FetchErrorKind.HTTP, "HTTP ${it.code}")
             }
         }
+    }
+
+    /**
+     * Copies cookies from the in-app browser (`name=value; name2=value2`) into the HTTP session
+     * so later requests reuse the verification the user completed. Invalid pairs are skipped.
+     */
+    fun importBrowserCookies(url: String, cookieHeader: String) {
+        val httpUrl = url.toHttpUrlOrNull() ?: return
+        val cookies = cookieHeader.split(';')
+            .map(String::trim)
+            .filter { it.contains('=') }
+            .mapNotNull { Cookie.parse(httpUrl, it) }
+        if (cookies.isNotEmpty()) client.cookieJar.saveFromResponse(httpUrl, cookies)
     }
 
     private suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation ->

@@ -6,9 +6,12 @@ import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.SearchHit
+import com.elp.datatool.domain.model.VerifiedPage
+import com.elp.datatool.domain.repository.BrowserVerifiedSearch
 import com.elp.datatool.domain.repository.SourceAdapter
 import java.net.URI
 import java.net.URLEncoder
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -19,13 +22,27 @@ class AveAdapter(
     private val http: HttpClient,
     private val baseUrl: String = BASE_URL,
     private val parseDispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : SourceAdapter {
+) : SourceAdapter, BrowserVerifiedSearch {
 
     override val source = DataSource.AVE
 
-    override suspend fun search(query: String): List<SearchHit> {
-        val page = http.get(searchUrl(query))
-        return withContext(parseDispatcher) { AveParser.parseSearch(page.body, page.url) }
+    /** Product URLs from earlier searches keyed by normalized SKU, so fetch can skip VerifyBot. */
+    private val knownProductUrls = ConcurrentHashMap<String, String>()
+
+    override suspend fun search(query: String): List<SearchHit> =
+        loadCandidates(query).map(AveParser.Candidate::toSearchHit)
+
+    /**
+     * Parses the search page the user reached in the in-app browser after solving reCAPTCHA.
+     * Only trusted AV Entertainments search pages are accepted.
+     */
+    override suspend fun searchFromVerifiedPage(page: VerifiedPage): List<SearchHit> {
+        if (!isTrustedSearchUrl(page.url)) {
+            throw FetchException(FetchErrorKind.PARSE, "Invalid AV Entertainments search page")
+        }
+        val candidates = withContext(parseDispatcher) { AveParser.parseCandidates(page.html, page.url) }
+        remember(candidates)
+        return candidates.map(AveParser.Candidate::toSearchHit)
     }
 
     override suspend fun fetch(productId: String): ProductResult {
@@ -40,12 +57,12 @@ class AveAdapter(
             productUrl = input
         } else {
             requestedSku = AveParser.normalizeSku(input)
-            val candidates = loadCandidates(requestedSku)
-            productUrl = candidates
-                .firstOrNull {
-                    AveParser.normalizeSku(it.sku) == requestedSku && isTrustedProductUrl(it.url)
-                }
-                ?.url
+            productUrl = knownProductUrls[requestedSku]
+                ?: loadCandidates(requestedSku)
+                    .firstOrNull {
+                        AveParser.normalizeSku(it.sku) == requestedSku && isTrustedProductUrl(it.url)
+                    }
+                    ?.url
                 ?: throw FetchException(FetchErrorKind.NOT_FOUND, "Ave product $requestedSku not found")
         }
 
@@ -88,9 +105,32 @@ class AveAdapter(
                 .replace("culture=en-US", "culture=ja-JP")
     }
 
+    /** Runs a search; a VerifyBot block carries the search URL so the user can verify in-app. */
     private suspend fun loadCandidates(query: String): List<AveParser.Candidate> {
-        val page = http.get(searchUrl(query))
-        return withContext(parseDispatcher) { AveParser.parseCandidates(page.body, page.url) }
+        val url = searchUrl(query)
+        val candidates = try {
+            val page = http.get(url)
+            withContext(parseDispatcher) { AveParser.parseCandidates(page.body, page.url) }
+        } catch (error: FetchException) {
+            if (error.kind != FetchErrorKind.BLOCKED || error.challengeUrl != null) throw error
+            throw FetchException(FetchErrorKind.BLOCKED, error.message, error, challengeUrl = url)
+        }
+        remember(candidates)
+        return candidates
+    }
+
+    private fun remember(candidates: List<AveParser.Candidate>) {
+        candidates
+            .filter { isTrustedProductUrl(it.url) }
+            .forEach { knownProductUrls.putIfAbsent(AveParser.normalizeSku(it.sku), it.url) }
+    }
+
+    private fun isTrustedSearchUrl(value: String): Boolean {
+        val uri = runCatching { URI(value) }.getOrNull() ?: return false
+        val baseUri = runCatching { URI(baseUrl) }.getOrNull() ?: return false
+        return uri.scheme.equals(baseUri.scheme, ignoreCase = true) &&
+            uri.host.equals(baseUri.host, ignoreCase = true) &&
+            uri.path.equals("/dvd/search", ignoreCase = true)
     }
 
     private fun isTrustedProductUrl(value: String): Boolean {

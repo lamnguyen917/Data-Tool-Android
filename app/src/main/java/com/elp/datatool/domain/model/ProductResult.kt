@@ -84,11 +84,24 @@ enum class FetchErrorKind(val isTemporary: Boolean) {
     val canRetry: Boolean get() = this != NOT_FOUND && this != UNSUPPORTED
 }
 
+/**
+ * @property challengeUrl page the user can open in the in-app browser to complete the site's
+ * human verification. Only set for [FetchErrorKind.BLOCKED] failures that support it.
+ */
 class FetchException(
     val kind: FetchErrorKind,
     message: String? = null,
     cause: Throwable? = null,
+    val challengeUrl: String? = null,
 ) : Exception(message ?: kind.name, cause)
+
+/** A page the user reached in the in-app browser after completing a site challenge. */
+data class VerifiedPage(
+    val url: String,
+    val html: String,
+    /** Raw `Cookie` header for [url] taken from the browser; empty when unavailable. */
+    val cookieHeader: String = "",
+)
 
 /** A product returned by a keyword search. */
 data class SearchHit(
