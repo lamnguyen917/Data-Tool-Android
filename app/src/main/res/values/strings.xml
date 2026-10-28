@@ -17,6 +17,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_retry">Retry</string>
     <string name="action_select">Select</string>
+    <string name="action_select_all">Select all</string>
     <string name="action_done">Done</string>
     <string name="action_share">Share</string>
     <string name="action_export">Export</string>
@@ -197,6 +198,7 @@
     <!-- Result details -->
     <string name="detail_title">Result details</string>
     <string name="detail_overview">Overview</string>
+    <string name="detail_authors">Authors</string>
     <string name="detail_publisher">Publisher</string>
     <string name="detail_category">Category</string>
     <string name="detail_url">Product URL</string>
@@ -205,6 +207,12 @@
     <string name="attr_price">Price</string>
     <string name="attr_price_free">Free</string>
     <string name="attr_rating">Rating</string>
+    <string name="attr_publisher">Publisher</string>
+    <string name="attr_publication_date">Publication date</string>
+    <string name="attr_language">Language</string>
+    <string name="attr_print_length">Print length</string>
+    <string name="attr_isbn_10">ISBN-10</string>
+    <string name="attr_isbn_13">ISBN-13</string>
     <string name="attr_version">Version</string>
     <string name="attr_latest_release">Latest release</string>
     <string name="attr_first_published">First published</string>

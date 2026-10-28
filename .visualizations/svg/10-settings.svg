@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="776" viewBox="0 0 375 776" role="img" aria-label="Settings screen with copy section">
+  <title>Data Tool – Settings screen with copy section</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+    .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace; }
+    .track { fill: var(--surface-2); } .fill { fill: var(--strong); }
+  </style>
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+    <symbol id="i-layout-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <clipPath id="clip-phone"><rect x="0.5" y="0.5" width="374" height="775" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip-phone)">
+    <rect class="bg" width="375" height="776"/>
+
+    
+    <text class="eb" x="16" y="32">DATA TOOL</text>
+    <text class="s20 w5" x="16" y="56">Settings</text>
+    
+    <line class="hr" x1="0" y1="76.5" x2="375" y2="76.5"/>
+    <text class="eb" x="16" y="98">APPEARANCE</text><line class="hr" x1="0" y1="108.5" x2="375" y2="108.5"/>
+    <text class="s14" x="16" y="135">System default</text><circle cx="347" cy="130" r="9" style="fill:none;stroke:var(--strong);stroke-width:2"/><circle class="dot" cx="347" cy="130" r="5"/>
+    <text class="s14" x="16" y="179">Light</text><circle cx="347" cy="174" r="9" style="fill:none;stroke:var(--muted);stroke-width:2"/>
+    <text class="s14" x="16" y="223">Dark</text><circle cx="347" cy="218" r="9" style="fill:none;stroke:var(--muted);stroke-width:2"/>
+    <text class="eb" x="16" y="262">PROCESSING</text><line class="hr" x1="0" y1="272.5" x2="375" y2="272.5"/>
+    <text class="s14" x="16" y="298">Parallel requests</text><text class="s12 mu" x="16" y="314">3 at a time</text>
+    <rect class="track" x="16" y="330" width="343" height="8" rx="4"/><rect class="fill" x="16" y="330" width="98" height="8" rx="4"/>
+    <rect class="fill" x="112" y="322" width="4" height="24" rx="2"/>
+    <text class="s14" x="16" y="374">Request timeout</text><clipPath id="seg-16-384"><rect x="16" y="384" width="343" height="36" rx="18"/></clipPath>
+    <g clip-path="url(#seg-16-384)"><text class="s13 mid" x="73.16666666666666" y="407">15s</text><rect class="bg2" x="130.33333333333331" y="384" width="114.33333333333333" height="36"/><line class="hr" x1="130.33333333333331" y1="384" x2="130.33333333333331" y2="420"/><use href="#i-check" class="ic" x="165.16499999999996" y="395" width="14" height="14"/><text class="s13 w5 mid" x="195.49999999999997" y="407">30s</text><line class="hr" x1="244.66666666666666" y1="384" x2="244.66666666666666" y2="420"/><text class="s13 mid" x="301.8333333333333" y="407">60s</text></g>
+    <rect class="frame" x="16.5" y="384.5" width="342" height="35" rx="18"/>
+    <text class="s14" x="16" y="454">Retry temporary errors</text><text class="s11 mu" x="16" y="470">Network and timeout errors are retried automatically.</text><rect class="strong" x="315" y="444" width="44" height="26" rx="13"/><circle cx="346" cy="457" r="9" style="fill:var(--on-strong)"/>
+    <text class="eb" x="16" y="506">COPY</text><line class="hr" x1="0" y1="516.5" x2="375" y2="516.5"/>
+    <text class="s14" x="16" y="540">Copy line format</text><text class="s12 mu" x="16" y="557">TSV · SKU, Title, Categories, Author, URL</text><use href="#i-chevron-right" class="ic-mu" x="341" y="534" width="16" height="16"/>
+    <text class="s14" x="16" y="594">Copy details template</text><text class="s12 mu" x="16" y="611">Default template</text><use href="#i-chevron-right" class="ic-mu" x="341" y="588" width="16" height="16"/>
+    <text class="eb" x="16" y="646">LOCAL DATA</text><line class="hr" x1="0" y1="656.5" x2="375" y2="656.5"/>
+    <text class="s14" x="16" y="680">Clear cache</text><text class="s12 mu" x="16" y="697">Removes cached product pages.</text>
+    
+    <rect class="bg" x="0" y="710" width="375" height="66"/>
+    <line class="hr" x1="0" y1="710.5" x2="375" y2="710.5"/>
+    
+    <use href="#i-inbox" class="ic-mu" x="52.5" y="722" width="20" height="20"/>
+    <text class="s11 mu mid" x="62.5" y="758">Collect</text>
+    
+    <use href="#i-layout-list" class="ic-mu" x="177.5" y="722" width="20" height="20"/>
+    <text class="s11 mu mid" x="187.5" y="758">Results</text>
+    <rect class="bg2" x="284.5" y="718" width="56" height="28" rx="14"/>
+    <use href="#i-settings" class="ic" x="302.5" y="722" width="20" height="20"/>
+    <text class="s11 w5 mid" x="312.5" y="758">Settings</text>
+  </g>
+  <rect class="frame" x="0.5" y="0.5" width="374" height="775" rx="28"/>
+</svg>

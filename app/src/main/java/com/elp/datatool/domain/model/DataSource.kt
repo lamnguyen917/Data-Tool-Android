@@ -18,8 +18,11 @@ enum class DataSource(val id: String) {
             STEAM_STORE -> DIGITS.matchEntire(value)?.value
                 ?: STEAM_URL.find(value)?.groupValues?.get(1)
 
-            AMAZON_BOOKS -> ASIN.matchEntire(value.uppercase())?.value
-                ?: AMAZON_URL.find(value)?.groupValues?.get(1)?.uppercase()
+            AMAZON_BOOKS -> (AMAZON_URL.find(value)?.groupValues?.get(1)
+                ?: AMAZON_PATH.find(value)?.groupValues?.get(1)
+                ?: value)
+                .uppercase()
+                .takeIf(ASIN::matches)
 
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
@@ -34,11 +37,12 @@ enum class DataSource(val id: String) {
 
     private companion object {
         val DIGITS = Regex("""\d+""")
-        val ASIN = Regex("""[A-Z0-9]{10}""")
+        val ASIN = Regex("""(?:\d{9}[0-9X]|B[A-Z0-9]{9})""")
         val IGDB_SLUG = Regex("""[a-z0-9]+(?:-[a-z0-9]+)*""")
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
         val AMAZON_URL = Regex("""amazon\.[a-z.]+/(?:\S*/)?(?:dp|gp/product)/([A-Za-z0-9]{10})""")
+        val AMAZON_PATH = Regex("""(?:^|/)(?:dp|gp/product)/([A-Za-z0-9]{10})(?:[/?#]|$)""")
         val IGDB_URL = Regex("""igdb\.com/games/([a-z0-9-]+)""")
     }
 }

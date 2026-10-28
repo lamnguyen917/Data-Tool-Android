@@ -84,6 +84,10 @@ class ResultsViewModel(
         it.copy(selectedKeys = keys)
     }
 
+    fun onSelectAll() = controls.update {
+        it.copy(selectedKeys = it.selectedKeys + uiState.value.visibleResults.map(ProductResult::key))
+    }
+
     /** Long press starts selection mode with the pressed item selected. */
     fun onLongPress(key: String) = controls.update {
         it.copy(selectionMode = true, selectedKeys = it.selectedKeys + key)

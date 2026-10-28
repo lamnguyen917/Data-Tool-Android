@@ -1,2 +1,3 @@
 - All text and label must be written in English
 - All comments must be written in English
+- All changes to the code must be written in .agents/memory

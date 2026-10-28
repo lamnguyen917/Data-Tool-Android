@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import coil3.compose.SubcomposeAsyncImage
 import com.elp.datatool.domain.model.ProductAttributes
+import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.presentation.components.descriptionRes
 import com.elp.datatool.presentation.components.labelRes
 import androidx.compose.ui.platform.LocalClipboard
@@ -231,7 +232,10 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
             R.string.detail_error,
             result.error?.let { "${stringResource(it.labelRes)}. ${stringResource(it.descriptionRes)}" },
         )
-        DetailSection(R.string.detail_publisher, result.creators.joinToString().ifEmpty { null })
+        DetailSection(
+            if (result.source == DataSource.AMAZON_BOOKS) R.string.detail_authors else R.string.detail_publisher,
+            result.creators.joinToString().ifEmpty { null },
+        )
         DetailSection(R.string.detail_category, result.categories.joinToString(" / ").ifEmpty { null })
         AttributesSection(result.attributes)
         DetailSection(R.string.detail_overview, result.description)
@@ -243,6 +247,12 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
 private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.PRICE to R.string.attr_price,
     ProductAttributes.RATING to R.string.attr_rating,
+    ProductAttributes.PUBLISHER to R.string.attr_publisher,
+    ProductAttributes.PUBLICATION_DATE to R.string.attr_publication_date,
+    ProductAttributes.LANGUAGE to R.string.attr_language,
+    ProductAttributes.PRINT_LENGTH to R.string.attr_print_length,
+    ProductAttributes.ISBN_10 to R.string.attr_isbn_10,
+    ProductAttributes.ISBN_13 to R.string.attr_isbn_13,
     ProductAttributes.VERSION to R.string.attr_version,
     ProductAttributes.LATEST_RELEASE to R.string.attr_latest_release,
     ProductAttributes.FIRST_PUBLISHED to R.string.attr_first_published,
@@ -263,8 +273,8 @@ private fun AttributesSection(attributes: Map<String, String>) {
             }
 
             ProductAttributes.RATING -> attributes[key]?.let { rating ->
-                val count = attributes[ProductAttributes.RATING_COUNT]?.toIntOrNull() ?: 0
-                pluralStringResource(R.plurals.attr_rating_value, count, rating, count)
+                val count = attributes[ProductAttributes.RATING_COUNT]?.toIntOrNull()
+                if (count == null) rating else pluralStringResource(R.plurals.attr_rating_value, count, rating, count)
             }
 
             else -> attributes[key]

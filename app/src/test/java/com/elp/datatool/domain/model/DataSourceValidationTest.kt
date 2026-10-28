@@ -36,6 +36,9 @@ class DataSourceValidationTest {
     fun amazon_normalizesAsinToUpperCase() {
         assertValid(DataSource.AMAZON_BOOKS, "020161622x", "020161622X")
         assertValid(DataSource.AMAZON_BOOKS, "https://www.amazon.com/Clean-Code/dp/0132350882/ref=sr_1_1", "0132350882")
+        assertValid(DataSource.AMAZON_BOOKS, "/dp/1098119517?ref=test", "1098119517")
+        assertValid(DataSource.AMAZON_BOOKS, "/gp/product/b0abcdefgh#details", "B0ABCDEFGH")
+        assertInvalid(DataSource.AMAZON_BOOKS, "ABCDEFGHIJ", InvalidReason.BAD_FORMAT)
         assertInvalid(DataSource.AMAZON_BOOKS, "12345", InvalidReason.BAD_FORMAT)
     }
 

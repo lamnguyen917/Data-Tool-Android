@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="776" viewBox="0 0 375 776" role="img" aria-label="Copy line settings">
+  <title>Data Tool – Copy line settings</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+    .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace; }
+    .track { fill: var(--surface-2); } .fill { fill: var(--strong); }
+  </style>
+  <defs>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-chevron-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <clipPath id="clip-phone"><rect x="0.5" y="0.5" width="374" height="775" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip-phone)">
+    <rect class="bg" width="375" height="776"/>
+
+    
+    <use href="#i-arrow-left" class="ic" x="22" y="25" width="22" height="22"/>
+    <text class="s20 w5" x="58" y="43">Copy line</text>
+    
+    <line class="hr" x1="0" y1="72.5" x2="375" y2="72.5"/>
+    <text class="s12 w5" x="16" y="100">Format</text>
+    <clipPath id="seg-16-108"><rect x="16" y="108" width="343" height="40" rx="20"/></clipPath>
+    <g clip-path="url(#seg-16-108)"><text class="s13 mid" x="101.75" y="133">CSV</text><rect class="bg2" x="187.5" y="108" width="171.5" height="40"/><line class="hr" x1="187.5" y1="108" x2="187.5" y2="148"/><use href="#i-check" class="ic" x="250.91500000000002" y="121" width="14" height="14"/><text class="s13 w5 mid" x="281.25" y="133">TSV</text></g>
+    <rect class="frame" x="16.5" y="108.5" width="342" height="39" rx="20"/>
+    <text class="s11 mu" x="16" y="168">TSV pastes into separate spreadsheet columns. CSV uses</text>
+    <text class="s11 mu" x="16" y="183">commas and quotes values when needed.</text>
+    <text class="s12 w5" x="16" y="210">Columns</text>
+    <rect class="frame" x="16.5" y="218.5" width="342" height="229" rx="10"/>
+    <text class="s12 w5 mu" x="28" y="246">1</text>
+    <text class="s13" x="48" y="239">SKU</text><text class="s10 mu" x="48" y="254">{sku}</text>
+    <use href="#i-chevron-up" class="ic-mu" x="268" y="232" width="18" height="18"/>
+    <use href="#i-chevron-down" class="ic" x="302" y="232" width="18" height="18"/>
+    <use href="#i-x" class="ic" x="334" y="232" width="18" height="18"/>
+    <line class="hr" x1="16" y1="264.5" x2="359" y2="264.5"/><text class="s12 w5 mu" x="28" y="292">2</text>
+    <text class="s13" x="48" y="285">Title</text><text class="s10 mu" x="48" y="300">{title}</text>
+    <use href="#i-chevron-up" class="ic" x="268" y="278" width="18" height="18"/>
+    <use href="#i-chevron-down" class="ic" x="302" y="278" width="18" height="18"/>
+    <use href="#i-x" class="ic" x="334" y="278" width="18" height="18"/>
+    <line class="hr" x1="16" y1="310.5" x2="359" y2="310.5"/><text class="s12 w5 mu" x="28" y="338">3</text>
+    <text class="s13" x="48" y="331">Categories</text><text class="s10 mu" x="48" y="346">{categories}</text>
+    <use href="#i-chevron-up" class="ic" x="268" y="324" width="18" height="18"/>
+    <use href="#i-chevron-down" class="ic" x="302" y="324" width="18" height="18"/>
+    <use href="#i-x" class="ic" x="334" y="324" width="18" height="18"/>
+    <line class="hr" x1="16" y1="356.5" x2="359" y2="356.5"/><text class="s12 w5 mu" x="28" y="384">4</text>
+    <text class="s13" x="48" y="377">Author</text><text class="s10 mu" x="48" y="392">{author}</text>
+    <use href="#i-chevron-up" class="ic" x="268" y="370" width="18" height="18"/>
+    <use href="#i-chevron-down" class="ic" x="302" y="370" width="18" height="18"/>
+    <use href="#i-x" class="ic" x="334" y="370" width="18" height="18"/>
+    <line class="hr" x1="16" y1="402.5" x2="359" y2="402.5"/><text class="s12 w5 mu" x="28" y="430">5</text>
+    <text class="s13" x="48" y="423">URL</text><text class="s10 mu" x="48" y="438">{url}</text>
+    <use href="#i-chevron-up" class="ic" x="268" y="416" width="18" height="18"/>
+    <use href="#i-chevron-down" class="ic-mu" x="302" y="416" width="18" height="18"/>
+    <use href="#i-x" class="ic" x="334" y="416" width="18" height="18"/>
+    <text class="s12 w5" x="16" y="476">Available fields</text>
+    <rect class="card" x="16.5" y="484.5" width="71" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="493" width="12" height="12"/>
+    <text class="s12" x="43" y="503">Source</text>
+    <rect class="card" x="96.5" y="484.5" width="65" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="106" y="493" width="12" height="12"/>
+    <text class="s12" x="123" y="503">Price</text>
+    <rect class="card" x="170.5" y="484.5" width="71" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="180" y="493" width="12" height="12"/>
+    <text class="s12" x="197" y="503">Rating</text>
+    <rect class="card" x="250.5" y="484.5" width="78" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="260" y="493" width="12" height="12"/>
+    <text class="s12" x="277" y="503">Version</text>
+    <rect class="card" x="16.5" y="522.5" width="122" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="531" width="12" height="12"/>
+    <text class="s12" x="43" y="541">Latest release</text>
+    <rect class="card" x="147.5" y="522.5" width="128" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="157" y="531" width="12" height="12"/>
+    <text class="s12" x="174" y="541">First published</text>
+    <rect class="card" x="16.5" y="560.5" width="122" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="569" width="12" height="12"/>
+    <text class="s12" x="43" y="579">Unity versions</text>
+    <rect class="card" x="147.5" y="560.5" width="90" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="157" y="569" width="12" height="12"/>
+    <text class="s12" x="174" y="579">File size</text>
+    <rect class="card" x="246.5" y="560.5" width="71" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="256" y="569" width="12" height="12"/>
+    <text class="s12" x="273" y="579">Assets</text>
+    <rect class="card" x="16.5" y="598.5" width="58" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="607" width="12" height="12"/>
+    <text class="s12" x="43" y="617">Tags</text>
+    <rect class="card" x="83.5" y="598.5" width="90" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="93" y="607" width="12" height="12"/>
+    <text class="s12" x="110" y="617">Image URL</text>
+    <rect class="card" x="182.5" y="598.5" width="103" height="29" rx="8"/>
+    <use href="#i-plus" class="ic" x="192" y="607" width="12" height="12"/>
+    <text class="s12" x="209" y="617">Description</text>
+    <text class="s12 w5" x="16" y="652">Preview</text><text class="s10 mu end" x="359" y="652">Using MicroSplat</text>
+    <rect class="bg2" x="16" y="660" width="343" height="36" rx="10"/>
+    <text class="s12 mono" x="28" y="683">96478 → MicroSplat → Tools / Terrain → Jas…</text>
+    <rect class="card" x="16.5" y="708.5" width="342" height="39" rx="10"/>
+    <use href="#i-rotate" class="ic" x="126.62" y="721" width="14" height="14"/>
+    <text class="s12 w5" x="146.62" y="732.32">Reset to default</text>
+  </g>
+  <rect class="frame" x="0.5" y="0.5" width="374" height="775" rx="28"/>
+</svg>

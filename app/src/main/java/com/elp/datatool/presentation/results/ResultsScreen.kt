@@ -117,6 +117,7 @@ fun ResultsRoute(
         onFilterChange = viewModel::onFilterChange,
         onToggleSort = viewModel::onToggleSort,
         onToggleSelectionMode = viewModel::onToggleSelectionMode,
+        onSelectAll = viewModel::onSelectAll,
         onCardClick = { key ->
             if (state.selectionMode) viewModel.onToggleSelection(key) else onOpenDetail(key)
         },
@@ -139,6 +140,7 @@ fun ResultsScreen(
     onFilterChange: (ResultFilter) -> Unit,
     onToggleSort: () -> Unit,
     onToggleSelectionMode: () -> Unit,
+    onSelectAll: () -> Unit,
     onCardClick: (String) -> Unit,
     onCardLongClick: (String) -> Unit,
     onRetry: (String) -> Unit,
@@ -164,6 +166,14 @@ fun ResultsScreen(
                 title = stringResource(R.string.results_title),
                 actions = {
                     if (state.totalCount > 0) {
+                        if (state.selectionMode) {
+                            TextButton(onClick = onSelectAll) {
+                                Text(
+                                    text = stringResource(R.string.action_select_all),
+                                    style = MaterialTheme.typography.labelMedium,
+                                )
+                            }
+                        }
                         TextButton(onClick = onToggleSelectionMode) {
                             Text(
                                 text = stringResource(if (state.selectionMode) R.string.action_done else R.string.action_select),
@@ -427,6 +437,7 @@ private fun ResultsScreenPreview() {
             onFilterChange = {},
             onToggleSort = {},
             onToggleSelectionMode = {},
+            onSelectAll = {},
             onCardClick = {},
             onCardLongClick = {},
             onRetry = {},
@@ -460,6 +471,7 @@ private fun ResultsSelectionPreview() {
             onFilterChange = {},
             onToggleSort = {},
             onToggleSelectionMode = {},
+            onSelectAll = {},
             onCardClick = {},
             onCardLongClick = {},
             onRetry = {},

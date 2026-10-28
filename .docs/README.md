@@ -19,7 +19,8 @@ Giao diện Compose đã được dựng theo wireframe trong [`.visualizations/
 | Nguồn | Tìm kiếm | Thu thập |
 |-------|----------|----------|
 | Unity Asset Store | ✅ `/search?q=` (RSC payload) | ✅ `/packages/unknown/{id}` + embedded state / ld+json |
-| Amazon Books, Steam Store, IGDB | — | — (báo “not available yet”) |
+| Amazon Books | — | ✅ `/dp/{ASIN}` + product HTML |
+| Steam Store, IGDB | — | — (reports “not available yet”) |
 
 Đã có: `UnityAssetStoreAdapter` (`data/adapter/unity`), HTTP client OkHttp (`data/remote`), hàng đợi xử lý `DefaultCollectionQueue` (giới hạn song song, timeout, tự thử lại lỗi tạm thời, hủy, thử lại thủ công), cache theo mã sản phẩm có thời hạn, ảnh bằng Coil. Kiểm thử parser dùng fixture trong `app/src/test/resources/unity`.
 

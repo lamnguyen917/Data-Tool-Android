@@ -111,11 +111,53 @@
 </head>
 <body>
 
+<script>
+  // Shared copy settings and formatter used by Results and Settings.
+  // Mirrors app/src/main/java/com/elp/datatool/domain/copy/CopyFormatter.kt.
+  window.dtCopy = (() => {
+    const fields = [
+      ['sku', 'SKU'], ['title', 'Title'], ['categories', 'Categories'], ['author', 'Author'], ['url', 'URL'],
+      ['source', 'Source'], ['price', 'Price'], ['rating', 'Rating'], ['version', 'Version'],
+      ['latest_release', 'Latest release'], ['first_published', 'First published'], ['unity_versions', 'Unity versions'],
+      ['file_size', 'File size'], ['asset_count', 'Assets'], ['tags', 'Tags'], ['image_url', 'Image URL'],
+      ['description', 'Description'],
+    ].map(([key, label]) => ({ key, label }));
+    const DEFAULT_FIELDS = ['sku', 'title', 'categories', 'author', 'url'];
+    const DEFAULT_TEMPLATE = [
+      '{title}', 'SKU: {sku}', 'Source: {source}', 'Author: {author}', 'Categories: {categories}',
+      'Price: {price}', 'Rating: {rating}', 'Version: {version}', 'URL: {url}', '', '{description}',
+    ].join('\n');
+    const settings = { format: 'TSV', fields: [...DEFAULT_FIELDS], template: DEFAULT_TEMPLATE };
+    const known = new Set(fields.map(f => f.key));
+    const value = (item, key) => (item[key] ?? '').toString();
+    const csv = v => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
+
+    return {
+      fields, settings, DEFAULT_FIELDS, DEFAULT_TEMPLATE,
+      field: key => fields.find(f => f.key === key),
+      line(item) {
+        const cells = settings.fields.map(key => value(item, key));
+        return settings.format === 'CSV'
+          ? cells.map(csv).join(',')
+          : cells.map(v => v.replace(/[\t\r\n]+/g, ' ').trim()).join('\t');
+      },
+      details(item) {
+        return settings.template.split('\n').flatMap(line => {
+          const keys = [...line.matchAll(/\{([a-z_]+)\}/g)].map(m => m[1]).filter(k => known.has(k));
+          if (keys.length && keys.every(k => !value(item, k).trim())) return [];
+          return [line.replace(/\{([a-z_]+)\}/g, (m, k) => (known.has(k) ? value(item, k) : m))];
+        }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+      },
+    };
+  })();
+</script>
+
 <header class="wf-header">
   <h1>Data Tool – Wireframes</h1>
   <nav class="wf-nav" aria-label="Sections">
     <a href="#collect">Collect</a>
     <a href="#results">Results</a>
+    <a href="#settings">Settings</a>
     <a href="#svg-screens">SVG screens</a>
   </nav>
 </header>
@@ -123,7 +165,7 @@
 <!-- ============================== COLLECT (interactive) ============================== -->
 <section class="wf-section" id="collect">
   <h2>Collect</h2>
-  <p>Interactive wireframe. Static exports: <a href="svg/01-collect-focused-input.svg">focused input</a>, <a href="svg/02-collect-search-overlay.svg">search overlay</a>, <a href="svg/03-collect-queue-first.svg">queue first</a>.</p>
+  <p>Interactive wireframe. Static exports: <a href="svg/01-collect-focused-input.svg">focused input</a>, <a href="svg/02-collect-search-overlay.svg">search overlay</a>, <a href="svg/03-collect-queue-first.svg">queue first</a>, <a href="svg/08-collect-processing.svg">processing</a>, <a href="svg/09-collect-finished.svg">finished</a>. Tap “Start processing” to simulate a batch.</p>
 <div id="data-tool-wireframe" class="viz-carousel viz-dotted-background" aria-label="Data Tool main screen wireframe variants">
   <section data-variant="Focused input" aria-label="Focused input wireframe">
     <div class="dt-phone" data-phone="focused">
@@ -189,12 +231,31 @@ invalid-item</textarea>
         </section>
       </main>
 
-      <div class="dt-bottom-action">
+      <div class="dt-bottom-action" data-bar="ready">
         <div>
           <span>Ready to process</span>
           <strong id="focused-ready-count">2 items</strong>
         </div>
         <button class="dt-primary-action" type="button" data-action="start">Start processing</button>
+      </div>
+
+      <div class="dt-bottom-action dt-processing-bar" data-bar="processing" hidden aria-live="polite">
+        <div class="dt-processing-row">
+          <div>
+            <span>Processing</span>
+            <strong data-progress-text>0 of 2</strong>
+          </div>
+          <button class="dt-outline-action" type="button" data-action="cancel">Cancel</button>
+        </div>
+        <div class="dt-progress" role="progressbar" aria-label="Processing progress"><div data-progress-fill></div></div>
+      </div>
+
+      <div class="dt-bottom-action" data-bar="finished" hidden aria-live="polite">
+        <div>
+          <span data-finished-label>Finished</span>
+          <strong data-finished-text>2 collected · 0 failed</strong>
+        </div>
+        <button class="dt-primary-action" type="button" data-action="view-results">View results</button>
       </div>
 
       <nav class="dt-bottom-nav" aria-label="Primary navigation">
@@ -567,6 +628,13 @@ invalid-item</textarea>
 
   #data-tool-wireframe .dt-primary-action:disabled { opacity: 0.45; }
 
+  #data-tool-wireframe .dt-bottom-action.dt-processing-bar { display: grid; justify-content: stretch; gap: 8px; }
+  #data-tool-wireframe .dt-bottom-action.dt-processing-bar > .dt-processing-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  #data-tool-wireframe .dt-processing-row > div { display: grid; gap: 1px; }
+  #data-tool-wireframe .dt-outline-action { min-height: 40px; padding: 0 16px; border: 1px solid var(--dt-line); border-radius: 10px; background: var(--dt-surface); font-size: 12px; font-weight: 500; }
+  #data-tool-wireframe .dt-progress { height: 4px; overflow: hidden; border-radius: 2px; background: var(--dt-surface-2); }
+  #data-tool-wireframe .dt-progress > div { width: 0; height: 100%; background: var(--dt-strong); transition: width .25s ease; }
+
   #data-tool-wireframe .dt-bottom-nav {
     min-height: 66px;
     display: grid;
@@ -717,14 +785,57 @@ invalid-item</textarea>
       if (action === 'search') searchLayer.hidden = false;
       if (action === 'close-search' || action === 'add-search') searchLayer.hidden = true;
       if (action === 'add-search') focusedInput.value = `${focusedInput.value.trim()}\n96478`.trim();
-      if (action === 'start') {
-        const button = focusedPhone.querySelector('[data-action="start"]');
-        button.textContent = 'Queued';
-        setTimeout(() => { button.textContent = 'Start processing'; }, 1200);
+      if (action === 'start') startProcessing();
+      if (action === 'cancel' && confirm('Stop processing?\nPending items will not be collected. Items that are already collected are kept.')) {
+        finishProcessing(true);
+      }
+      if (action === 'view-results') {
+        setBar('ready');
+        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
       }
       renderFocused();
       persist();
     });
+
+    // Simulated batch: one item every 700 ms; the last item fails when there are several.
+    let processing = null;
+
+    function setBar(name) {
+      focusedPhone.querySelectorAll('[data-bar]').forEach(bar => { bar.hidden = bar.dataset.bar !== name; });
+    }
+
+    function renderProgress() {
+      const { done, total } = processing;
+      focusedPhone.querySelector('[data-progress-text]').textContent = `${done} of ${total}`;
+      focusedPhone.querySelector('[data-progress-fill]').style.width = `${total ? (done / total) * 100 : 0}%`;
+    }
+
+    function startProcessing() {
+      const total = lines().filter(value => /^\d{3,}$/.test(value)).length;
+      if (!total || processing) return;
+      processing = { done: 0, failed: 0, total, timer: null };
+      setBar('processing');
+      renderProgress();
+      processing.timer = setInterval(() => {
+        processing.done++;
+        if (processing.total > 1 && processing.done === processing.total) processing.failed++;
+        renderProgress();
+        if (processing.done === processing.total) finishProcessing(false);
+      }, 700);
+    }
+
+    function finishProcessing(cancelled) {
+      if (!processing) return;
+      clearInterval(processing.timer);
+      const collected = processing.done - processing.failed;
+      focusedPhone.querySelector('[data-finished-label]').textContent = cancelled ? 'Cancelled' : 'Finished';
+      focusedPhone.querySelector('[data-finished-text]').textContent = `${collected} collected · ${processing.failed} failed`;
+      processing = null;
+      setBar('finished');
+    }
+
+    // Editing the input after a batch shows the ready state again.
+    focusedInput.addEventListener('input', () => { if (!processing) setBar('ready'); });
 
     queuePhone.addEventListener('click', event => {
       const action = event.target.closest('[data-action]')?.dataset.action;
@@ -772,7 +883,7 @@ invalid-item</textarea>
 <!-- ============================== RESULTS (interactive) ============================== -->
 <section class="wf-section" id="results">
   <h2>Results</h2>
-  <p>Interactive wireframe. Static exports: <a href="svg/04-results-visual-cards.svg">visual cards</a>, <a href="svg/05-results-selection-mode.svg">selection mode</a>, <a href="svg/06-results-detail.svg">result details</a>, <a href="svg/07-results-compact-cards.svg">compact cards</a>.</p>
+  <p>Interactive wireframe. Copy line / Copy details copy real text using the formats in Settings. Static exports: <a href="svg/04-results-visual-cards.svg">visual cards</a>, <a href="svg/05-results-selection-mode.svg">selection mode</a>, <a href="svg/06-results-detail.svg">result details</a>, <a href="svg/07-results-compact-cards.svg">compact cards</a>.</p>
 <div id="data-tool-results-wireframe" class="viz-carousel viz-dotted-background" aria-label="Data Tool Results screen card-view variants">
   <section data-variant="Visual cards" aria-label="Visual result cards wireframe">
     <div class="rs-phone" data-phone="visual" aria-label="Visual cards design">
@@ -805,7 +916,7 @@ invalid-item</textarea>
         </div>
 
         <div class="rs-card-list" data-card-list aria-live="polite">
-          <article class="rs-result-card cursor-interaction" data-status="success" data-title="MicroSplat" data-id="96478" role="button" aria-label="Open MicroSplat details">
+          <article class="rs-result-card cursor-interaction" data-status="success" data-title="MicroSplat" data-author="Jason Booth" data-category="Tools / Terrain" data-url="https://assetstore.unity.com/packages/tools/terrain/microsplat-96478" data-description="Terrain shading system with modular features and extensions." data-id="96478" role="button" aria-label="Open MicroSplat details">
             <label class="rs-select-box" hidden><input type="checkbox" aria-label="Select MicroSplat" /></label>
             <div class="rs-thumbnail"><i data-lucide="image" aria-hidden="true"></i><span>UNITY</span></div>
             <div class="rs-card-body">
@@ -822,10 +933,14 @@ invalid-item</textarea>
                 <span class="rs-category">Tools / Terrain</span>
                 <button class="rs-open-button cursor-interaction" type="button" aria-label="Open MicroSplat details"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               </div>
+              <div class="rs-copy-actions">
+                <button class="cursor-interaction" type="button" data-action="copy-line"><i data-lucide="copy" aria-hidden="true"></i>Copy line</button>
+                <button class="cursor-interaction" type="button" data-action="copy-details"><i data-lucide="file-text" aria-hidden="true"></i>Copy details</button>
+              </div>
             </div>
           </article>
 
-          <article class="rs-result-card cursor-interaction" data-status="success" data-title="Terrain Composer 2" data-id="65563" role="button" aria-label="Open Terrain Composer 2 details">
+          <article class="rs-result-card cursor-interaction" data-status="success" data-title="Terrain Composer 2" data-author="Nathaniel Doldersum" data-category="Tools / Terrain" data-url="https://assetstore.unity.com/packages/tools/terrain/terrain-composer-2-65563" data-description="Node-based terrain creation and automation toolkit." data-id="65563" role="button" aria-label="Open Terrain Composer 2 details">
             <label class="rs-select-box" hidden><input type="checkbox" aria-label="Select Terrain Composer 2" /></label>
             <div class="rs-thumbnail"><i data-lucide="image" aria-hidden="true"></i><span>UNITY</span></div>
             <div class="rs-card-body">
@@ -842,10 +957,14 @@ invalid-item</textarea>
                 <span class="rs-category">Tools / Terrain</span>
                 <button class="rs-open-button cursor-interaction" type="button" aria-label="Open Terrain Composer 2 details"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               </div>
+              <div class="rs-copy-actions">
+                <button class="cursor-interaction" type="button" data-action="copy-line"><i data-lucide="copy" aria-hidden="true"></i>Copy line</button>
+                <button class="cursor-interaction" type="button" data-action="copy-details"><i data-lucide="file-text" aria-hidden="true"></i>Copy details</button>
+              </div>
             </div>
           </article>
 
-          <article class="rs-result-card cursor-interaction" data-status="success" data-title="Gaia Pro" data-id="155852" role="button" aria-label="Open Gaia Pro details">
+          <article class="rs-result-card cursor-interaction" data-status="success" data-title="Gaia Pro" data-author="Procedural Worlds" data-category="Tools / Terrain" data-url="https://assetstore.unity.com/packages/tools/terrain/gaia-pro-155852" data-description="Complete environment and terrain generation solution." data-id="155852" role="button" aria-label="Open Gaia Pro details">
             <label class="rs-select-box" hidden><input type="checkbox" aria-label="Select Gaia Pro" /></label>
             <div class="rs-thumbnail"><i data-lucide="image" aria-hidden="true"></i><span>UNITY</span></div>
             <div class="rs-card-body">
@@ -861,6 +980,10 @@ invalid-item</textarea>
               <div class="rs-card-footer">
                 <span class="rs-category">Tools / Terrain</span>
                 <button class="rs-open-button cursor-interaction" type="button" aria-label="Open Gaia Pro details"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              </div>
+              <div class="rs-copy-actions">
+                <button class="cursor-interaction" type="button" data-action="copy-line"><i data-lucide="copy" aria-hidden="true"></i>Copy line</button>
+                <button class="cursor-interaction" type="button" data-action="copy-details"><i data-lucide="file-text" aria-hidden="true"></i>Copy details</button>
               </div>
             </div>
           </article>
@@ -892,11 +1015,14 @@ invalid-item</textarea>
       <div class="rs-selection-bar" data-selection-bar hidden aria-live="polite">
         <strong><span data-selected-count>0</span> selected</strong>
         <div>
+          <button class="cursor-interaction" type="button" data-action="copy-selected" aria-label="Copy selected results as lines"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button>
           <button class="cursor-interaction" type="button" aria-label="Share selected results"><i data-lucide="share-2" aria-hidden="true"></i><span>Share</span></button>
           <button class="cursor-interaction" type="button" aria-label="Export selected results"><i data-lucide="download" aria-hidden="true"></i><span>Export</span></button>
           <button class="cursor-interaction" type="button" data-action="delete-selected" aria-label="Delete selected results"><i data-lucide="trash-2" aria-hidden="true"></i><span>Delete</span></button>
         </div>
       </div>
+
+      <div class="rs-toast" data-toast role="status" hidden></div>
 
       <nav class="rs-bottom-nav" aria-label="Primary navigation">
         <button class="cursor-interaction" type="button"><i data-lucide="inbox" aria-hidden="true"></i><span>Collect</span></button>
@@ -915,13 +1041,24 @@ invalid-item</textarea>
           <span class="rs-source">Unity Asset Store</span>
           <h2 data-detail-title>MicroSplat</h2>
           <p class="rs-detail-id" data-detail-id>Package ID 96478</p>
-          <section><h3>Overview</h3><p>Terrain shading system with modular features and extensions.</p></section>
-          <section><h3>Publisher</h3><p>Jason Booth</p></section>
-          <section><h3>Category</h3><p>Tools / Terrain</p></section>
+          <section><h3>Publisher</h3><p data-detail-author>Jason Booth</p></section>
+          <section><h3>Category</h3><p data-detail-category>Tools / Terrain</p></section>
+          <section>
+            <h3>Details</h3>
+            <dl class="rs-attributes">
+              <dt>Price</dt><dd>35.00 USD</dd>
+              <dt>Rating</dt><dd>5.0 (108 ratings)</dd>
+              <dt>Version</dt><dd>8.0.8</dd>
+              <dt>Latest release</dt><dd>2026-10-19</dd>
+              <dt>Unity versions</dt><dd>2021.3.43, 2022.3.0</dd>
+              <dt>File size</dt><dd>258.4 MB</dd>
+            </dl>
+          </section>
+          <section><h3>Overview</h3><p data-detail-description>Terrain shading system with modular features and extensions.</p></section>
           <section><h3>Product URL</h3><p>assetstore.unity.com/packages/…</p></section>
         </div>
         <div class="rs-detail-actions">
-          <button class="cursor-interaction" type="button"><i data-lucide="copy" aria-hidden="true"></i>Copy</button>
+          <button class="cursor-interaction" type="button" data-action="copy-details-detail"><i data-lucide="file-text" aria-hidden="true"></i>Copy details</button>
           <button class="rs-primary cursor-interaction" type="button"><i data-lucide="external-link" aria-hidden="true"></i>Open link</button>
         </div>
       </div>
@@ -1220,6 +1357,15 @@ invalid-item</textarea>
   #data-tool-results-wireframe .rs-card-footer { margin-top: 9px; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--rs-line); }
   #data-tool-results-wireframe .rs-category { color: var(--rs-muted); font-size: 10px; }
   #data-tool-results-wireframe .rs-open-button { width: 34px; height: 32px; display: grid; place-items: center; border: 0; background: transparent; }
+  #data-tool-results-wireframe .rs-copy-actions { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #data-tool-results-wireframe .rs-copy-actions button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--rs-line); border-radius: 10px; background: var(--rs-surface); font-size: 11px; font-weight: 500; }
+  #data-tool-results-wireframe .rs-copy-actions svg { width: 14px; height: 14px; }
+  #data-tool-results-wireframe .rs-attributes { margin: 4px 0 0; display: grid; grid-template-columns: 110px 1fr; gap: 4px 8px; font-size: 12px; }
+  #data-tool-results-wireframe .rs-attributes dt { color: var(--rs-muted); }
+  #data-tool-results-wireframe .rs-attributes dd { margin: 0; }
+  #data-tool-results-wireframe .rs-toast { position: absolute; z-index: 20; left: 14px; right: 14px; bottom: 80px; max-height: 120px; overflow: hidden; padding: 12px 14px; border-radius: 10px; background: var(--rs-strong); color: var(--rs-on-strong); box-shadow: 0 8px 20px rgb(0 0 0 / .25); font-size: 12px; }
+  #data-tool-results-wireframe .rs-toast strong { display: block; margin-bottom: 4px; font-weight: 500; }
+  #data-tool-results-wireframe .rs-toast pre { margin: 0; white-space: pre-wrap; word-break: break-all; font: 11px/1.4 ui-monospace, Consolas, monospace; opacity: .8; }
   #data-tool-results-wireframe .rs-retry { min-height: 34px; padding: 0 8px; display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; font-size: 11px; font-weight: 500; }
 
   #data-tool-results-wireframe .rs-empty {
@@ -1381,6 +1527,8 @@ invalid-item</textarea>
         if (show) visible++;
         const selectBox = card.querySelector('.rs-select-box');
         selectBox.hidden = !selectionMode;
+        const copyActions = card.querySelector('.rs-copy-actions');
+        if (copyActions) copyActions.hidden = selectionMode;
         if (!selectionMode) {
           selectBox.querySelector('input').checked = false;
           card.classList.remove('is-selected');
@@ -1424,10 +1572,43 @@ invalid-item</textarea>
       if (globalThis.lucide) lucide.createIcons({ attrs: { width: 16, height: 16 } });
     }
 
+    let detailCard = null;
+
     function openDetails(card) {
+      detailCard = card;
       detailLayer.querySelector('[data-detail-title]').textContent = card.dataset.title;
       detailLayer.querySelector('[data-detail-id]').textContent = `Package ID ${card.dataset.id}`;
+      detailLayer.querySelector('[data-detail-author]').textContent = card.dataset.author || '—';
+      detailLayer.querySelector('[data-detail-category]').textContent = card.dataset.category || '—';
+      detailLayer.querySelector('[data-detail-description]').textContent = card.dataset.description || '';
       detailLayer.hidden = false;
+    }
+
+    // ---- Copy line / Copy details (formatting mirrors domain/copy/CopyFormatter.kt) ----
+    const copyApi = window.dtCopy;
+    let toastTimer;
+
+    function itemFromCard(card) {
+      return {
+        sku: card.dataset.id, title: card.dataset.title, categories: card.dataset.category,
+        author: card.dataset.author, url: card.dataset.url, source: 'Unity Asset Store',
+        description: card.dataset.description,
+      };
+    }
+
+    function copyToClipboard(message, text) {
+      // Show feedback right away; the clipboard write may be blocked (e.g. unfocused page or file:// rules).
+      navigator.clipboard?.writeText(text).catch(() => {});
+      const toast = visualPhone.querySelector('[data-toast]');
+      toast.innerHTML = '';
+      const title = document.createElement('strong');
+      title.textContent = message;
+      const body = document.createElement('pre');
+      body.textContent = text.replace(/\t/g, '  ⇥  ');
+      toast.append(title, body);
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
     }
 
     visualSearch.addEventListener('input', () => { renderVisual(); persist(); });
@@ -1460,6 +1641,16 @@ invalid-item</textarea>
         selectionMode = false;
       }
       if (action === 'close-detail') detailLayer.hidden = true;
+      if (action === 'copy-line' && card) copyToClipboard('Line copied', copyApi.line(itemFromCard(card)));
+      if (action === 'copy-details' && card) copyToClipboard('Details copied', copyApi.details(itemFromCard(card)));
+      if (action === 'copy-details-detail' && detailCard) copyToClipboard('Details copied', copyApi.details(itemFromCard(detailCard)));
+      if (action === 'copy-selected') {
+        const cards = [...visualPhone.querySelectorAll('.rs-result-card.is-selected')]
+          .filter(item => !item.hidden && item.dataset.status === 'success');
+        if (cards.length) {
+          copyToClipboard(`${cards.length} ${cards.length === 1 ? 'line' : 'lines'} copied`, cards.map(item => copyApi.line(itemFromCard(item))).join('\n'));
+        }
+      }
       if (card && !action && !selectionMode) openDetails(card);
       if (card && !action && selectionMode) {
         const checkbox = card.querySelector('.rs-select-box input');
@@ -1526,6 +1717,307 @@ invalid-item</textarea>
 </script>
 </section>
 
+
+<!-- ============================== SETTINGS (interactive) ============================== -->
+<section class="wf-section" id="settings">
+  <h2>Settings</h2>
+  <p>Interactive wireframe. Copy settings here drive the Copy line / Copy details buttons in Results. Static exports: <a href="svg/10-settings.svg">settings</a>, <a href="svg/11-settings-copy-line.svg">copy line</a>, <a href="svg/12-settings-copy-details.svg">copy details</a>.</p>
+<div id="data-tool-settings-wireframe" class="viz-dotted-background">
+  <div class="st-phone" data-phone="settings">
+    <!-- Main settings -->
+    <div class="st-view" data-view="main">
+      <header class="st-topbar"><div><span class="st-eyebrow">DATA TOOL</span><h2>Settings</h2></div></header>
+      <main class="st-content">
+        <h3 class="st-section">Appearance</h3>
+        <label class="st-row"><span>System default</span><input type="radio" name="st-theme" checked /></label>
+        <label class="st-row"><span>Light</span><input type="radio" name="st-theme" /></label>
+        <label class="st-row"><span>Dark</span><input type="radio" name="st-theme" /></label>
+
+        <h3 class="st-section">Processing</h3>
+        <div class="st-block">
+          <span class="st-title">Parallel requests</span>
+          <span class="st-desc" data-parallel-text>3 at a time</span>
+          <input type="range" min="1" max="8" value="3" data-parallel aria-label="Parallel requests" />
+        </div>
+        <div class="st-block">
+          <span class="st-title">Request timeout</span>
+          <div class="st-segmented" role="group" aria-label="Request timeout">
+            <button type="button">15s</button><button type="button" class="is-active">30s</button><button type="button">60s</button>
+          </div>
+        </div>
+        <label class="st-row st-row-tall">
+          <span><span class="st-title">Retry temporary errors</span><span class="st-desc">Network and timeout errors are retried automatically.</span></span>
+          <input type="checkbox" class="st-switch" checked />
+        </label>
+
+        <h3 class="st-section">Copy</h3>
+        <button class="st-nav-row" type="button" data-open="copy-line">
+          <span><span class="st-title">Copy line format</span><span class="st-desc" data-copy-line-summary></span></span>
+          <i data-lucide="chevron-right" aria-hidden="true"></i>
+        </button>
+        <button class="st-nav-row" type="button" data-open="copy-details">
+          <span><span class="st-title">Copy details template</span><span class="st-desc" data-copy-details-summary></span></span>
+          <i data-lucide="chevron-right" aria-hidden="true"></i>
+        </button>
+
+        <h3 class="st-section">Local data</h3>
+        <button class="st-nav-row" type="button"><span><span class="st-title">Clear cache</span><span class="st-desc">Removes cached product pages.</span></span></button>
+        <button class="st-nav-row" type="button"><span><span class="st-title st-danger">Clear history</span><span class="st-desc">Deletes all collected results.</span></span></button>
+      </main>
+      <nav class="st-bottom-nav" aria-label="Primary navigation">
+        <button type="button"><i data-lucide="inbox" aria-hidden="true"></i><span>Collect</span></button>
+        <button type="button"><i data-lucide="layout-list" aria-hidden="true"></i><span>Results</span></button>
+        <button type="button" class="is-active" aria-current="page"><i data-lucide="settings" aria-hidden="true"></i><span>Settings</span></button>
+      </nav>
+    </div>
+
+    <!-- Copy line -->
+    <div class="st-view" data-view="copy-line" hidden>
+      <header class="st-subbar">
+        <button class="st-icon-button" type="button" data-back aria-label="Back"><i data-lucide="arrow-left" aria-hidden="true"></i></button>
+        <h2>Copy line</h2>
+      </header>
+      <main class="st-content st-padded">
+        <span class="st-label">Format</span>
+        <div class="st-segmented" role="group" aria-label="Line format" data-format>
+          <button type="button" data-value="CSV">CSV</button><button type="button" data-value="TSV">TSV</button>
+        </div>
+        <p class="st-hint">TSV pastes into separate spreadsheet columns. CSV uses commas and quotes values when needed.</p>
+
+        <span class="st-label">Columns</span>
+        <ol class="st-columns" data-columns></ol>
+        <p class="st-hint st-error" data-columns-empty hidden>Add at least one column.</p>
+
+        <span class="st-label">Available fields</span>
+        <div class="st-chips" data-available></div>
+
+        <div class="st-preview-head"><span class="st-label">Preview</span><span>Using MicroSplat</span></div>
+        <pre class="st-preview st-preview-line" data-line-preview></pre>
+        <button class="st-reset" type="button" data-reset="line"><i data-lucide="rotate-cw" aria-hidden="true"></i>Reset to default</button>
+      </main>
+    </div>
+
+    <!-- Copy details -->
+    <div class="st-view" data-view="copy-details" hidden>
+      <header class="st-subbar">
+        <button class="st-icon-button" type="button" data-back aria-label="Back"><i data-lucide="arrow-left" aria-hidden="true"></i></button>
+        <h2>Copy details</h2>
+      </header>
+      <main class="st-content st-padded">
+        <label class="st-label" for="st-template">Template</label>
+        <textarea id="st-template" class="st-template" rows="11" spellcheck="false" data-template></textarea>
+        <p class="st-hint">Placeholders such as {title} are replaced with the result values. Lines whose placeholders are all empty are left out.</p>
+
+        <span class="st-label">Insert placeholder</span>
+        <div class="st-chips st-chips-mono" data-placeholders></div>
+
+        <div class="st-preview-head"><span class="st-label">Preview</span><span>Using MicroSplat</span></div>
+        <pre class="st-preview" data-details-preview></pre>
+        <button class="st-reset" type="button" data-reset="details"><i data-lucide="rotate-cw" aria-hidden="true"></i>Reset to default</button>
+      </main>
+    </div>
+  </div>
+</div>
+</section>
+
+<style>
+  #data-tool-settings-wireframe {
+    --st-surface: light-dark(#ffffff, #111111);
+    --st-surface-2: light-dark(#f5f5f3, #1d1d1b);
+    --st-text: light-dark(#1a1a19, #f3f3ef);
+    --st-muted: light-dark(#6b6b65, #aaa9a2);
+    --st-line: light-dark(#d5d5d0, #41413d);
+    --st-strong: light-dark(#242422, #eeeeea);
+    --st-on-strong: light-dark(#ffffff, #171716);
+    --st-danger: light-dark(#9a3412, #fdba74);
+    padding: 24px 14px 48px;
+    display: grid;
+    place-items: start center;
+  }
+  #data-tool-settings-wireframe * { box-sizing: border-box; }
+  #data-tool-settings-wireframe button, #data-tool-settings-wireframe textarea, #data-tool-settings-wireframe input { font: inherit; color: inherit; }
+  #data-tool-settings-wireframe h2, #data-tool-settings-wireframe h3, #data-tool-settings-wireframe p { margin: 0; }
+  #data-tool-settings-wireframe .st-phone {
+    position: relative; width: min(374px, calc(100% - 4px)); height: 776px; overflow: hidden;
+    border: 1px solid var(--st-line); border-radius: 28px; background: var(--st-surface); color: var(--st-text);
+    box-shadow: 0 18px 45px light-dark(rgb(0 0 0 / .14), rgb(0 0 0 / .4)); font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  #data-tool-settings-wireframe .st-view { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--st-surface); }
+  #data-tool-settings-wireframe .st-topbar { min-height: 76px; padding: 16px; display: flex; align-items: center; border-bottom: 1px solid var(--st-line); }
+  #data-tool-settings-wireframe .st-topbar h2, #data-tool-settings-wireframe .st-subbar h2 { font-size: 20px; font-weight: 500; }
+  #data-tool-settings-wireframe .st-eyebrow { display: block; margin-bottom: 2px; color: var(--st-muted); font-size: 11px; font-weight: 500; letter-spacing: .12em; }
+  #data-tool-settings-wireframe .st-subbar { min-height: 72px; padding: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--st-line); }
+  #data-tool-settings-wireframe .st-icon-button { width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+  #data-tool-settings-wireframe .st-content { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+  #data-tool-settings-wireframe .st-padded { padding: 16px; }
+  #data-tool-settings-wireframe .st-section { margin-top: 12px; padding: 8px 16px; border-bottom: 1px solid var(--st-line); color: var(--st-muted); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+  #data-tool-settings-wireframe .st-row { min-height: 50px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+  #data-tool-settings-wireframe .st-row-tall { min-height: 64px; }
+  #data-tool-settings-wireframe .st-row input[type=radio] { width: 18px; height: 18px; accent-color: var(--st-strong); }
+  #data-tool-settings-wireframe .st-block { padding: 10px 16px; display: grid; gap: 4px; }
+  #data-tool-settings-wireframe .st-block input[type=range] { width: 100%; accent-color: var(--st-strong); }
+  #data-tool-settings-wireframe .st-title { display: block; font-size: 14px; }
+  #data-tool-settings-wireframe .st-desc { display: block; color: var(--st-muted); font-size: 12px; }
+  #data-tool-settings-wireframe .st-danger { color: var(--st-danger); }
+  #data-tool-settings-wireframe .st-switch { width: 40px; height: 22px; accent-color: var(--st-strong); }
+  #data-tool-settings-wireframe .st-nav-row { width: 100%; min-height: 58px; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; background: transparent; text-align: left; cursor: pointer; }
+  #data-tool-settings-wireframe .st-nav-row:hover { background: var(--st-surface-2); }
+  #data-tool-settings-wireframe .st-nav-row svg { width: 16px; height: 16px; color: var(--st-muted); flex: 0 0 auto; }
+  #data-tool-settings-wireframe .st-segmented { display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; overflow: hidden; border: 1px solid var(--st-line); border-radius: 20px; }
+  #data-tool-settings-wireframe .st-segmented button { min-height: 38px; border: 0; border-left: 1px solid var(--st-line); background: transparent; font-size: 13px; cursor: pointer; }
+  #data-tool-settings-wireframe .st-segmented button:first-child { border-left: 0; }
+  #data-tool-settings-wireframe .st-segmented button.is-active { background: var(--st-surface-2); font-weight: 500; }
+  #data-tool-settings-wireframe .st-segmented button.is-active::before { content: "✓ "; }
+  #data-tool-settings-wireframe .st-label { display: block; margin: 16px 0 6px; font-size: 12px; font-weight: 500; }
+  #data-tool-settings-wireframe .st-padded > .st-label:first-child { margin-top: 0; }
+  #data-tool-settings-wireframe .st-hint { margin-top: 6px; color: var(--st-muted); font-size: 11px; line-height: 1.4; }
+  #data-tool-settings-wireframe .st-error { color: var(--st-danger); }
+  #data-tool-settings-wireframe .st-columns { margin: 0; padding: 0; list-style: none; border: 1px solid var(--st-line); border-radius: 10px; }
+  #data-tool-settings-wireframe .st-columns:empty { display: none; }
+  #data-tool-settings-wireframe .st-columns li { min-height: 46px; padding: 0 4px 0 12px; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--st-line); }
+  #data-tool-settings-wireframe .st-columns li:first-child { border-top: 0; }
+  #data-tool-settings-wireframe .st-columns .st-pos { width: 14px; color: var(--st-muted); font-size: 12px; font-weight: 500; }
+  #data-tool-settings-wireframe .st-columns .st-name { flex: 1; display: grid; font-size: 13px; }
+  #data-tool-settings-wireframe .st-columns .st-name small { color: var(--st-muted); font-size: 10px; }
+  #data-tool-settings-wireframe .st-columns button { width: 32px; height: 36px; border: 0; background: transparent; cursor: pointer; font-size: 14px; }
+  #data-tool-settings-wireframe .st-columns button:disabled { opacity: .3; cursor: default; }
+  #data-tool-settings-wireframe .st-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  #data-tool-settings-wireframe .st-chips button { min-height: 30px; padding: 0 10px; border: 1px solid var(--st-line); border-radius: 8px; background: var(--st-surface); font-size: 12px; cursor: pointer; }
+  #data-tool-settings-wireframe .st-chips button::before { content: "+ "; color: var(--st-muted); }
+  #data-tool-settings-wireframe .st-chips-mono button { font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+  #data-tool-settings-wireframe .st-template { width: 100%; padding: 10px 12px; resize: vertical; border: 1px solid var(--st-line); border-radius: 10px; background: var(--st-surface); font: 12px/1.5 ui-monospace, Consolas, monospace; }
+  #data-tool-settings-wireframe .st-preview-head { display: flex; align-items: baseline; justify-content: space-between; }
+  #data-tool-settings-wireframe .st-preview-head > span:last-child { color: var(--st-muted); font-size: 10px; }
+  #data-tool-settings-wireframe .st-preview { margin: 0; padding: 12px; border-radius: 10px; background: var(--st-surface-2); white-space: pre-wrap; word-break: break-word; font: 11px/1.5 ui-monospace, Consolas, monospace; }
+  #data-tool-settings-wireframe .st-preview-line { white-space: pre; overflow-x: auto; }
+  #data-tool-settings-wireframe .st-reset { width: 100%; min-height: 40px; margin-top: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--st-line); border-radius: 10px; background: var(--st-surface); font-size: 12px; font-weight: 500; cursor: pointer; }
+  #data-tool-settings-wireframe .st-reset svg { width: 14px; height: 14px; }
+  #data-tool-settings-wireframe .st-bottom-nav { min-height: 66px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--st-line); }
+  #data-tool-settings-wireframe .st-bottom-nav button { display: grid; place-items: center; align-content: center; gap: 3px; border: 0; background: transparent; color: var(--st-muted); font-size: 11px; }
+  #data-tool-settings-wireframe .st-bottom-nav button.is-active { color: var(--st-text); font-weight: 500; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('data-tool-settings-wireframe');
+    const copy = window.dtCopy;
+    const sample = {
+      sku: '96478', title: 'MicroSplat', categories: 'Tools / Terrain', author: 'Jason Booth',
+      url: 'https://assetstore.unity.com/packages/tools/terrain/microsplat-96478', source: 'Unity Asset Store',
+      description: 'Terrain shading system with modular features and extensions.',
+    };
+    const view = name => root.querySelectorAll('[data-view]').forEach(v => { v.hidden = v.dataset.view !== name; });
+
+    root.addEventListener('click', event => {
+      const open = event.target.closest('[data-open]')?.dataset.open;
+      if (open) view(open);
+      if (event.target.closest('[data-back]')) view('main');
+      const segment = event.target.closest('.st-segmented button');
+      if (segment && !segment.closest('[data-format]')) {
+        segment.parentElement.querySelectorAll('button').forEach(b => b.classList.toggle('is-active', b === segment));
+      }
+    });
+
+    const parallel = root.querySelector('[data-parallel]');
+    parallel.addEventListener('input', () => { root.querySelector('[data-parallel-text]').textContent = `${parallel.value} at a time`; });
+
+    // ---- Copy line ----
+    const columns = root.querySelector('[data-columns]');
+    const available = root.querySelector('[data-available]');
+
+    function renderLine() {
+      const state = copy.settings;
+      root.querySelectorAll('[data-format] button').forEach(b => b.classList.toggle('is-active', b.dataset.value === state.format));
+      columns.innerHTML = '';
+      state.fields.forEach((key, index) => {
+        const field = copy.field(key);
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="st-pos">${index + 1}</span>
+          <span class="st-name">${field.label}<small>{${key}}</small></span>
+          <button type="button" data-move="-1" aria-label="Move ${field.label} up" ${index === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" data-move="1" aria-label="Move ${field.label} down" ${index === state.fields.length - 1 ? 'disabled' : ''}>▼</button>
+          <button type="button" data-remove aria-label="Remove ${field.label}">✕</button>`;
+        li.dataset.key = key;
+        columns.append(li);
+      });
+      root.querySelector('[data-columns-empty]').hidden = state.fields.length > 0;
+      available.innerHTML = '';
+      copy.fields.filter(f => !state.fields.includes(f.key)).forEach(f => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.textContent = f.label;
+        chip.dataset.add = f.key;
+        available.append(chip);
+      });
+      root.querySelector('[data-line-preview]').textContent = copy.line(sample).replace(/\t/g, '  →  ');
+      const labels = state.fields.map(key => copy.field(key).label).join(', ');
+      root.querySelector('[data-copy-line-summary]').textContent = `${state.format} · ${labels || 'No columns'}`;
+    }
+
+    root.querySelector('[data-format]').addEventListener('click', event => {
+      const value = event.target.closest('button')?.dataset.value;
+      if (value) { copy.settings.format = value; renderLine(); }
+    });
+    columns.addEventListener('click', event => {
+      const li = event.target.closest('li');
+      if (!li) return;
+      const fields = copy.settings.fields;
+      const index = fields.indexOf(li.dataset.key);
+      const move = event.target.closest('[data-move]')?.dataset.move;
+      if (move) {
+        const to = index + Number(move);
+        if (to >= 0 && to < fields.length) fields.splice(to, 0, fields.splice(index, 1)[0]);
+      }
+      if (event.target.closest('[data-remove]')) fields.splice(index, 1);
+      renderLine();
+    });
+    available.addEventListener('click', event => {
+      const key = event.target.closest('[data-add]')?.dataset.add;
+      if (key) { copy.settings.fields.push(key); renderLine(); }
+    });
+
+    // ---- Copy details ----
+    const template = root.querySelector('[data-template]');
+    const placeholders = root.querySelector('[data-placeholders]');
+    copy.fields.forEach(f => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.textContent = `{${f.key}}`;
+      chip.dataset.insert = f.key;
+      placeholders.append(chip);
+    });
+
+    function renderDetails() {
+      root.querySelector('[data-details-preview]').textContent = copy.details(sample);
+      root.querySelector('[data-copy-details-summary]').textContent =
+        copy.settings.template === copy.DEFAULT_TEMPLATE ? 'Default template' : 'Custom template';
+    }
+
+    template.addEventListener('input', () => { copy.settings.template = template.value; renderDetails(); });
+    placeholders.addEventListener('click', event => {
+      const key = event.target.closest('[data-insert]')?.dataset.insert;
+      if (!key) return;
+      const token = `{${key}}`;
+      const { selectionStart: start, selectionEnd: end, value } = template;
+      template.value = value.slice(0, start) + token + value.slice(end);
+      template.focus();
+      template.setSelectionRange(start + token.length, start + token.length);
+      copy.settings.template = template.value;
+      renderDetails();
+    });
+
+    root.addEventListener('click', event => {
+      const reset = event.target.closest('[data-reset]')?.dataset.reset;
+      if (reset === 'line') { copy.settings.format = 'TSV'; copy.settings.fields = [...copy.DEFAULT_FIELDS]; renderLine(); }
+      if (reset === 'details') { copy.settings.template = copy.DEFAULT_TEMPLATE; template.value = copy.DEFAULT_TEMPLATE; renderDetails(); }
+    });
+
+    template.value = copy.settings.template;
+    renderLine();
+    renderDetails();
+  })();
+</script>
+
 <!-- ============================== SVG SCREENS ============================== -->
 <section class="wf-section" id="svg-screens">
   <h2>SVG screens</h2>
@@ -1544,12 +2036,12 @@ invalid-item</textarea>
         <figcaption><a href="svg/03-collect-queue-first.svg" target="_blank" rel="noopener">Collect · Queue first</a><span>svg/03-collect-queue-first.svg</span></figcaption>
       </figure>
       <figure>
-        <a href="svg/04-results-visual-cards.svg" target="_blank" rel="noopener"><img src="svg/04-results-visual-cards.svg" alt="Results · Visual cards" loading="lazy" /></a>
-        <figcaption><a href="svg/04-results-visual-cards.svg" target="_blank" rel="noopener">Results · Visual cards</a><span>svg/04-results-visual-cards.svg</span></figcaption>
+        <a href="svg/04-results-visual-cards.svg" target="_blank" rel="noopener"><img src="svg/04-results-visual-cards.svg" alt="Results · Visual cards + copy" loading="lazy" /></a>
+        <figcaption><a href="svg/04-results-visual-cards.svg" target="_blank" rel="noopener">Results · Visual cards + copy</a><span>svg/04-results-visual-cards.svg</span></figcaption>
       </figure>
       <figure>
-        <a href="svg/05-results-selection-mode.svg" target="_blank" rel="noopener"><img src="svg/05-results-selection-mode.svg" alt="Results · Errors filter + selection" loading="lazy" /></a>
-        <figcaption><a href="svg/05-results-selection-mode.svg" target="_blank" rel="noopener">Results · Errors filter + selection</a><span>svg/05-results-selection-mode.svg</span></figcaption>
+        <a href="svg/05-results-selection-mode.svg" target="_blank" rel="noopener"><img src="svg/05-results-selection-mode.svg" alt="Results · Selection + copy" loading="lazy" /></a>
+        <figcaption><a href="svg/05-results-selection-mode.svg" target="_blank" rel="noopener">Results · Selection + copy</a><span>svg/05-results-selection-mode.svg</span></figcaption>
       </figure>
       <figure>
         <a href="svg/06-results-detail.svg" target="_blank" rel="noopener"><img src="svg/06-results-detail.svg" alt="Results · Result details" loading="lazy" /></a>
@@ -1558,6 +2050,26 @@ invalid-item</textarea>
       <figure>
         <a href="svg/07-results-compact-cards.svg" target="_blank" rel="noopener"><img src="svg/07-results-compact-cards.svg" alt="Results · Compact cards" loading="lazy" /></a>
         <figcaption><a href="svg/07-results-compact-cards.svg" target="_blank" rel="noopener">Results · Compact cards</a><span>svg/07-results-compact-cards.svg</span></figcaption>
+      </figure>
+      <figure>
+        <a href="svg/08-collect-processing.svg" target="_blank" rel="noopener"><img src="svg/08-collect-processing.svg" alt="Collect · Processing" loading="lazy" /></a>
+        <figcaption><a href="svg/08-collect-processing.svg" target="_blank" rel="noopener">Collect · Processing</a><span>svg/08-collect-processing.svg</span></figcaption>
+      </figure>
+      <figure>
+        <a href="svg/09-collect-finished.svg" target="_blank" rel="noopener"><img src="svg/09-collect-finished.svg" alt="Collect · Finished" loading="lazy" /></a>
+        <figcaption><a href="svg/09-collect-finished.svg" target="_blank" rel="noopener">Collect · Finished</a><span>svg/09-collect-finished.svg</span></figcaption>
+      </figure>
+      <figure>
+        <a href="svg/10-settings.svg" target="_blank" rel="noopener"><img src="svg/10-settings.svg" alt="Settings" loading="lazy" /></a>
+        <figcaption><a href="svg/10-settings.svg" target="_blank" rel="noopener">Settings</a><span>svg/10-settings.svg</span></figcaption>
+      </figure>
+      <figure>
+        <a href="svg/11-settings-copy-line.svg" target="_blank" rel="noopener"><img src="svg/11-settings-copy-line.svg" alt="Settings · Copy line" loading="lazy" /></a>
+        <figcaption><a href="svg/11-settings-copy-line.svg" target="_blank" rel="noopener">Settings · Copy line</a><span>svg/11-settings-copy-line.svg</span></figcaption>
+      </figure>
+      <figure>
+        <a href="svg/12-settings-copy-details.svg" target="_blank" rel="noopener"><img src="svg/12-settings-copy-details.svg" alt="Settings · Copy details" loading="lazy" /></a>
+        <figcaption><a href="svg/12-settings-copy-details.svg" target="_blank" rel="noopener">Settings · Copy details</a><span>svg/12-settings-copy-details.svg</span></figcaption>
       </figure>
   </div>
 </section>

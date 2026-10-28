@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="776" viewBox="0 0 375 776" role="img" aria-label="Copy details template settings">
+  <title>Data Tool – Copy details template settings</title>
+  <style>
+    svg {
+      --surface: #ffffff; --surface-2: #f5f5f3; --text: #1a1a19; --muted: #6b6b65;
+      --line: #d5d5d0; --strong: #242422; --on-strong: #ffffff;
+      --success: #276749; --success-soft: #edf7f1; --danger: #9a3412; --danger-soft: #fff7ed;
+    }
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --surface: #111111; --surface-2: #1d1d1b; --text: #f3f3ef; --muted: #aaa9a2;
+        --line: #41413d; --strong: #eeeeea; --on-strong: #171716;
+        --success: #86efac; --success-soft: #13251b; --danger: #fdba74; --danger-soft: #2b1b12;
+      }
+    }
+    text { fill: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .frame { fill: none; stroke: var(--line); }
+    .bg { fill: var(--surface); }
+    .bg2 { fill: var(--surface-2); }
+    .card { fill: var(--surface); stroke: var(--line); }
+    .card2 { fill: var(--surface-2); stroke: var(--line); }
+    .strong { fill: var(--strong); stroke: var(--strong); }
+    .dsoft { fill: var(--danger-soft); }
+    .dcard { fill: var(--danger-soft); stroke: var(--line); }
+    .ssoft { fill: var(--success-soft); }
+    .hr { stroke: var(--line); }
+    .dot { fill: var(--strong); }
+    text.mu { fill: var(--muted); }
+    text.on { fill: var(--on-strong); }
+    text.dg { fill: var(--danger); }
+    text.ok { fill: var(--success); }
+    .s10 { font-size: 10px; } .s11 { font-size: 11px; } .s12 { font-size: 12px; } .s13 { font-size: 13px; }
+    .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s20 { font-size: 20px; }
+    .w5 { font-weight: 500; } .w6 { font-weight: 600; }
+    .eb { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; fill: var(--muted); }
+    .mid { text-anchor: middle; } .end { text-anchor: end; }
+    .ic { color: var(--text); } .ic-mu { color: var(--muted); } .ic-on { color: var(--on-strong); }
+    .ic-dg { color: var(--danger); } .ic-ok { color: var(--success); }
+    .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace; }
+    .track { fill: var(--surface-2); } .fill { fill: var(--strong); }
+  </style>
+  <defs>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <clipPath id="clip-phone"><rect x="0.5" y="0.5" width="374" height="775" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip-phone)">
+    <rect class="bg" width="375" height="776"/>
+
+    
+    <use href="#i-arrow-left" class="ic" x="22" y="25" width="22" height="22"/>
+    <text class="s20 w5" x="58" y="43">Copy details</text>
+    
+    <line class="hr" x1="0" y1="72.5" x2="375" y2="72.5"/>
+    <text class="s12 w5" x="16" y="100">Template</text>
+    <rect class="card" x="16.5" y="108.5" width="342" height="226" rx="10"/>
+    <text class="s12 mono" x="28" y="132">{title}</text>
+    <text class="s12 mono" x="28" y="150">SKU: {sku}</text>
+    <text class="s12 mono" x="28" y="168">Source: {source}</text>
+    <text class="s12 mono" x="28" y="186">Author: {author}</text>
+    <text class="s12 mono" x="28" y="204">Categories: {categories}</text>
+    <text class="s12 mono" x="28" y="222">Price: {price}</text>
+    <text class="s12 mono" x="28" y="240">Rating: {rating}</text>
+    <text class="s12 mono" x="28" y="258">Version: {version}</text>
+    <text class="s12 mono" x="28" y="276">URL: {url}</text>
+    <text class="s12 mono" x="28" y="294"></text>
+    <text class="s12 mono" x="28" y="312">{description}</text>
+    <text class="s11 mu" x="16" y="354">Placeholders such as {title} are replaced with the result values.</text>
+    <text class="s11 mu" x="16" y="369">Lines whose placeholders are all empty are left out.</text>
+    <text class="s12 w5" x="16" y="396">Insert placeholder</text>
+    <rect class="card" x="16.5" y="404.5" width="66" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="412" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="422">{sku}</text>
+    <rect class="card" x="91.5" y="404.5" width="79" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="101" y="412" width="12" height="12"/>
+    <text class="s11 mono" x="118" y="422">{title}</text>
+    <rect class="card" x="179.5" y="404.5" width="111" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="189" y="412" width="12" height="12"/>
+    <text class="s11 mono" x="206" y="422">{categories}</text>
+    <rect class="card" x="16.5" y="440.5" width="85" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="448" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="458">{author}</text>
+    <rect class="card" x="110.5" y="440.5" width="66" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="120" y="448" width="12" height="12"/>
+    <text class="s11 mono" x="137" y="458">{url}</text>
+    <rect class="card" x="185.5" y="440.5" width="85" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="195" y="448" width="12" height="12"/>
+    <text class="s11 mono" x="212" y="458">{source}</text>
+    <rect class="card" x="279.5" y="440.5" width="79" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="289" y="448" width="12" height="12"/>
+    <text class="s11 mono" x="306" y="458">{price}</text>
+    <rect class="card" x="16.5" y="476.5" width="85" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="484" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="494">{rating}</text>
+    <rect class="card" x="110.5" y="476.5" width="92" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="120" y="484" width="12" height="12"/>
+    <text class="s11 mono" x="137" y="494">{version}</text>
+    <rect class="card" x="211.5" y="476.5" width="137" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="221" y="484" width="12" height="12"/>
+    <text class="s11 mono" x="238" y="494">{latest_release}</text>
+    <rect class="card" x="16.5" y="512.5" width="144" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="520" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="530">{first_published}</text>
+    <rect class="card" x="169.5" y="512.5" width="137" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="179" y="520" width="12" height="12"/>
+    <text class="s11 mono" x="196" y="530">{unity_versions}</text>
+    <rect class="card" x="16.5" y="548.5" width="105" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="556" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="566">{file_size}</text>
+    <rect class="card" x="130.5" y="548.5" width="118" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="140" y="556" width="12" height="12"/>
+    <text class="s11 mono" x="157" y="566">{asset_count}</text>
+    <rect class="card" x="257.5" y="548.5" width="72" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="267" y="556" width="12" height="12"/>
+    <text class="s11 mono" x="284" y="566">{tags}</text>
+    <rect class="card" x="16.5" y="584.5" width="105" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="26" y="592" width="12" height="12"/>
+    <text class="s11 mono" x="43" y="602">{image_url}</text>
+    <rect class="card" x="130.5" y="584.5" width="118" height="27" rx="8"/>
+    <use href="#i-plus" class="ic" x="140" y="592" width="12" height="12"/>
+    <text class="s11 mono" x="157" y="602">{description}</text>
+    <text class="s12 w5" x="16" y="638">Preview</text><text class="s10 mu end" x="359" y="638">Using MicroSplat</text>
+    <rect class="bg2" x="16" y="646" width="343" height="120" rx="10"/>
+    <text class="s11 mono" x="28" y="668">MicroSplat</text>
+    <text class="s11 mono" x="28" y="685">SKU: 96478</text>
+    <text class="s11 mono" x="28" y="702">Source: Unity Asset Store</text>
+    <text class="s11 mono" x="28" y="719">Author: Jason Booth</text>
+    <text class="s11 mono" x="28" y="736">Categories: Tools / Terrain</text>
+    <text class="s11 mono" x="28" y="753">URL: https://assetstore.unity.com/packa…</text>
+  </g>
+  <rect class="frame" x="0.5" y="0.5" width="374" height="775" rx="28"/>
+</svg>

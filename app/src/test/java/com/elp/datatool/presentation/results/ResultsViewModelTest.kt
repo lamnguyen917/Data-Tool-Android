@@ -97,6 +97,21 @@ class ResultsViewModelTest {
     }
 
     @Test
+    fun selectAll_selectsEveryVisibleResult() = runTest {
+        val viewModel = ResultsViewModel(repository, queue, settings)
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        viewModel.onToggleSelectionMode()
+        viewModel.onFilterChange(ResultFilter.COMPLETED)
+
+        viewModel.onSelectAll()
+
+        assertEquals(
+            viewModel.uiState.value.visibleResults.mapTo(LinkedHashSet()) { it.key },
+            viewModel.uiState.value.selectedKeys,
+        )
+    }
+
+    @Test
     fun longPressThenDelete_removesSelectedAndExitsSelection() = runTest {
         val viewModel = ResultsViewModel(repository, queue, settings)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
