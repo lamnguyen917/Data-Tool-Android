@@ -38,7 +38,10 @@ class DataSourceValidationTest {
         assertValid(DataSource.AMAZON_BOOKS, "https://www.amazon.com/Clean-Code/dp/0132350882/ref=sr_1_1", "0132350882")
         assertValid(DataSource.AMAZON_BOOKS, "/dp/1098119517?ref=test", "1098119517")
         assertValid(DataSource.AMAZON_BOOKS, "/gp/product/b0abcdefgh#details", "B0ABCDEFGH")
+        assertValid(DataSource.AMAZON_BOOKS, "https://www.amazon.co.uk/dp/B0BOOK1234", "B0BOOK1234")
         assertInvalid(DataSource.AMAZON_BOOKS, "ABCDEFGHIJ", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.AMAZON_BOOKS, "https://example.com/dp/1098119517", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.AMAZON_BOOKS, "https://www.amazon.com.evil.test/dp/1098119517", InvalidReason.BAD_FORMAT)
         assertInvalid(DataSource.AMAZON_BOOKS, "12345", InvalidReason.BAD_FORMAT)
     }
 

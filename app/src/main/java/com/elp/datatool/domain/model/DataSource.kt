@@ -18,11 +18,7 @@ enum class DataSource(val id: String) {
             STEAM_STORE -> DIGITS.matchEntire(value)?.value
                 ?: STEAM_URL.find(value)?.groupValues?.get(1)
 
-            AMAZON_BOOKS -> (AMAZON_URL.find(value)?.groupValues?.get(1)
-                ?: AMAZON_PATH.find(value)?.groupValues?.get(1)
-                ?: value)
-                .uppercase()
-                .takeIf(ASIN::matches)
+            AMAZON_BOOKS -> amazonProductId(value)
 
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
@@ -41,9 +37,21 @@ enum class DataSource(val id: String) {
         val IGDB_SLUG = Regex("""[a-z0-9]+(?:-[a-z0-9]+)*""")
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
-        val AMAZON_URL = Regex("""amazon\.[a-z.]+/(?:\S*/)?(?:dp|gp/product)/([A-Za-z0-9]{10})""")
+        val AMAZON_URL = Regex(
+            """(?:^|https?://)(?:www\.)?amazon\.(?:com(?:\.[a-z]{2})?|co\.[a-z]{2}|[a-z]{2,3})/""" +
+                """(?:\S*/)?(?:dp|gp/product)/([A-Z0-9]{10})""",
+            RegexOption.IGNORE_CASE,
+        )
         val AMAZON_PATH = Regex("""(?:^|/)(?:dp|gp/product)/([A-Za-z0-9]{10})(?:[/?#]|$)""")
         val IGDB_URL = Regex("""igdb\.com/games/([a-z0-9-]+)""")
+
+        fun amazonProductId(value: String): String? {
+            val candidate = AMAZON_URL.find(value)?.groupValues?.get(1)
+                ?: value.takeIf { it.startsWith('/') }
+                    ?.let { AMAZON_PATH.find(it)?.groupValues?.get(1) }
+                ?: value
+            return candidate.uppercase().takeIf(ASIN::matches)
+        }
     }
 }
 

@@ -12,6 +12,8 @@ import org.junit.Test
 class AmazonBookParserTest {
 
     private val normalizedUrl = "https://www.amazon.com/dp/1098119517"
+    private val canonicalUrl =
+        "https://www.amazon.com/Flutter-Dart-Cookbook-Developing-Applications/dp/1098119517"
 
     @Test
     fun parseProduct_readsBookMetadata() {
@@ -26,7 +28,7 @@ class AmazonBookParserTest {
         )
         assertEquals(listOf("Richard Rose"), result.creators)
         assertEquals(listOf("Computers & Technology", "Programming", "Mobile Apps"), result.categories)
-        assertEquals(normalizedUrl, result.canonicalUrl)
+        assertEquals(canonicalUrl, result.canonicalUrl)
         assertEquals("https://images.example/large.jpg", result.imageUrl)
         assertEquals(
             "Build full-stack Flutter applications for mobile, web, and the cloud.",
@@ -49,6 +51,56 @@ class AmazonBookParserTest {
     }
 
     @Test
+    fun parseProduct_readsClasslessAuthorLinks() {
+        val html = fixture().replace(
+            Regex("""(?s)<div id="bylineInfo">.*?</div>"""),
+            """<div id="bylineInfo"><span>by </span><a href="/author/Richard-Rose">Richard Rose</a></div>""",
+        )
+
+        val result = AmazonBookParser.parseProduct(html, "1098119517", normalizedUrl)
+
+        assertEquals(listOf("Richard Rose"), result.creators)
+    }
+
+    @Test
+    fun parseProduct_matchesDetailLabelsIgnoringCase() {
+        val html = fixture().replace("Publisher &rlm;", "publisher &rlm;")
+
+        val attributes = AmazonBookParser.parseProduct(html, "1098119517", normalizedUrl).attributes
+
+        assertEquals("O'Reilly Media", attributes[ProductAttributes.PUBLISHER])
+    }
+
+    @Test
+    fun parseProduct_ignoresNestedDetailBulletWrappers() {
+        val replacement = """
+            <div id="detailBullets_feature_div">
+                <ul>
+                    <li><span>Publisher : O'Reilly Media</span></li>
+                    <li class="detail-bullets-wrapper"><span>Publisher : Wrong Publisher</span></li>
+                </ul>
+            </div>
+        """.trimIndent()
+        val html = fixture().replace(
+            Regex("""(?s)<div id="detailBullets_feature_div">.*?</div>"""),
+            replacement,
+        )
+
+        val attributes = AmazonBookParser.parseProduct(html, "1098119517", normalizedUrl).attributes
+
+        assertEquals("O'Reilly Media", attributes[ProductAttributes.PUBLISHER])
+    }
+
+    @Test
+    fun parseProduct_rejectsForeignCanonicalUrl() {
+        val html = fixture().replace(canonicalUrl, "https://example.com/dp/1098119517")
+
+        val result = AmazonBookParser.parseProduct(html, "1098119517", normalizedUrl)
+
+        assertEquals(normalizedUrl, result.canonicalUrl)
+    }
+
+    @Test
     fun parseProduct_detectsCaptchaPage() {
         val html = """<html><head><title>Robot Check</title></head><body><form action="/errors/validateCaptcha"></form></body></html>"""
 
@@ -58,6 +110,13 @@ class AmazonBookParserTest {
     @Test
     fun parseProduct_detectsSmallSoftBlockPage() {
         assertError(FetchErrorKind.BLOCKED, "<html><body>Automated access</body></html>")
+    }
+
+    @Test
+    fun parseProduct_usesConservativeTwentyKilobyteBlockThreshold() {
+        val html = "<html><body>${"x".repeat(15 * 1024)}</body></html>"
+
+        assertError(FetchErrorKind.BLOCKED, html)
     }
 
     private fun assertError(expected: FetchErrorKind, html: String) {

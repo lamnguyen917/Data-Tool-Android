@@ -69,3 +69,14 @@ https://www.amazon.com/Flutter-Beginners-introductory-cross-platform-application
 | Print length | 353 pages |
 | ISBN-10 | 1800565992 |
 | ISBN-13 | 978-1800565999 |
+
+## Reference implementation review (2026-10-28)
+
+Evidence source: `DataTool/src-tauri/src/adapters/amazon_book.rs` and its unit fixtures. This is implementation evidence, not a new live Amazon crawl.
+
+- The fixtures cover both `#bylineInfo .author a` markup and a plain `#bylineInfo a` without Amazon CSS classes. Author parsing must support both shapes.
+- Detail-bullet lookup cleans bidi markers and compares known labels case-insensitively.
+- The reference parser uses `link[rel=canonical][href]` as the displayed product URL, while fetches and cache keys continue to use the normalized `/dp/{id}` seed.
+- Its conservative soft-block rule treats HTML below 20 KB without `#productTitle` as blocked.
+- Tests cover both single-author (`1098119517`) and multi-author (`1800565992`) pages.
+- The reference URL validation is over-broad: its generic path fallback accepts `https://example.com/dp/1098119517`, and `validate()` accepts any URL before `resolve_seed_url()` rejects it. Consumers should require an Amazon host for absolute URLs and only apply the generic `/dp/` or `/gp/product/` rule to path-only input.

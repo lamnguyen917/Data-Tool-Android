@@ -7,6 +7,7 @@ import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductAttributes
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.ResultStatus
+import com.elp.datatool.domain.model.ValidationResult
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.intOrNull
@@ -41,15 +42,15 @@ object AmazonBookParser {
             description = description(document),
             creators = authors(document),
             categories = categories(document),
-            canonicalUrl = normalizedUrl,
+            canonicalUrl = canonicalUrl(document, normalizedUrl),
             imageUrl = coverImage(document),
             attributes = buildMap {
-                putIfPresent(ProductAttributes.PUBLISHER, details["Publisher"])
-                putIfPresent(ProductAttributes.PUBLICATION_DATE, details["Publication date"])
-                putIfPresent(ProductAttributes.LANGUAGE, details["Language"])
-                putIfPresent(ProductAttributes.PRINT_LENGTH, details["Print length"])
-                putIfPresent(ProductAttributes.ISBN_10, details["ISBN-10"])
-                putIfPresent(ProductAttributes.ISBN_13, details["ISBN-13"])
+                putIfPresent(ProductAttributes.PUBLISHER, details.value("Publisher"))
+                putIfPresent(ProductAttributes.PUBLICATION_DATE, details.value("Publication date"))
+                putIfPresent(ProductAttributes.LANGUAGE, details.value("Language"))
+                putIfPresent(ProductAttributes.PRINT_LENGTH, details.value("Print length"))
+                putIfPresent(ProductAttributes.ISBN_10, details.value("ISBN-10"))
+                putIfPresent(ProductAttributes.ISBN_13, details.value("ISBN-13"))
                 putIfPresent(ProductAttributes.RATING, rating(document))
                 putIfPresent(ProductAttributes.RATING_COUNT, ratingCount(document))
             },
@@ -74,6 +75,11 @@ object AmazonBookParser {
 
     private fun detailBullets(document: Document): Map<String, String> = buildMap {
         document.select("#detailBullets_feature_div li").forEach { item ->
+            if (item.hasClass("detail-bullets-wrapper") ||
+                item.select(".detail-bullets-wrapper").isNotEmpty()
+            ) {
+                return@forEach
+            }
             val text = cleanBulletText(item.text())
             val separator = text.indexOf(':')
             if (separator > 0) {
@@ -94,11 +100,15 @@ object AmazonBookParser {
         val values = if (authorContainers.isNotEmpty()) {
             authorContainers.map { author -> author.selectFirst("a")?.text() ?: author.text() }
         } else {
-            document.select("#bylineInfo a.a-link-normal").map(Element::text)
+            document.select("#bylineInfo a").map(Element::text)
         }
         return values
-            .map { authorSuffix.replace(it, "").removePrefix("by ").trim() }
-            .filter { it.isNotEmpty() && !it.startsWith("Visit Amazon's", ignoreCase = true) }
+            .map { authorSuffix.replace(it, "").replaceFirst(BY_PREFIX, "").trim() }
+            .filter {
+                it.isNotEmpty() &&
+                    !it.equals("Author", ignoreCase = true) &&
+                    !it.startsWith("Visit Amazon's", ignoreCase = true)
+            }
             .distinct()
     }
 
@@ -113,6 +123,12 @@ object AmazonBookParser {
             ?.text()
             ?.trim()
             ?.takeIf { it.isNotEmpty() }
+
+    private fun canonicalUrl(document: Document, fallback: String): String =
+        document.selectFirst("link[rel=canonical][href]")
+            ?.let { it.absUrl("href").ifBlank { it.attr("href") } }
+            ?.takeIf { DataSource.AMAZON_BOOKS.validate(it) is ValidationResult.Valid }
+            ?: fallback
 
     private fun rating(document: Document): String? {
         val source = document.selectFirst("#acrPopover")?.attr("title")
@@ -149,7 +165,12 @@ object AmazonBookParser {
         value?.takeIf { it.isNotBlank() }?.let { put(key, it) }
     }
 
+    private fun Map<String, String>.value(key: String): String? = entries
+        .firstOrNull { (label) -> cleanBulletText(label).trimEnd(':').equals(key, ignoreCase = true) }
+        ?.value
+
     private fun Int?.orZero() = this ?: 0
 
-    private const val MIN_PRODUCT_PAGE_SIZE = 10 * 1024
+    private val BY_PREFIX = Regex("""^by\s+""", RegexOption.IGNORE_CASE)
+    private const val MIN_PRODUCT_PAGE_SIZE = 20 * 1024
 }

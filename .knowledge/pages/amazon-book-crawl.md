@@ -2,7 +2,7 @@
 id: amazon-book-crawl
 title: Amazon — book product crawl
 status: verified
-updated: 2026-07-20
+updated: 2026-10-28
 tags:
   - amazon
   - books
@@ -37,7 +37,8 @@ Related: [raw observations](../sources/amazon-book-observations.md)
 | Do | Don't |
 |----|-------|
 | Normalize to `https://www.amazon.com/dp/{id}` for crawl | Assume slug-less and slug URLs redirect to each other |
-| Accept full URL, `/dp/…`, `/gp/product/…`, or bare ISBN-10 / ASIN | Use ISBN-13 in `/dp/` as primary resolver (fragile / soft-block observed) |
+| Accept Amazon URL, `/dp/…`, `/gp/product/…`, or bare ISBN-10 / ASIN | Accept a foreign absolute URL merely because its path contains `/dp/{id}` |
+| Use the ISBN-10 or ASIN from the product URL as the primary resolver | Use ISBN-13 in `/dp/` as the primary resolver (fragile / soft-block observed) |
 | Parse `#productTitle`, `#bylineInfo`, `#detailBullets_feature_div` | Rely on `application/ld+json` |
 | Strip Unicode bidi marks (`\u200f`, `\u200e`) and entities `&rlm;` / `&lrm;` from detail bullets | Hammer Amazon with back-to-back requests from one IP |
 | Detect bot/block pages (small HTML, no `#productTitle`) | Treat HTTP 200 alone as success |
@@ -63,7 +64,7 @@ Also works:
 https://www.amazon.com/gp/product/1098119517
 ```
 
-`rel=canonical` may reference the slug form; prefer storing **`https://www.amazon.com/dp/{id}`** as the normalized product URL unless you need the canonical slug URL.
+`rel=canonical` may reference the slug form. Use **`https://www.amazon.com/dp/{id}`** as the normalized request/cache URL; use a valid `rel=canonical` value as the user-facing product URL when available.
 
 ## Input → seed URL
 
@@ -78,6 +79,8 @@ INPUT
       ├─ /^\d{10}$/           → ISBN-10 (common for books) → /dp/{id}
       └─ /^B[A-Z0-9]{9}$/i    → Amazon ASIN → /dp/{id}
 ```
+
+For an absolute URL, require an `amazon.*` host. Apply the generic `/dp/{id}` and `/gp/product/{id}` extraction only to path-only input; otherwise a foreign URL such as `https://example.com/dp/1098119517` can be misclassified as Amazon.
 
 ### Extract id from URL
 
@@ -113,7 +116,7 @@ Treat as **failure** (retry later / rotate session), not parseable product:
 
 | Signal | Meaning |
 |--------|---------|
-| HTML ≪ 10 KB and no `#productTitle` | Soft block / automated-access page |
+| HTML < 20 KB and no `#productTitle` | Conservative soft-block / automated-access detection |
 | Title `Robot Check` or captcha form | Hard block |
 | Boilerplate mentioning `api-services-support@amazon.com` | Automated access warning |
 | Missing `#productTitle` on otherwise small page | Not a product detail page |
@@ -126,7 +129,7 @@ Treat as **failure** (retry later / rotate session), not parseable product:
 |---------|---------------------------|
 | SKU / ASIN | URL `/dp/{id}`; cross-check `#detailBullets` **ISBN-10** |
 | Title | `#productTitle` |
-| Author(s) | `#bylineInfo` — links/text after “by”, drop “(Author)” suffix |
+| Author(s) | `#bylineInfo .author a`; fallback to any `#bylineInfo a` even without a CSS class; drop “by” / “(Author)” wrappers |
 | Publisher | `#detailBullets_feature_div` li containing `Publisher` |
 | Publication date | detail bullet `Publication date` |
 | Language | detail bullet `Language` |
@@ -157,6 +160,8 @@ Publisher &rlm; : &lrm; Packt Publishing
 - Labels and values may be wrapped with Unicode direction marks **U+200F / U+200E** or entities **`&rlm;` / `&lrm;`** — remove before split.
 - Split on first `:` after label; value is remainder trimmed.
 - Label and value may live in separate `<span>` siblings (bold label + value span).
+- Compare known labels case-insensitively after bidi cleanup.
+- Ignore nested `detail-bullets-wrapper` list entries so wrapper text does not overwrite real bullet values.
 
 ### Embedded JSON notes
 
