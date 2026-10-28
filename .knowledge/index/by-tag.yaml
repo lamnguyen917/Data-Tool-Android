@@ -34,10 +34,34 @@ crawl:
 graphql:
   ids: [unity-crawl]
 html:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl]
+  ids: [unity-crawl, amazon-book-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research]
 redirect:
   ids: [unity-crawl]
 search:
-  ids: [unity-crawl, steam-crawl, igdb-crawl]
+  ids: [unity-crawl, steam-crawl, igdb-crawl, rust-desktop-adapters, ave-adapter-research]
 nextjs:
   ids: [unity-crawl]
+adapters:
+  ids: [rust-desktop-adapters, ave-adapter-research]
+rust:
+  ids: [rust-desktop-adapters, ave-adapter-research]
+localization:
+  ids: [rust-desktop-adapters, ave-adapter-research]
+ave:
+  ids: [ave-adapter-research, rust-desktop-adapters]
+adult-empire:
+  ids: [rust-desktop-adapters]
+avfantasy:
+  ids: [rust-desktop-adapters]
+carib:
+  ids: [rust-desktop-adapters]
+caribpr:
+  ids: [rust-desktop-adapters]
+heyzo:
+  ids: [rust-desktop-adapters]
+1pondo:
+  ids: [rust-desktop-adapters]
+third-world-media:
+  ids: [rust-desktop-adapters]
+tokyo-hot:
+  ids: [rust-desktop-adapters]

@@ -26,3 +26,5 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `amazon-book-crawl` | [Amazon book crawl](./pages/amazon-book-crawl.md) | ASIN / ISBN, `/dp/` URL, Amazon HTML selectors |
 | `steam-crawl` | [Steam Store crawl](./pages/steam-store-crawl.md) | AppID resolve, storesearch, Steam API / HTML |
 | `igdb-crawl` | [IGDB crawl](./pages/igdb-crawl.md) | slug / game id, IGDB API v4, involved_companies |
+| `rust-desktop-adapters` | [Rust desktop adapters](./pages/rust-desktop-adapters.md) | migration reference for Ave, AdultEmpire, AVFantasy, Carib, CaribPr, Heyzo, 1pondo, ThirdWorldMedia, and Tokyo-Hot |
+| `ave-adapter-research` | [Ave adapter research](./pages/ave-adapter-research.md) | Ave input resolution, search, bilingual parsing, cache risks, Android mapping, and test plan |

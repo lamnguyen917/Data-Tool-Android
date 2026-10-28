@@ -58,3 +58,33 @@ igdb-crawl:
     - igdb slug
     - igdb api apicalypse
     - igdb search
+
+rust-desktop-adapters:
+  title: Rust desktop adapters — implementation reference
+  path: pages/rust-desktop-adapters.md
+  source: sources/rust-desktop-adapter-observations.md
+  status: source-reviewed
+  summary: >
+    Source-reviewed behavior, endpoints, selectors, field mappings, localization,
+    tests, and known limitations for nine adapters registered in the sibling Rust
+    desktop application. These adapters are not implemented in DataToolAndroid.
+  open_when:
+    - rust adapter migration
+    - ave adultempire avfantasy
+    - carib caribpr heyzo
+    - 1pondo thirdworldmedia tokyo-hot
+
+ave-adapter-research:
+  title: Ave adapter — source research and Android migration guide
+  path: pages/ave-adapter-research.md
+  source: sources/ave-adapter-observations.md
+  status: source-reviewed
+  summary: >
+    Dedicated source research for the Rust Ave adapter: strict input resolution,
+    candidate search, exact SKU matching, English and Japanese HTML parsing,
+    cache and validation risks, Android field mapping, and fixture test plan.
+  open_when:
+    - ave adapter
+    - aventertainments crawl
+    - ave android migration
+    - ave search parsing

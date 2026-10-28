@@ -1,38 +1,55 @@
-# Android — trạng thái dự án
+# Android project status
 
-Ứng dụng sử dụng **Kotlin**, **Jetpack Compose** và **Material 3**.
+The application uses **Kotlin**, **Jetpack Compose**, and **Material 3**.
 
-## Cấu hình hiện tại
+## Current configuration
 
-| Mục | Giá trị |
-|-----|---------|
+| Item | Value |
+|------|-------|
 | Application ID | `com.elp.datatool` |
 | Module | `app` |
 | Min SDK | 24 |
 | Target / Compile SDK | 37 |
 | Java compatibility | 11 |
 
-## Trạng thái triển khai
+## Implementation status
 
-Giao diện Compose đã được dựng theo wireframe trong [`.visualizations/wireframe.html`](../.visualizations/wireframe.html): **Thu thập**, **Tìm sản phẩm**, **Kết quả** (card, lọc, chọn nhiều), **Chi tiết kết quả** và **Cài đặt**, cùng điều hướng và theme sáng/tối.
+The Compose UI follows [`.visualizations/wireframe.html`](../.visualizations/wireframe.html). It includes collection, product search, result cards and filters, multi-selection, result details, settings, navigation, and light/dark themes.
 
-| Nguồn | Tìm kiếm | Thu thập |
-|-------|----------|----------|
-| Unity Asset Store | ✅ `/search?q=` (RSC payload) | ✅ `/packages/unknown/{id}` + embedded state / ld+json |
-| Amazon Books | — | ✅ `/dp/{ASIN}` + product HTML |
-| Steam Store, IGDB | — | — (reports “not available yet”) |
+| Source | Search | Collection |
+|--------|--------|------------|
+| Unity Asset Store | Implemented through `/search?q=` and the RSC payload | Implemented through `/packages/unknown/{id}` and embedded state / JSON-LD |
+| Amazon Books | Not supported | Implemented through `/dp/{ASIN}` and product HTML |
+| Steam Store | Not supported | Not implemented; the UI reports that the source is not available yet |
+| IGDB | Not supported | Not implemented; the UI reports that the source is not available yet |
 
-Đã có: `UnityAssetStoreAdapter` (`data/adapter/unity`), HTTP client OkHttp (`data/remote`), hàng đợi xử lý `DefaultCollectionQueue` (giới hạn song song, timeout, tự thử lại lỗi tạm thời, hủy, thử lại thủ công), cache theo mã sản phẩm có thời hạn, ảnh bằng Coil. Kiểm thử parser dùng fixture trong `app/src/test/resources/unity`.
+The Android application currently registers `UnityAssetStoreAdapter` and `AmazonBookAdapter`. It also includes the OkHttp client, `DefaultCollectionQueue` with bounded concurrency, timeout, temporary-error retry, cancellation and manual retry, expiring response cache, and Coil image loading. Parser tests use local fixtures under `app/src/test/resources`.
 
-Sao chép kết quả: **Copy line** (CSV/TSV, chọn và sắp xếp cột) và **Copy details** (template có placeholder `{title}`, `{sku}`…), cấu hình trong Cài đặt → Copy; logic định dạng ở `domain/copy/CopyFormatter.kt`.
+The sibling Rust desktop project contains nine additional registered adapters. They are **implementation references only** and are not registered in the Android application:
 
-Còn là **thiết kế mục tiêu**: database và DataStore (kết quả, cài đặt đang lưu trong bộ nhớ, mất khi tắt ứng dụng), WorkManager cho hàng đợi bền vững, xuất file.
+| Adapter | Rust key | Current Rust capability |
+|---------|----------|-------------------------|
+| [Ave](../.knowledge/pages/ave-adapter-research.md) | `ave` | English and Japanese product parsing, SKU lookup, and keyword candidates |
+| Tokyo-Hot | `tokyo-hot` | English and Japanese parsing for SKU or URL; keyword resolution is English-only |
+| 1pondo | `1pondo` | JSON request only; metadata mapping is still a stub |
+| Heyzo | `heyzo` | English and Japanese product parsing for a four-digit SKU or movie URL |
+| AdultEmpire | `adult-empire` | Product-URL parsing with an age-confirmation request; no Japanese result |
+| AVFantasy | `avfantasy` | SKU, URL, and title-keyword resolution with English and partial Japanese parsing |
+| Carib | `caribbeancom` | English and Japanese parsing for a dated SKU or movie URL |
+| CaribPr | `caribbeancompr` | Japanese-only parsing; the top-level English result remains mostly empty |
+| ThirdWorldMedia | `third-world-media` | Registered but not implemented; every parse call returns an error |
 
-## Thứ tự đọc
+See [Rust desktop adapter reference](../.knowledge/pages/rust-desktop-adapters.md) for input rules, endpoints, field mappings, selectors, and known limitations extracted from the Rust source.
 
-1. [`01-product-overview.md`](./01-product-overview.md) — phạm vi và luồng nghiệp vụ.
-2. [`02-architecture.md`](./02-architecture.md) — ranh giới các lớp và dữ liệu.
-3. [`03-ui-design.md`](./03-ui-design.md) — đặc tả giao diện mobile.
-4. [`.knowledge/index/by-id.yaml`](../../.knowledge/index/by-id.yaml) — tra cứu cách làm việc với từng nguồn dữ liệu.
+Result copying supports **Copy line** with CSV/TSV and configurable field order, plus **Copy details** with placeholders such as `{title}` and `{sku}`. Configuration is available under Settings > Copy, and formatting logic lives in `domain/copy/CopyFormatter.kt`.
 
-Mỗi tính năng chỉ được đánh dấu đã triển khai khi có mã nguồn và kiểm thử tương ứng.
+The database, DataStore persistence, durable WorkManager queue, and file export remain target architecture. Results and settings currently live in memory and are lost when the application process stops.
+
+## Reading order
+
+1. [`01-product-overview.md`](./01-product-overview.md) — product scope and primary workflows.
+2. [`02-architecture.md`](./02-architecture.md) — layer boundaries and data contracts.
+3. [`03-ui-design.md`](./03-ui-design.md) — mobile UI specification.
+4. [`.knowledge/index/by-id.yaml`](../.knowledge/index/by-id.yaml) — source-specific crawl and adapter knowledge.
+
+A feature is marked as implemented only when corresponding source code and tests exist in this Android project.
