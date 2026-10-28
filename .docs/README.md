@@ -21,16 +21,16 @@ The Compose UI follows [`.visualizations/wireframe.html`](../.visualizations/wir
 | Unity Asset Store | Implemented through `/search?q=` and the RSC payload | Implemented through `/packages/unknown/{id}` and embedded state / JSON-LD |
 | Amazon Books | Not supported | Implemented through `/dp/{ASIN}` and product HTML |
 | [Ave](../.knowledge/pages/ave-adapter-research.md) | Implemented, but the site currently redirects automated search to VerifyBot/reCAPTCHA | Implemented for trusted product URLs, with English and Japanese metadata |
+| [Tokyo-Hot](../.knowledge/pages/tokyo-hot-adapter-research.md) | Implemented through `/product/?q=` with exact Product ID matching | Implemented for Product IDs and trusted URLs, with English and Japanese metadata |
 | Steam Store | Not supported | Not implemented; the UI reports that the source is not available yet |
 | IGDB | Not supported | Not implemented; the UI reports that the source is not available yet |
 
-The Android application currently registers `UnityAssetStoreAdapter`, `AmazonBookAdapter`, and `AveAdapter`. It also includes the OkHttp client, `DefaultCollectionQueue` with bounded concurrency, timeout, temporary-error retry, cancellation and manual retry, expiring response cache, and Coil image loading. Parser tests use local fixtures under `app/src/test/resources`.
+The Android application currently registers `UnityAssetStoreAdapter`, `AmazonBookAdapter`, `AveAdapter`, and `TokyoHotAdapter`. It also includes the OkHttp client, `DefaultCollectionQueue` with bounded concurrency, timeout, temporary-error retry, cancellation and manual retry, expiring response cache, and Coil image loading. Parser tests use local fixtures under `app/src/test/resources`.
 
-The sibling Rust desktop project supplied the Ave reference and contains eight remaining adapters that are **implementation references only** and are not registered in the Android application:
+The sibling Rust desktop project supplied the adapter references. Seven adapters remain **implementation references only** and are not registered in the Android application:
 
 | Adapter | Rust key | Current Rust capability |
 |---------|----------|-------------------------|
-| Tokyo-Hot | `tokyo-hot` | English and Japanese parsing for SKU or URL; keyword resolution is English-only |
 | 1pondo | `1pondo` | JSON request only; metadata mapping is still a stub |
 | Heyzo | `heyzo` | English and Japanese product parsing for a four-digit SKU or movie URL |
 | AdultEmpire | `adult-empire` | Product-URL parsing with an age-confirmation request; no Japanese result |
@@ -53,3 +53,5 @@ The database, DataStore persistence, durable WorkManager queue, and file export 
 4. [`.knowledge/index/by-id.yaml`](../.knowledge/index/by-id.yaml) — source-specific crawl and adapter knowledge.
 
 A feature is marked as implemented only when corresponding source code and tests exist in this Android project.
+
+FC2 has a dedicated [adapter research guide](../.knowledge/pages/fc2-adapter-research.md) based on live article `4871322`, but it is not yet a registered Android source and has no implementation code.

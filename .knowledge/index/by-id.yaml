@@ -67,7 +67,7 @@ rust-desktop-adapters:
   summary: >
     Source-reviewed behavior, endpoints, selectors, field mappings, localization,
     tests, and known limitations for nine adapters registered in the sibling Rust
-    desktop application. These adapters are not implemented in DataToolAndroid.
+    desktop application. Ave and Tokyo-Hot now have dedicated Android implementations.
   open_when:
     - rust adapter migration
     - ave adultempire avfantasy
@@ -88,3 +88,32 @@ ave-adapter-research:
     - aventertainments crawl
     - ave android migration
     - ave search parsing
+
+tokyo-hot-adapter-research:
+  title: Tokyo-Hot adapter — live research and Android implementation
+  path: pages/tokyo-hot-adapter-research.md
+  source: sources/tokyo-hot-adapter-observations.md
+  status: implemented
+  summary: >
+    Live-verified Tokyo-Hot search and bilingual product parsing, exact Product ID
+    resolution for n0001, field mapping, trusted URL rules, error policy, and tests.
+  open_when:
+    - tokyo-hot adapter
+    - tokyo-hot n0001
+    - tokyo-hot search
+    - tokyo-hot localization
+
+fc2-adapter-research:
+  title: FC2 adapter — live article research and implementation guide
+  path: pages/fc2-adapter-research.md
+  source: sources/fc2-adapter-observations.md
+  status: researched
+  summary: >
+    Live analysis of FC2 article 4871322: numeric SKU normalization, Product
+    JSON-LD, supplemental DOM fields, session-bound description iframe, soft
+    not-found pages, anonymous-search limitation, field mapping, and test plan.
+  open_when:
+    - fc2 adapter
+    - fc2 ppv
+    - fc2 article 4871322
+    - fc2 content market

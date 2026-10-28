@@ -59,6 +59,19 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun tokyoHot_acceptsProductIdAndTrustedProductUrl() {
+        assertValid(DataSource.TOKYO_HOT, "N0001", "n0001")
+        assertValid(DataSource.TOKYO_HOT, "HTN0001", "HTN0001")
+        assertValid(
+            DataSource.TOKYO_HOT,
+            "https://www.tokyo-hot.com/product/5000/",
+            "https://www.tokyo-hot.com/product/5000/",
+        )
+        assertInvalid(DataSource.TOKYO_HOT, "https://example.com/product/5000/", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.TOKYO_HOT, "https://www.tokyo-hot.com/product/?q=n0001", InvalidReason.BAD_FORMAT)
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

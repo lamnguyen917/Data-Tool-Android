@@ -64,6 +64,8 @@ object ProductAttributes {
     const val STUDIO = "studio"
     const val RELEASE_DATE = "release_date"
     const val SERIES = "series"
+    const val DURATION = "duration"
+    const val THEME = "theme"
 }
 
 /** Why collecting a product failed. Drives the message and the retry policy. */

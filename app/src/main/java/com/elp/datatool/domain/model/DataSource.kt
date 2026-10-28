@@ -1,10 +1,13 @@
 package com.elp.datatool.domain.model
 
+import java.util.Locale
+
 /** A website the app can collect product metadata from. */
 enum class DataSource(val id: String) {
     UNITY_ASSET_STORE("unity"),
     AMAZON_BOOKS("amazon"),
     AVE("ave"),
+    TOKYO_HOT("tokyo-hot"),
     STEAM_STORE("steam"),
     IGDB("igdb");
 
@@ -23,6 +26,8 @@ enum class DataSource(val id: String) {
 
             AVE -> aveProductId(value)
 
+            TOKYO_HOT -> tokyoHotProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -39,6 +44,7 @@ enum class DataSource(val id: String) {
         val ASIN = Regex("""(?:\d{9}[0-9X]|B[A-Z0-9]{9})""")
         val IGDB_SLUG = Regex("""[a-z0-9]+(?:-[a-z0-9]+)*""")
         val AVE_SKU = Regex("""[A-Z0-9_]{2,}-?[A-Z0-9_]?\d{2,5}""")
+        val TOKYO_HOT_ID = Regex("""[A-Za-z0-9][A-Za-z0-9_-]*""")
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
         val AMAZON_URL = Regex(
@@ -75,6 +81,21 @@ enum class DataSource(val id: String) {
                     hasProductId
             }
         }
+
+        fun tokyoHotProductId(value: String): String? {
+            if (TOKYO_HOT_ID.matches(value)) return value.lowercaseIfClassicTokyoHotId()
+
+            val uri = runCatching { java.net.URI(value) }.getOrNull() ?: return null
+            val trustedHost = uri.host?.lowercase() in setOf("tokyo-hot.com", "www.tokyo-hot.com")
+            val hasProductPath = Regex("""/product/[A-Za-z0-9_-]+/?""")
+                .matches(uri.path.orEmpty())
+            return value.takeIf {
+                uri.scheme.equals("https", ignoreCase = true) && trustedHost && hasProductPath
+            }
+        }
+
+        fun String.lowercaseIfClassicTokyoHotId(): String =
+            if (Regex("""[kKnN]\d{4}""").matches(this)) lowercase(Locale.ROOT) else this
 
         fun String.removePrefixIgnoreCase(prefix: String): String =
             if (startsWith(prefix, ignoreCase = true)) substring(prefix.length) else this

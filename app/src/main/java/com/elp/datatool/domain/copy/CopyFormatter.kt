@@ -132,6 +132,7 @@ val DataSource.displayName: String
         DataSource.UNITY_ASSET_STORE -> "Unity Asset Store"
         DataSource.AMAZON_BOOKS -> "Amazon Books"
         DataSource.AVE -> "Ave"
+        DataSource.TOKYO_HOT -> "Tokyo-Hot"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
     }

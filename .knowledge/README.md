@@ -28,3 +28,5 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `igdb-crawl` | [IGDB crawl](./pages/igdb-crawl.md) | slug / game id, IGDB API v4, involved_companies |
 | `rust-desktop-adapters` | [Rust desktop adapters](./pages/rust-desktop-adapters.md) | migration reference for Ave, AdultEmpire, AVFantasy, Carib, CaribPr, Heyzo, 1pondo, ThirdWorldMedia, and Tokyo-Hot |
 | `ave-adapter-research` | [Ave adapter research](./pages/ave-adapter-research.md) | Ave input resolution, search, bilingual parsing, cache risks, Android mapping, and test plan |
+| `tokyo-hot-adapter-research` | [Tokyo-Hot adapter research](./pages/tokyo-hot-adapter-research.md) | live search selectors, exact `n0001` resolution, bilingual parsing, Android mapping, and verification |
+| `fc2-adapter-research` | [FC2 adapter research](./pages/fc2-adapter-research.md) | numeric article SKU, Product JSON-LD, description iframe, soft not-found behavior, search limitation, and implementation plan |

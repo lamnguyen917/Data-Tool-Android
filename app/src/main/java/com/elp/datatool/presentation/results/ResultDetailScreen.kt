@@ -236,7 +236,7 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
         DetailSection(
             when (result.source) {
                 DataSource.AMAZON_BOOKS -> R.string.detail_authors
-                DataSource.AVE -> R.string.detail_performers
+                DataSource.AVE, DataSource.TOKYO_HOT -> R.string.detail_performers
                 else -> R.string.detail_publisher
             },
             result.creators.joinToString().ifEmpty { null },
@@ -269,6 +269,8 @@ private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.STUDIO to R.string.attr_studio,
     ProductAttributes.RELEASE_DATE to R.string.attr_release_date,
     ProductAttributes.SERIES to R.string.attr_series,
+    ProductAttributes.DURATION to R.string.attr_duration,
+    ProductAttributes.THEME to R.string.attr_theme,
 )
 
 @Composable
@@ -323,6 +325,12 @@ private fun JapaneseMetadataSection(metadata: LocalizedProductMetadata) {
             ?.let { add(stringResource(R.string.attr_release_date) to it) }
         metadata.attributes[ProductAttributes.SERIES]
             ?.let { add(stringResource(R.string.attr_series) to it) }
+        metadata.attributes[ProductAttributes.DURATION]
+            ?.let { add(stringResource(R.string.attr_duration) to it) }
+        metadata.attributes[ProductAttributes.TAGS]
+            ?.let { add(stringResource(R.string.attr_tags) to it) }
+        metadata.attributes[ProductAttributes.THEME]
+            ?.let { add(stringResource(R.string.attr_theme) to it) }
         metadata.description?.let { add(stringResource(R.string.detail_localized_description) to it) }
         metadata.canonicalUrl?.let { add(stringResource(R.string.detail_localized_url) to it) }
     }
