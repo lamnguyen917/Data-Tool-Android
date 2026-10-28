@@ -16,7 +16,12 @@ import com.elp.datatool.presentation.settings.SettingsViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            CollectViewModel(container().productSearchRepository, container().collectionQueue)
+            val container = container()
+            CollectViewModel(
+                container.productSearchRepository,
+                container.collectionQueue,
+                container.settingsRepository,
+            )
         }
         initializer {
             val container = container()

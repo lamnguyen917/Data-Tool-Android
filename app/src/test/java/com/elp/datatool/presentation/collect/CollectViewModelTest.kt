@@ -1,5 +1,7 @@
 package com.elp.datatool.presentation.collect
 
+import com.elp.datatool.data.repository.InMemorySettingsRepository
+import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.FetchException
@@ -32,10 +34,13 @@ class CollectViewModelTest {
     }
 
     private val queue = FakeCollectionQueue()
+    private val settings = InMemorySettingsRepository()
+
+    private fun createViewModel() = CollectViewModel(searchRepository, queue, settings)
 
     @Test
     fun start_sendsNormalizedValidIdsToQueue() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onInputChange(
             "96478\ninvalid-item\nhttps://assetstore.unity.com/packages/tools/terrain/microsplat-36050"
         )
@@ -48,7 +53,7 @@ class CollectViewModelTest {
 
     @Test
     fun start_withUnsupportedSourceSendsEvent() = runTest {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onSourceChange(DataSource.STEAM_STORE)
         viewModel.onInputChange("413150")
 
@@ -60,7 +65,7 @@ class CollectViewModelTest {
 
     @Test
     fun finishedBatch_showsSummaryUntilInputChanges() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onInputChange("96478")
         viewModel.onStartProcessing()
 
@@ -73,7 +78,7 @@ class CollectViewModelTest {
 
     @Test
     fun cancel_delegatesToQueue() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
 
         viewModel.onCancelProcessing()
 
@@ -82,7 +87,7 @@ class CollectViewModelTest {
 
     @Test
     fun search_unsupportedSourceShowsUnsupportedState() = runTest {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onSourceChange(DataSource.AMAZON_BOOKS)
 
         viewModel.onQueryChange("clean code")
@@ -111,7 +116,7 @@ class CollectViewModelTest {
 
     @Test
     fun inputChange_countsValidAndInvalidItems() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
 
         viewModel.onInputChange("96478\n36050\ninvalid-item")
 
@@ -123,18 +128,30 @@ class CollectViewModelTest {
 
     @Test
     fun sourceChange_revalidatesExistingInput() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onInputChange("hollow-knight")
         assertEquals(0, viewModel.uiState.value.validCount)
 
         viewModel.onSourceChange(DataSource.IGDB)
 
         assertEquals(1, viewModel.uiState.value.validCount)
+        assertEquals(DataSource.IGDB, settings.settings.value.selectedSource)
+    }
+
+    @Test
+    fun initialSource_usesSavedSelection() {
+        val savedSettings = InMemorySettingsRepository(
+            AppSettings(selectedSource = DataSource.AMAZON_BOOKS)
+        )
+
+        val viewModel = CollectViewModel(searchRepository, queue, savedSettings)
+
+        assertEquals(DataSource.AMAZON_BOOKS, viewModel.uiState.value.source)
     }
 
     @Test
     fun paste_appendsBelowCurrentInput() {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onInputChange("96478\n")
 
         viewModel.onPaste("36050")
@@ -144,7 +161,7 @@ class CollectViewModelTest {
 
     @Test
     fun addSelected_appendsOnlyNewIds() = runTest {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
         viewModel.onInputChange("96478")
         viewModel.onQueryChange("terrain")
         viewModel.onSearchSubmit()
@@ -160,7 +177,7 @@ class CollectViewModelTest {
 
     @Test
     fun search_loadsHits() = runTest {
-        val viewModel = CollectViewModel(searchRepository, queue)
+        val viewModel = createViewModel()
 
         viewModel.onQueryChange("terrain")
         viewModel.onSearchSubmit()
