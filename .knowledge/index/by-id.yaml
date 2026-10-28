@@ -78,7 +78,7 @@ ave-adapter-research:
   title: Ave adapter — source research and Android migration guide
   path: pages/ave-adapter-research.md
   source: sources/ave-adapter-observations.md
-  status: source-reviewed
+  status: implemented
   summary: >
     Dedicated source research for the Rust Ave adapter: strict input resolution,
     candidate search, exact SKU matching, English and Japanese HTML parsing,

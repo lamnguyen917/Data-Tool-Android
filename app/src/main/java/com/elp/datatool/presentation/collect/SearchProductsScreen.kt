@@ -54,6 +54,8 @@ import com.elp.datatool.presentation.components.DtTopBar
 import com.elp.datatool.presentation.components.EmptyState
 import com.elp.datatool.presentation.components.FieldLabel
 import com.elp.datatool.presentation.components.nameRes
+import com.elp.datatool.presentation.components.descriptionRes
+import com.elp.datatool.presentation.components.labelRes
 import com.elp.datatool.presentation.components.productIdLabel
 import com.elp.datatool.ui.icons.DtIcons
 import com.elp.datatool.ui.theme.DataToolTheme
@@ -186,8 +188,10 @@ fun SearchProductsScreen(
 
                 state.status == SearchStatus.FAILED -> EmptyState(
                     icon = DtIcons.Alert,
-                    title = stringResource(R.string.search_error_title),
-                    message = stringResource(R.string.search_error_body),
+                    title = state.error?.let { stringResource(it.labelRes) }
+                        ?: stringResource(R.string.search_error_title),
+                    message = state.error?.let { stringResource(it.descriptionRes) }
+                        ?: stringResource(R.string.search_error_body),
                     actionLabel = stringResource(R.string.action_retry),
                     onAction = onSubmit,
                 )

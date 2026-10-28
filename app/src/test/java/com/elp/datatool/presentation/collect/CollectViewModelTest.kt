@@ -93,6 +93,23 @@ class CollectViewModelTest {
     }
 
     @Test
+    fun search_blockedSourcePreservesErrorKind() = runTest {
+        val repository = object : ProductSearchRepository {
+            override suspend fun search(source: DataSource, query: String): List<SearchHit> =
+                throw FetchException(FetchErrorKind.BLOCKED)
+        }
+        val viewModel = CollectViewModel(repository, queue)
+        viewModel.onSourceChange(DataSource.AVE)
+
+        viewModel.onQueryChange("RHJ-101")
+        viewModel.onSearchSubmit()
+        advanceUntilIdle()
+
+        assertEquals(SearchStatus.FAILED, viewModel.searchState.value.status)
+        assertEquals(FetchErrorKind.BLOCKED, viewModel.searchState.value.error)
+    }
+
+    @Test
     fun inputChange_countsValidAndInvalidItems() {
         val viewModel = CollectViewModel(searchRepository, queue)
 

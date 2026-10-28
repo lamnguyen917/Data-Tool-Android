@@ -15,6 +15,7 @@ val DataSource.nameRes: Int
     get() = when (this) {
         DataSource.UNITY_ASSET_STORE -> R.string.source_unity
         DataSource.AMAZON_BOOKS -> R.string.source_amazon
+        DataSource.AVE -> R.string.source_ave
         DataSource.STEAM_STORE -> R.string.source_steam
         DataSource.IGDB -> R.string.source_igdb
     }
@@ -24,6 +25,7 @@ val DataSource.shortLabelRes: Int
     get() = when (this) {
         DataSource.UNITY_ASSET_STORE -> R.string.source_short_unity
         DataSource.AMAZON_BOOKS -> R.string.source_short_amazon
+        DataSource.AVE -> R.string.source_short_ave
         DataSource.STEAM_STORE -> R.string.source_short_steam
         DataSource.IGDB -> R.string.source_short_igdb
     }
@@ -33,6 +35,7 @@ val DataSource.idLabelRes: Int
     get() = when (this) {
         DataSource.UNITY_ASSET_STORE -> R.string.id_label_unity
         DataSource.AMAZON_BOOKS -> R.string.id_label_amazon
+        DataSource.AVE -> R.string.id_label_ave
         DataSource.STEAM_STORE -> R.string.id_label_steam
         DataSource.IGDB -> R.string.id_label_igdb
     }
@@ -42,6 +45,7 @@ val DataSource.invalidMessageRes: Int
     get() = when (this) {
         DataSource.UNITY_ASSET_STORE -> R.string.invalid_unity
         DataSource.AMAZON_BOOKS -> R.string.invalid_amazon
+        DataSource.AVE -> R.string.invalid_ave
         DataSource.STEAM_STORE -> R.string.invalid_steam
         DataSource.IGDB -> R.string.invalid_igdb
     }

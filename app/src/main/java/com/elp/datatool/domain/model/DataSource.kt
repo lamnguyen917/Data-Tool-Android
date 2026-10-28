@@ -4,6 +4,7 @@ package com.elp.datatool.domain.model
 enum class DataSource(val id: String) {
     UNITY_ASSET_STORE("unity"),
     AMAZON_BOOKS("amazon"),
+    AVE("ave"),
     STEAM_STORE("steam"),
     IGDB("igdb");
 
@@ -20,6 +21,8 @@ enum class DataSource(val id: String) {
 
             AMAZON_BOOKS -> amazonProductId(value)
 
+            AVE -> aveProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -35,6 +38,7 @@ enum class DataSource(val id: String) {
         val DIGITS = Regex("""\d+""")
         val ASIN = Regex("""(?:\d{9}[0-9X]|B[A-Z0-9]{9})""")
         val IGDB_SLUG = Regex("""[a-z0-9]+(?:-[a-z0-9]+)*""")
+        val AVE_SKU = Regex("""[A-Z0-9_]{2,}-?[A-Z0-9_]?\d{2,5}""")
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
         val AMAZON_URL = Regex(
@@ -44,6 +48,36 @@ enum class DataSource(val id: String) {
         )
         val AMAZON_PATH = Regex("""(?:^|/)(?:dp|gp/product)/([A-Za-z0-9]{10})(?:[/?#]|$)""")
         val IGDB_URL = Regex("""igdb\.com/games/([a-z0-9-]+)""")
+
+        fun aveProductId(value: String): String? {
+            val normalizedSku = value
+                .removePrefixIgnoreCase("dvd1")
+                .uppercase()
+                .takeIf(AVE_SKU::matches)
+            if (normalizedSku != null) return normalizedSku
+
+            val uri = runCatching { java.net.URI(value) }.getOrNull() ?: return null
+            val trustedHost = uri.host?.lowercase() in setOf(
+                "aventertainments.com",
+                "www.aventertainments.com",
+            )
+            val hasProductId = uri.rawQuery
+                ?.split('&')
+                ?.any { parameter ->
+                    val parts = parameter.split('=', limit = 2)
+                    parts.size == 2 && parts[0].equals("pro", ignoreCase = true) &&
+                        parts[1].all(Char::isDigit)
+                } == true
+            return value.takeIf {
+                uri.scheme.equals("https", ignoreCase = true) &&
+                    trustedHost &&
+                    uri.path.equals("/dvd/detail", ignoreCase = true) &&
+                    hasProductId
+            }
+        }
+
+        fun String.removePrefixIgnoreCase(prefix: String): String =
+            if (startsWith(prefix, ignoreCase = true)) substring(prefix.length) else this
 
         fun amazonProductId(value: String): String? {
             val candidate = AMAZON_URL.find(value)?.groupValues?.get(1)

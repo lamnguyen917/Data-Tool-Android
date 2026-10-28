@@ -131,6 +131,7 @@ val DataSource.displayName: String
     get() = when (this) {
         DataSource.UNITY_ASSET_STORE -> "Unity Asset Store"
         DataSource.AMAZON_BOOKS -> "Amazon Books"
+        DataSource.AVE -> "Ave"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
     }

@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import coil3.compose.SubcomposeAsyncImage
 import com.elp.datatool.domain.model.ProductAttributes
+import com.elp.datatool.domain.model.LocalizedProductMetadata
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.presentation.components.descriptionRes
 import com.elp.datatool.presentation.components.labelRes
@@ -233,13 +234,18 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
             result.error?.let { "${stringResource(it.labelRes)}. ${stringResource(it.descriptionRes)}" },
         )
         DetailSection(
-            if (result.source == DataSource.AMAZON_BOOKS) R.string.detail_authors else R.string.detail_publisher,
+            when (result.source) {
+                DataSource.AMAZON_BOOKS -> R.string.detail_authors
+                DataSource.AVE -> R.string.detail_performers
+                else -> R.string.detail_publisher
+            },
             result.creators.joinToString().ifEmpty { null },
         )
         DetailSection(R.string.detail_category, result.categories.joinToString(" / ").ifEmpty { null })
         AttributesSection(result.attributes)
         DetailSection(R.string.detail_overview, result.description)
         DetailSection(R.string.detail_url, result.canonicalUrl)
+        result.localized["ja"]?.let { JapaneseMetadataSection(it) }
     }
 }
 
@@ -260,6 +266,9 @@ private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.FILE_SIZE to R.string.attr_file_size,
     ProductAttributes.ASSET_COUNT to R.string.attr_asset_count,
     ProductAttributes.TAGS to R.string.attr_tags,
+    ProductAttributes.STUDIO to R.string.attr_studio,
+    ProductAttributes.RELEASE_DATE to R.string.attr_release_date,
+    ProductAttributes.SERIES to R.string.attr_series,
 )
 
 @Composable
@@ -285,6 +294,42 @@ private fun AttributesSection(attributes: Map<String, String>) {
 
     Column(Modifier.padding(vertical = 11.dp)) {
         Text(stringResource(R.string.detail_details), style = MaterialTheme.typography.titleSmall)
+        rows.forEach { (label, value) ->
+            Row(Modifier.padding(top = 6.dp)) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.width(120.dp),
+                )
+                Text(text = value, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+            }
+        }
+    }
+    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+}
+
+@Composable
+private fun JapaneseMetadataSection(metadata: LocalizedProductMetadata) {
+    val rows = buildList {
+        metadata.title?.let { add(stringResource(R.string.detail_localized_title) to it) }
+        metadata.creators.takeIf { it.isNotEmpty() }
+            ?.let { add(stringResource(R.string.detail_localized_creators) to it.joinToString()) }
+        metadata.categories.takeIf { it.isNotEmpty() }
+            ?.let { add(stringResource(R.string.detail_localized_categories) to it.joinToString(" / ")) }
+        metadata.attributes[ProductAttributes.STUDIO]
+            ?.let { add(stringResource(R.string.attr_studio) to it) }
+        metadata.attributes[ProductAttributes.RELEASE_DATE]
+            ?.let { add(stringResource(R.string.attr_release_date) to it) }
+        metadata.attributes[ProductAttributes.SERIES]
+            ?.let { add(stringResource(R.string.attr_series) to it) }
+        metadata.description?.let { add(stringResource(R.string.detail_localized_description) to it) }
+        metadata.canonicalUrl?.let { add(stringResource(R.string.detail_localized_url) to it) }
+    }
+    if (rows.isEmpty()) return
+
+    Column(Modifier.padding(vertical = 11.dp)) {
+        Text(stringResource(R.string.detail_japanese_metadata), style = MaterialTheme.typography.titleSmall)
         rows.forEach { (label, value) ->
             Row(Modifier.padding(top = 6.dp)) {
                 Text(

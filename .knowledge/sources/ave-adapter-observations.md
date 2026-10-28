@@ -215,4 +215,14 @@ There are no local HTML fixtures in `ave.rs`. The main integration test is not m
 - Japanese fetch failure is represented by a non-empty but mostly blank nested result, which can be mistaken for successful localization.
 - Date output is not normalized to ISO 8601.
 - Live network tests are fragile and do not isolate parser regressions.
-- The Android model has no localized-result structure corresponding to Rust `jp`.
+- The Android model initially had no localized-result structure corresponding to Rust `jp`; the Ave port added locale-indexed metadata.
+
+## Live verification — RHJ-101 (2026-10-28)
+
+- `GET /dvd/search?...&keyword=RHJ-101` returned HTTP 200 only after redirecting to `/cart/verifybot`.
+- The verification page contains a Google reCAPTCHA form, `.g-recaptcha`, `I am not a robot`, an antiforgery token, and the original search URL as `referralLink`.
+- A session that first visited `/dvd/index`, received `AVECustID`, used desktop browser headers, and supplied a same-origin referrer was still redirected to VerifyBot.
+- The public `robots.txt` explicitly disallows `/dvd/search`; the Android adapter must not attempt to bypass the CAPTCHA.
+- Direct product record `pro=30719` is accessible and returns SKU `RHJ-101` with title `Red Hot Jam Vol.101 Attack of Hard Cocked Samurai in LA (**no cover, disc only**)`.
+- Live product markup stores the item number in `.single-info .tag-title`, not `.single-info .value`. The Android parser now accepts `.value`, `.tag-title`, and `.value-category`.
+- A temporary Android live smoke run fetched `pro=30719` through `AveAdapter` and verified the returned SKU and title. The test remains ignored by default so the normal suite stays deterministic.

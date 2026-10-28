@@ -2,6 +2,7 @@ package com.elp.datatool
 
 import android.app.Application
 import com.elp.datatool.data.adapter.amazon.AmazonBookAdapter
+import com.elp.datatool.data.adapter.ave.AveAdapter
 import com.elp.datatool.data.adapter.unity.UnityAssetStoreAdapter
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.data.repository.AdapterSearchRepository
@@ -32,6 +33,7 @@ class AppContainer {
     private val adapters: List<SourceAdapter> = listOf(
         UnityAssetStoreAdapter(httpClient),
         AmazonBookAdapter(httpClient),
+        AveAdapter(httpClient),
     )
 
     val resultRepository: ResultRepository = InMemoryResultRepository()

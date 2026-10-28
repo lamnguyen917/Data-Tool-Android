@@ -114,7 +114,7 @@ class DefaultCollectionQueue(
             val kind = try {
                 val result = withTimeout(current.timeoutSeconds * 1000L) { adapter.fetch(productId) }
                     .copy(collectedAtMillis = clock())
-                cache.put(result)
+                cache.put(result, aliasKey = key)
                 return result
             } catch (_: TimeoutCancellationException) {
                 FetchErrorKind.TIMEOUT

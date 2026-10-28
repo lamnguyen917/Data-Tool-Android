@@ -71,8 +71,10 @@ class ProductCache(
         return result
     }
 
-    fun put(result: ProductResult) {
-        entries[result.key] = clock() to result
+    fun put(result: ProductResult, aliasKey: String? = null) {
+        val entry = clock() to result
+        entries[result.key] = entry
+        if (aliasKey != null) entries[aliasKey] = entry
     }
 
     override fun clear() = entries.clear()

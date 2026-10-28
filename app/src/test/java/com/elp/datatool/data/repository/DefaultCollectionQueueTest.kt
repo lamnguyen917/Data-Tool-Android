@@ -151,6 +151,21 @@ class DefaultCollectionQueueTest {
     }
 
     @Test
+    fun batch_cacheAliasesOriginalRequestWhenResultIdDiffers() = runTest {
+        val requestUrl = "https://example.test/product/30718"
+        val adapter = FakeAdapter { _, _ -> completed("RHJ-100") }
+        val queue = queueWith(adapter)
+
+        queue.start(DataSource.UNITY_ASSET_STORE, listOf(requestUrl))
+        advanceUntilIdle()
+        queue.start(DataSource.UNITY_ASSET_STORE, listOf(requestUrl))
+        advanceUntilIdle()
+
+        assertEquals(1, adapter.calls[requestUrl])
+        assertEquals(ResultStatus.COMPLETED, results.get("unity:RHJ-100")?.status)
+    }
+
+    @Test
     fun parallelism_followsSettings() = runTest {
         settings.setParallelRequests(2)
         var active = 0

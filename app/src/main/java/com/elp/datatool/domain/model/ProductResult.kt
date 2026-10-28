@@ -17,6 +17,8 @@ data class ProductResult(
     val imageUrl: String? = null,
     /** Source-specific fields, keyed by [ProductAttributes]. */
     val attributes: Map<String, String> = emptyMap(),
+    /** Localized metadata keyed by a BCP 47 language tag such as `ja`. */
+    val localized: Map<String, LocalizedProductMetadata> = emptyMap(),
     val error: FetchErrorKind? = null,
     val collectedAtMillis: Long = 0L,
 ) {
@@ -27,6 +29,16 @@ data class ProductResult(
         fun keyOf(source: DataSource, productId: String) = "${source.id}:$productId"
     }
 }
+
+/** Translated metadata for the same product identity. */
+data class LocalizedProductMetadata(
+    val title: String? = null,
+    val description: String? = null,
+    val creators: List<String> = emptyList(),
+    val categories: List<String> = emptyList(),
+    val canonicalUrl: String? = null,
+    val attributes: Map<String, String> = emptyMap(),
+)
 
 enum class ResultStatus { PROCESSING, COMPLETED, ERROR }
 
@@ -49,6 +61,9 @@ object ProductAttributes {
     const val FILE_SIZE = "file_size"
     const val ASSET_COUNT = "asset_count"
     const val TAGS = "tags"
+    const val STUDIO = "studio"
+    const val RELEASE_DATE = "release_date"
+    const val SERIES = "series"
 }
 
 /** Why collecting a product failed. Drives the message and the retry policy. */

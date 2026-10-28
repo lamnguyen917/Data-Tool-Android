@@ -46,6 +46,19 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun ave_acceptsSkuAndTrustedProductUrl() {
+        assertValid(DataSource.AVE, "RHJ-100", "RHJ-100")
+        assertValid(DataSource.AVE, "dvd1pt-101", "PT-101")
+        assertValid(
+            DataSource.AVE,
+            "https://www.aventertainments.com/dvd/detail?lang=1&pro=30718",
+            "https://www.aventertainments.com/dvd/detail?lang=1&pro=30718",
+        )
+        assertInvalid(DataSource.AVE, "https://example.com/dvd/detail?pro=30718", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.AVE, "https://www.aventertainments.com/dvd/search?keyword=RHJ-100", InvalidReason.BAD_FORMAT)
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

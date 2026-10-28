@@ -48,6 +48,7 @@ data class SearchUiState(
     val status: SearchStatus = SearchStatus.IDLE,
     val hits: List<SearchHit> = emptyList(),
     val selectedIds: Set<String> = emptySet(),
+    val error: FetchErrorKind? = null,
 )
 
 sealed interface CollectEvent {
@@ -155,13 +156,14 @@ class CollectViewModel(
     private fun launchSearch(query: String, debounce: Boolean) {
         searchJob?.cancel()
         if (query.isBlank()) {
-            _searchState.update { it.copy(status = SearchStatus.IDLE, hits = emptyList()) }
+            _searchState.update { it.copy(status = SearchStatus.IDLE, hits = emptyList(), error = null) }
             return
         }
         val source = _uiState.value.source
         searchJob = viewModelScope.launch {
             if (debounce) delay(SEARCH_DEBOUNCE_MS)
-            _searchState.update { it.copy(status = SearchStatus.LOADING) }
+            _searchState.update { it.copy(status = SearchStatus.LOADING, error = null) }
+            var error: FetchErrorKind? = null
             val status = try {
                 val hits = searchRepository.search(source, query)
                 _searchState.update { it.copy(hits = hits) }
@@ -169,12 +171,17 @@ class CollectViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: FetchException) {
+                error = e.kind
                 if (e.kind == FetchErrorKind.UNSUPPORTED) SearchStatus.UNSUPPORTED else SearchStatus.FAILED
             } catch (_: Exception) {
                 SearchStatus.FAILED
             }
             _searchState.update {
-                it.copy(status = status, hits = if (status == SearchStatus.LOADED) it.hits else emptyList())
+                it.copy(
+                    status = status,
+                    hits = if (status == SearchStatus.LOADED) it.hits else emptyList(),
+                    error = error,
+                )
             }
         }
     }

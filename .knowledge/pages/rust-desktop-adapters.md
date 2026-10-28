@@ -14,7 +14,7 @@ source: ../sources/rust-desktop-adapter-observations.md
 
 # Rust desktop adapters — implementation reference
 
-This page summarizes nine adapters registered by the sibling Rust desktop application. It is a migration reference for Android work, not evidence that these adapters are implemented in `DataToolAndroid` or that their target websites currently match the selectors.
+This page summarizes nine adapters registered by the sibling Rust desktop application. Ave has now been implemented in `DataToolAndroid`; the other entries remain migration references and none of the target websites were live-verified by this source review.
 
 Related: [source-review observations](../sources/rust-desktop-adapter-observations.md)
 
@@ -22,7 +22,7 @@ Related: [source-review observations](../sources/rust-desktop-adapter-observatio
 
 | Adapter | Key | Accepted input | Candidate search | Languages | Source-reviewed status |
 |---------|-----|----------------|------------------|-----------|------------------------|
-| Ave | `ave` | SKU; `parse` also accepts URL | Yes | English + Japanese | Parser implemented; integration test for `RHJ-100` |
+| Ave | `ave` | SKU; `parse` also accepts URL | Yes | English + Japanese | Implemented on Android with offline fixtures |
 | AdultEmpire | `adult-empire` | Product URL | No | English | Parser implemented; age-confirmation flow required |
 | AVFantasy | `avfantasy` | SKU, URL, or `!keyword` | Yes | English + partial Japanese | Parser implemented with localization caveat |
 | Carib | `caribbeancom` | `MMDDYY-NNN` or movie URL | No | English + Japanese | Parser implemented |

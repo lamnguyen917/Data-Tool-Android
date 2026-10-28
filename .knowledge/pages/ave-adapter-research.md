@@ -1,7 +1,7 @@
 ---
 id: ave-adapter-research
 title: Ave adapter — source research and Android migration guide
-status: source-reviewed
+status: implemented
 updated: 2026-10-28
 tags:
   - ave
@@ -26,14 +26,33 @@ Related: [raw Ave observations](../sources/ave-adapter-observations.md) and [all
 | Rust adapter key | `ave` |
 | Target | AV Entertainments DVD catalog |
 | Primary lookup | English keyword search followed by exact normalized SKU match |
-| Direct product URL | Supported by `parse`, rejected by `validate` |
+| Rust direct product URL | Supported by `parse`, rejected by `validate` |
 | Candidate search | Implemented |
 | Languages | English and Japanese |
 | Main page format | HTML |
-| Android status | Not implemented or registered |
-| Evidence quality | Source-reviewed; live behavior not re-verified |
+| Android status | Implemented, tested, and registered |
+| Evidence quality | Source-reviewed; `RHJ-101` live-verified on 2026-10-28 |
 
-The parser is one of the more complete Rust references: it supports candidate search, exact SKU resolution, bilingual product parsing, multiple page layouts, and several SKU fallbacks. Its most important migration issues are inconsistent URL validation, weak host restrictions, cache collisions for direct URLs, live-only parser tests, and the lack of a localized-result model on Android.
+The Rust parser is one of the more complete references: it supports candidate search, exact SKU resolution, bilingual product parsing, multiple page layouts, and several SKU fallbacks. The Android implementation addresses the main migration risks with strict HTTPS host validation, URL-aware cache aliases, offline parser fixtures, stable English attribute keys, and locale-indexed metadata.
+
+### Current live-search limitation
+
+Live verification with `RHJ-101` on 2026-10-28 found that AV Entertainments redirects `/dvd/search` to `/cart/verifybot`, which requires Google reCAPTCHA. Browser-like headers, an `AVECustID` session cookie, and a same-origin referrer did not remove the challenge. The site also disallows `/dvd/search` in `robots.txt`, so the adapter reports `BLOCKED` and does not attempt a CAPTCHA bypass.
+
+Direct product collection remains functional. The verified `RHJ-101` URL uses `pro=30719`; an Android live smoke run returned SKU `RHJ-101` and the expected `Red Hot Jam Vol.101` title.
+
+## Android implementation
+
+The Android port is registered as `DataSource.AVE` and includes:
+
+- strict SKU and trusted AV Entertainments product-URL validation;
+- candidate search with form URL encoding, image-derived SKU normalization, link deduplication, and exact SKU resolution;
+- English product parsing for grouped and flat metadata layouts;
+- Japanese page resolution and locale-indexed metadata under language tag `ja`;
+- stable `studio`, `release_date`, and `series` attributes;
+- block-page detection and explicit not-found/parse errors;
+- request-key cache aliases for direct URL input;
+- MockWebServer integration tests and local EN/JP/search fixtures.
 
 ## Source behavior
 
@@ -201,7 +220,7 @@ culture=en-US -> culture=ja-JP
 /1/           -> /2/
 ```
 
-The Rust result stores Japanese metadata in `ItemResult.jp`. Android `ProductResult` currently has no equivalent. Before implementing Ave, choose one model:
+The Rust result stores Japanese metadata in `ItemResult.jp`. Android now stores translations in `ProductResult.localized`, keyed by BCP 47 language tag. The implementation uses `localized["ja"]` for Ave. These were the alternatives considered:
 
 | Option | Benefit | Cost |
 |--------|---------|------|
@@ -209,11 +228,11 @@ The Rust result stores Japanese metadata in `ItemResult.jp`. Android `ProductRes
 | Separate localized result | Minimal conceptual change from Rust | Duplicate queue/cache/result identity concerns |
 | English-only first phase | Fastest safe implementation | Defers a documented capability |
 
-Recommended direction: add locale-indexed metadata to the domain model. Do not append localized values to English lists without recording their locale.
+The selected locale-indexed model keeps Japanese values separate from English lists and displays them in a dedicated result-detail section.
 
 Japanese request failures should not create a result that looks successful but contains only SKU and URL. Record a localization warning or omit the Japanese variant while keeping the English result successful.
 
-## Proposed Android mapping
+## Android mapping
 
 | Rust Ave value | Android destination | Required model work |
 |----------------|---------------------|---------------------|
@@ -227,7 +246,7 @@ Japanese request failures should not create a result that looks successful but c
 | `date` | `attributes[release_date]` | Add stable `RELEASE_DATE` key |
 | `Series` / `シリーズ` | `attributes[series]` | Add stable `SERIES` key |
 | Other `details` | normalized attributes | Define allowlist and English identifiers |
-| `jp` | localized metadata | Domain decision required |
+| `jp` | `localized["ja"]` | Implemented with `LocalizedProductMetadata` |
 
 Source-language labels must never become Android attribute keys. Map both English and Japanese labels to stable English identifiers.
 
@@ -317,7 +336,7 @@ Do not rely on the current live `RHJ-100` test as the parser regression suite. C
 - Unicode queries with similar sanitized forms never collide.
 - English and Japanese responses use distinct keys.
 
-## Implementation sequence
+## Implemented sequence
 
 1. Define `DataSource.AVE`, English display labels, and strict input resolution.
 2. Decide the localized-result model before implementing Japanese parsing.
@@ -331,7 +350,7 @@ Do not rely on the current live `RHJ-100` test as the parser regression suite. C
 
 ## Acceptance criteria
 
-The Android Ave adapter is ready to register only when:
+The registered Android Ave adapter is expected to continue meeting these criteria:
 
 - validation and fetch accept the same documented input forms;
 - only trusted AV Entertainments hosts are fetched;
