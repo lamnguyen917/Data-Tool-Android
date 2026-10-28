@@ -1,6 +1,6 @@
 # FC2 adapter research
 
-Status: researched from live article `4871322`; not implemented in the Android application.
+Status: implemented and live-verified against article `4871322` on 2026-10-28.
 
 Source evidence: [`../sources/fc2-adapter-observations.md`](../sources/fc2-adapter-observations.md)
 
@@ -8,8 +8,8 @@ Live reference: `https://adult.contents.fc2.com/article/4871322/`
 
 ## Adapter identity
 
-- Proposed source ID: `fc2`
-- Proposed display name: `FC2`
+- Source ID: `fc2`
+- Display name: `FC2`
 - Canonical SKU: the numeric article ID only, for example `4871322`
 - Product URL template: `https://adult.contents.fc2.com/article/{sku}/?lang=ja`
 - Search: unsupported for anonymous requests
@@ -31,7 +31,7 @@ Reject look-alike hosts, non-HTTPS URLs, search URLs, embed URLs, and article pa
 ## Fetch flow
 
 1. Normalize the input to a numeric SKU.
-2. Request `https://adult.contents.fc2.com/article/{sku}/?lang=ja` with the shared browser-like HTTP client and cookie jar.
+2. Request `https://adult.contents.fc2.com/article/{sku}/?lang=ja` with the shared cookie jar and an FC2-specific desktop Chrome user agent. The live site omits Product JSON-LD for the shared Android mobile user agent.
 3. Parse the Product JSON-LD object.
 4. If no Product JSON-LD exists, check the page title/body for the FC2 not-found marker and return `NOT_FOUND`; otherwise return `PARSE`.
 5. Parse supplemental DOM fields such as seller, duration, sale date, supported devices, and sample images.
@@ -97,16 +97,16 @@ Although FC2 publishes a GET search form using parameter `q`, anonymous search c
 
 Search can be revisited only if FC2 provides an anonymous result page or an authorized API that fits the application's account and credential policy. Do not automate login or CAPTCHA handling.
 
-## Fixture and test plan
+## Implemented verification
 
-Create sanitized local fixtures for:
+Sanitized local fixtures cover:
 
 - the verified product page with Product JSON-LD and hidden heading noise;
 - the description iframe with hidden marker nodes and recommendation blocks;
 - the soft HTTP-200 not-found page;
 - the login/reCAPTCHA response returned by anonymous search.
 
-Required tests:
+Automated tests verify:
 
 - URL and numeric-SKU normalization to `4871322`;
 - rejection of look-alike hosts and non-article paths;
@@ -117,3 +117,5 @@ Required tests:
 - HTTP-200 not-found classification;
 - protocol-relative image normalization;
 - explicit unsupported search behavior.
+
+The normally ignored live smoke test fetches article `4871322`, validates that the title contains no hidden heading noise, and checks seller, duration, image, and full description. It passed when enabled manually on 2026-10-28.

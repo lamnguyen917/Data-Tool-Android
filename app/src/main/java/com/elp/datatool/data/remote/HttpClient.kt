@@ -23,8 +23,10 @@ data class HttpPage(val url: String, val code: Int, val body: String)
 /** Thin coroutine wrapper over OkHttp that maps failures to [FetchException]. */
 class HttpClient(private val client: OkHttpClient) {
 
-    suspend fun get(url: String): HttpPage {
-        val request = Request.Builder().url(url).get().build()
+    suspend fun get(url: String, headers: Map<String, String> = emptyMap()): HttpPage {
+        val request = Request.Builder().url(url).apply {
+            headers.forEach { (name, value) -> header(name, value) }
+        }.get().build()
         val response = client.newCall(request).await()
         return response.use {
             val page = HttpPage(it.request.url.toString(), it.code, it.body?.string().orEmpty())
@@ -64,13 +66,16 @@ class HttpClient(private val client: OkHttpClient) {
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor { chain ->
-                chain.proceed(
-                    chain.request().newBuilder()
-                        .header("User-Agent", USER_AGENT)
-                        .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                        .header("Accept-Language", "en-US,en;q=0.9")
-                        .build()
-                )
+                val request = chain.request()
+                val builder = request.newBuilder()
+                if (request.header("User-Agent") == null) builder.header("User-Agent", USER_AGENT)
+                if (request.header("Accept") == null) {
+                    builder.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                }
+                if (request.header("Accept-Language") == null) {
+                    builder.header("Accept-Language", "en-US,en;q=0.9")
+                }
+                chain.proceed(builder.build())
             }
             .build()
     }

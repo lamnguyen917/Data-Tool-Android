@@ -11,6 +11,7 @@ Observed on 2026-10-28 against the supplied live page:
 - The product URL returned HTTP 200 without an age-confirmation redirect.
 - The response set a PHP session cookie plus `contents_mode=digital` and `contents_func_mode=buy` cookies.
 - `?lang=en` and `?lang=ja` translate FC2 interface labels, but the seller-authored product title remains Japanese.
+- FC2 omitted Product JSON-LD when tested with the shared Android mobile user agent, while the same live article included it for a desktop Chrome user agent. The FC2 adapter must override only its own requests with a desktop user agent.
 - A nonexistent article, tested with `9999999999`, also returned HTTP 200. Its title indicated that the product was not found and it did not contain Product JSON-LD.
 
 ## Structured metadata
@@ -85,3 +86,4 @@ An anonymous request to `/search/?q=4871322` returned the generic FC2 login page
 - JSON-LD descriptions can be empty or truncated depending on interface language.
 - Image and sample links can be protocol-relative and must be normalized to HTTPS.
 - Price and review values are live data and can change between requests.
+- The Product JSON-LD response shape depends on user agent; use the adapter-specific desktop header and keep DOM fallbacks for title and image.

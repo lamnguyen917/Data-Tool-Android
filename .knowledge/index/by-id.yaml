@@ -107,11 +107,12 @@ fc2-adapter-research:
   title: FC2 adapter — live article research and implementation guide
   path: pages/fc2-adapter-research.md
   source: sources/fc2-adapter-observations.md
-  status: researched
+  status: implemented
   summary: >
-    Live analysis of FC2 article 4871322: numeric SKU normalization, Product
-    JSON-LD, supplemental DOM fields, session-bound description iframe, soft
-    not-found pages, anonymous-search limitation, field mapping, and test plan.
+    Implemented FC2 article collection for numeric SKU 4871322: Product JSON-LD,
+    supplemental DOM fields, desktop user-agent requirement, session-bound
+    description iframe, soft not-found pages, unsupported anonymous search,
+    field mapping, fixtures, and live verification.
   open_when:
     - fc2 adapter
     - fc2 ppv

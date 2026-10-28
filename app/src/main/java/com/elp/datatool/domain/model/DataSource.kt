@@ -8,6 +8,7 @@ enum class DataSource(val id: String) {
     AMAZON_BOOKS("amazon"),
     AVE("ave"),
     TOKYO_HOT("tokyo-hot"),
+    FC2("fc2"),
     STEAM_STORE("steam"),
     IGDB("igdb");
 
@@ -28,6 +29,8 @@ enum class DataSource(val id: String) {
 
             TOKYO_HOT -> tokyoHotProductId(value)
 
+            FC2 -> fc2ProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -45,6 +48,7 @@ enum class DataSource(val id: String) {
         val IGDB_SLUG = Regex("""[a-z0-9]+(?:-[a-z0-9]+)*""")
         val AVE_SKU = Regex("""[A-Z0-9_]{2,}-?[A-Z0-9_]?\d{2,5}""")
         val TOKYO_HOT_ID = Regex("""[A-Za-z0-9][A-Za-z0-9_-]*""")
+        val FC2_ALIAS = Regex("""FC2[-\s]?PPV[-\s]?(\d+)""", RegexOption.IGNORE_CASE)
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
         val AMAZON_URL = Regex(
@@ -96,6 +100,21 @@ enum class DataSource(val id: String) {
 
         fun String.lowercaseIfClassicTokyoHotId(): String =
             if (Regex("""[kKnN]\d{4}""").matches(this)) lowercase(Locale.ROOT) else this
+
+        fun fc2ProductId(value: String): String? {
+            DIGITS.matchEntire(value)?.value?.let { return it }
+            FC2_ALIAS.matchEntire(value)?.groupValues?.get(1)?.let { return it }
+
+            val uri = runCatching { java.net.URI(value) }.getOrNull() ?: return null
+            val trustedHost = uri.host.equals("adult.contents.fc2.com", ignoreCase = true)
+            val productId = Regex("""/article/(\d+)/?""")
+                .matchEntire(uri.path.orEmpty())
+                ?.groupValues
+                ?.get(1)
+            return productId?.takeIf {
+                uri.scheme.equals("https", ignoreCase = true) && trustedHost
+            }
+        }
 
         fun String.removePrefixIgnoreCase(prefix: String): String =
             if (startsWith(prefix, ignoreCase = true)) substring(prefix.length) else this

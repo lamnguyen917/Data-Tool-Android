@@ -72,6 +72,21 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun fc2_normalizesArticleIdAliasAndTrustedUrl() {
+        assertValid(DataSource.FC2, "4871322", "4871322")
+        assertValid(DataSource.FC2, "FC2-PPV-4871322", "4871322")
+        assertValid(DataSource.FC2, "FC2 PPV 4871322", "4871322")
+        assertValid(
+            DataSource.FC2,
+            "https://adult.contents.fc2.com/article/4871322/?lang=ja",
+            "4871322",
+        )
+        assertInvalid(DataSource.FC2, "http://adult.contents.fc2.com/article/4871322/", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.FC2, "https://adult.contents.fc2.com.evil.test/article/4871322/", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.FC2, "https://adult.contents.fc2.com/embed/4871322/", InvalidReason.BAD_FORMAT)
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

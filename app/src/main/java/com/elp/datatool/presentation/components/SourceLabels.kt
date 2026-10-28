@@ -17,6 +17,7 @@ val DataSource.nameRes: Int
         DataSource.AMAZON_BOOKS -> R.string.source_amazon
         DataSource.AVE -> R.string.source_ave
         DataSource.TOKYO_HOT -> R.string.source_tokyo_hot
+        DataSource.FC2 -> R.string.source_fc2
         DataSource.STEAM_STORE -> R.string.source_steam
         DataSource.IGDB -> R.string.source_igdb
     }
@@ -28,6 +29,7 @@ val DataSource.shortLabelRes: Int
         DataSource.AMAZON_BOOKS -> R.string.source_short_amazon
         DataSource.AVE -> R.string.source_short_ave
         DataSource.TOKYO_HOT -> R.string.source_short_tokyo_hot
+        DataSource.FC2 -> R.string.source_short_fc2
         DataSource.STEAM_STORE -> R.string.source_short_steam
         DataSource.IGDB -> R.string.source_short_igdb
     }
@@ -39,6 +41,7 @@ val DataSource.idLabelRes: Int
         DataSource.AMAZON_BOOKS -> R.string.id_label_amazon
         DataSource.AVE -> R.string.id_label_ave
         DataSource.TOKYO_HOT -> R.string.id_label_tokyo_hot
+        DataSource.FC2 -> R.string.id_label_fc2
         DataSource.STEAM_STORE -> R.string.id_label_steam
         DataSource.IGDB -> R.string.id_label_igdb
     }
@@ -50,6 +53,7 @@ val DataSource.invalidMessageRes: Int
         DataSource.AMAZON_BOOKS -> R.string.invalid_amazon
         DataSource.AVE -> R.string.invalid_ave
         DataSource.TOKYO_HOT -> R.string.invalid_tokyo_hot
+        DataSource.FC2 -> R.string.invalid_fc2
         DataSource.STEAM_STORE -> R.string.invalid_steam
         DataSource.IGDB -> R.string.invalid_igdb
     }

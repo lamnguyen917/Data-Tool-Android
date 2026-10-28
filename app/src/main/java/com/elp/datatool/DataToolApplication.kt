@@ -3,6 +3,7 @@ package com.elp.datatool
 import android.app.Application
 import com.elp.datatool.data.adapter.amazon.AmazonBookAdapter
 import com.elp.datatool.data.adapter.ave.AveAdapter
+import com.elp.datatool.data.adapter.fc2.Fc2Adapter
 import com.elp.datatool.data.adapter.tokyohot.TokyoHotAdapter
 import com.elp.datatool.data.adapter.unity.UnityAssetStoreAdapter
 import com.elp.datatool.data.remote.HttpClient
@@ -36,6 +37,7 @@ class AppContainer {
         AmazonBookAdapter(httpClient),
         AveAdapter(httpClient),
         TokyoHotAdapter(httpClient),
+        Fc2Adapter(httpClient),
     )
 
     val resultRepository: ResultRepository = InMemoryResultRepository()

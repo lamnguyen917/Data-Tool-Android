@@ -237,6 +237,7 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
             when (result.source) {
                 DataSource.AMAZON_BOOKS -> R.string.detail_authors
                 DataSource.AVE, DataSource.TOKYO_HOT -> R.string.detail_performers
+                DataSource.FC2 -> R.string.detail_seller
                 else -> R.string.detail_publisher
             },
             result.creators.joinToString().ifEmpty { null },
@@ -271,6 +272,7 @@ private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.SERIES to R.string.attr_series,
     ProductAttributes.DURATION to R.string.attr_duration,
     ProductAttributes.THEME to R.string.attr_theme,
+    ProductAttributes.SUPPORTED_DEVICES to R.string.attr_supported_devices,
 )
 
 @Composable
