@@ -82,9 +82,9 @@ class ProductCache(
     }
 }
 
-/** Settings kept in memory; will be replaced by DataStore. */
-class InMemorySettingsRepository : SettingsRepository {
-    private val state = MutableStateFlow(AppSettings())
+/** Lightweight settings store used by unit tests. */
+class InMemorySettingsRepository(initial: AppSettings = AppSettings()) : SettingsRepository {
+    private val state = MutableStateFlow(initial)
     override val settings: StateFlow<AppSettings> = state.asStateFlow()
 
     override fun setThemeMode(mode: ThemeMode) = state.update { it.copy(themeMode = mode) }
@@ -94,4 +94,5 @@ class InMemorySettingsRepository : SettingsRepository {
     override fun setCopyLineFormat(format: LineFormat) = state.update { it.copy(copyLineFormat = format) }
     override fun setCopyLineFields(fields: List<CopyField>) = state.update { it.copy(copyLineFields = fields) }
     override fun setCopyDetailsTemplate(template: String) = state.update { it.copy(copyDetailsTemplate = template) }
+    override fun setSelectedSource(source: DataSource) = state.update { it.copy(selectedSource = source) }
 }

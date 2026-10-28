@@ -11,6 +11,7 @@ import com.elp.datatool.domain.model.ValidationResult
 import com.elp.datatool.domain.model.parseInputLines
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ProductSearchRepository
+import com.elp.datatool.domain.repository.SettingsRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -59,9 +60,15 @@ sealed interface CollectEvent {
 class CollectViewModel(
     private val searchRepository: ProductSearchRepository,
     private val queue: CollectionQueue,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CollectUiState(queue = queue.state.value))
+    private val _uiState = MutableStateFlow(
+        CollectUiState(
+            source = settingsRepository.settings.value.selectedSource,
+            queue = queue.state.value,
+        )
+    )
     val uiState: StateFlow<CollectUiState> = _uiState.asStateFlow()
 
     private val _searchState = MutableStateFlow(SearchUiState())
@@ -85,6 +92,7 @@ class CollectViewModel(
 
     fun onSourceChange(source: DataSource) {
         if (source == _uiState.value.source) return
+        settingsRepository.setSelectedSource(source)
         _uiState.update { it.withInput(source, it.input) }
         resetSearch()
     }

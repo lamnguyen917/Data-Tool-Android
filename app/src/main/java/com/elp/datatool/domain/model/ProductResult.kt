@@ -103,4 +103,5 @@ data class AppSettings(
     val copyLineFormat: LineFormat = CopyFormatter.DEFAULT_LINE_FORMAT,
     val copyLineFields: List<CopyField> = CopyFormatter.DEFAULT_LINE_FIELDS,
     val copyDetailsTemplate: String = CopyFormatter.DEFAULT_DETAILS_TEMPLATE,
+    val selectedSource: DataSource = DataSource.UNITY_ASSET_STORE,
 )

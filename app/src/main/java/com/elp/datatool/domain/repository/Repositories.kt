@@ -54,4 +54,5 @@ interface SettingsRepository {
     fun setCopyLineFormat(format: LineFormat)
     fun setCopyLineFields(fields: List<CopyField>)
     fun setCopyDetailsTemplate(template: String)
+    fun setSelectedSource(source: DataSource)
 }

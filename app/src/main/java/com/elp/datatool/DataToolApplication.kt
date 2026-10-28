@@ -7,7 +7,7 @@ import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.data.repository.AdapterSearchRepository
 import com.elp.datatool.data.repository.DefaultCollectionQueue
 import com.elp.datatool.data.repository.InMemoryResultRepository
-import com.elp.datatool.data.repository.InMemorySettingsRepository
+import com.elp.datatool.data.repository.PreferencesSettingsRepository
 import com.elp.datatool.data.repository.ProductCache
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ProductSearchRepository
@@ -20,11 +20,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 class DataToolApplication : Application() {
-    val container: AppContainer by lazy { AppContainer() }
+    val container: AppContainer by lazy { AppContainer(this) }
 }
 
 /** Manual dependency container shared by all ViewModels. */
-class AppContainer {
+class AppContainer(application: Application) {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val httpClient = HttpClient(HttpClient.createOkHttpClient())
     private val productCache = ProductCache()
@@ -35,7 +35,7 @@ class AppContainer {
     )
 
     val resultRepository: ResultRepository = InMemoryResultRepository()
-    val settingsRepository: SettingsRepository = InMemorySettingsRepository()
+    val settingsRepository: SettingsRepository = PreferencesSettingsRepository(application.applicationContext)
     val responseCache: ResponseCache = productCache
     val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(adapters)
     val collectionQueue: CollectionQueue = DefaultCollectionQueue(
