@@ -31,4 +31,5 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `tokyo-hot-adapter-research` | [Tokyo-Hot adapter research](./pages/tokyo-hot-adapter-research.md) | live search selectors, exact `n0001` resolution, bilingual parsing, Android mapping, and verification |
 | `fc2-adapter-research` | [FC2 adapter research](./pages/fc2-adapter-research.md) | numeric article SKU, Product JSON-LD, description iframe, soft not-found behavior, search limitation, and implementation plan |
 | `heyzo-adapter-research` | [Heyzo adapter research](./pages/heyzo-adapter-research.md) | strict four-digit resolution, bilingual parsing, Cloudflare block behavior, Android mapping, and fixture plan |
+| `caribbeancom-adapter-research` | [Caribbeancom adapter research](./pages/caribbeancom-adapter-research.md) | `MMDDYY-NNN` resolution, live-verified bilingual selectors, EUC-JP decoding, English soft not-found, SKU-derived date, and Android plan |
 | `gog-crawl` | [GOG game crawl](./pages/gog-crawl.md) | product id / slug, Catalog API, Product API, HTML fallback |

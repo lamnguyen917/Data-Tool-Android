@@ -129,6 +129,33 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun caribbeancom_acceptsDatedSkuAndTrustedProductUrls() {
+        assertValid(DataSource.CARIBBEANCOM, " 091317-498 ", "091317-498")
+        assertValid(
+            DataSource.CARIBBEANCOM,
+            "https://www.caribbeancom.com/moviepages/091317-498/index.html",
+            "091317-498",
+        )
+        assertValid(
+            DataSource.CARIBBEANCOM,
+            "https://en.caribbeancom.com/eng/moviepages/091317-498/index.html",
+            "091317-498",
+        )
+        assertValid(DataSource.CARIBBEANCOM, "https://www.caribbeancom.com/moviepages/091317-498/", "091317-498")
+        listOf(
+            "091317_498",
+            "91317-498",
+            "091317-4980",
+            "http://www.caribbeancom.com/moviepages/091317-498/index.html",
+            "https://www.caribbeancom.com.evil.test/moviepages/091317-498/index.html",
+            "https://www.caribbeancom.com:8443/moviepages/091317-498/index.html",
+            "https://www.caribbeancom.com/moviepages/091317-498/index.html?ref=test",
+            "https://en.caribbeancom.com/moviepages/091317-498/index.html",
+            "https://www.caribbeancom.com/eng/moviepages/091317-498/index.html",
+        ).forEach { assertInvalid(DataSource.CARIBBEANCOM, it, InvalidReason.BAD_FORMAT) }
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

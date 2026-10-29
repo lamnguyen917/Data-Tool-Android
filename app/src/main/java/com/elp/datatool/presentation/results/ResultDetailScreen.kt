@@ -236,7 +236,11 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
         DetailSection(
             when (result.source) {
                 DataSource.AMAZON_BOOKS -> R.string.detail_authors
-                DataSource.AVE, DataSource.TOKYO_HOT, DataSource.HEYZO -> R.string.detail_performers
+                DataSource.AVE,
+                DataSource.TOKYO_HOT,
+                DataSource.HEYZO,
+                DataSource.CARIBBEANCOM,
+                -> R.string.detail_performers
                 DataSource.FC2 -> R.string.detail_seller
                 DataSource.GOG -> R.string.detail_developer
                 else -> R.string.detail_publisher

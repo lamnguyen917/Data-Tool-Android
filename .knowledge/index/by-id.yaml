@@ -134,6 +134,21 @@ heyzo-adapter-research:
     - heyzo moviepages
     - heyzo android migration
 
+caribbeancom-adapter-research:
+  title: Caribbeancom adapter — source research and Android migration guide
+  path: pages/caribbeancom-adapter-research.md
+  source: sources/caribbeancom-adapter-observations.md
+  status: implemented
+  summary: >
+    Strict MMDDYY-NNN and trusted product-URL resolution, fixed English and Japanese
+    endpoints, live-verified selectors, EUC-JP Japanese page, English HTTP 200 soft
+    not-found, validated SKU-derived date, and the implemented Android adapter.
+  open_when:
+    - caribbeancom adapter
+    - carib crawl
+    - carib moviepages
+    - carib android migration
+
 gog-crawl:
   title: GOG - game crawl
   path: pages/gog-crawl.md

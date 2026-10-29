@@ -25,7 +25,7 @@ Related: [source-review observations](../sources/rust-desktop-adapter-observatio
 | Ave | `ave` | SKU; `parse` also accepts URL | Yes | English + Japanese | Implemented on Android with offline fixtures |
 | AdultEmpire | `adult-empire` | Product URL | No | English | Parser implemented; age-confirmation flow required |
 | AVFantasy | `avfantasy` | SKU, URL, or `!keyword` | Yes | English + partial Japanese | Parser implemented with localization caveat |
-| Carib | `caribbeancom` | `MMDDYY-NNN` or movie URL | No | English + Japanese | Parser implemented |
+| Carib | `caribbeancom` | `MMDDYY-NNN` or movie URL | No | English + Japanese | Implemented on Android; see [Caribbeancom research](./caribbeancom-adapter-research.md) |
 | CaribPr | `caribbeancompr` | `MMDDYY_NNN` or URL | No | Japanese only | Partial; top-level English metadata is empty |
 | Heyzo | `heyzo` | Four-digit SKU or movie URL | No | English + Japanese | Parser implemented |
 | 1pondo | `1pondo` | `MMDDYY_NNN` or JSON URL | No | Declared Japanese | Stub; JSON is fetched but not mapped |

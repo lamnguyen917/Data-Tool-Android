@@ -11,6 +11,7 @@ enum class DataSource(val id: String) {
     TOKYO_HOT("tokyo-hot"),
     FC2("fc2"),
     HEYZO("heyzo"),
+    CARIBBEANCOM("caribbeancom"),
     STEAM_STORE("steam"),
     IGDB("igdb"),
     GOG("gog");
@@ -36,6 +37,8 @@ enum class DataSource(val id: String) {
 
             HEYZO -> heyzoProductId(value)
 
+            CARIBBEANCOM -> caribbeancomProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -58,6 +61,9 @@ enum class DataSource(val id: String) {
         val FC2_ALIAS = Regex("""FC2[-\s]?PPV[-\s]?(\d+)""", RegexOption.IGNORE_CASE)
         val HEYZO_SKU = Regex("""\d{4}""")
         val HEYZO_PRODUCT_PATH = Regex("""/moviepages/(\d{4})/index\.html""")
+        val CARIBBEANCOM_SKU = Regex("""\d{6}-\d{3}""")
+        val CARIBBEANCOM_JA_PATH = Regex("""/moviepages/(\d{6}-\d{3})/(?:index\.html)?""")
+        val CARIBBEANCOM_EN_PATH = Regex("""/eng/moviepages/(\d{6}-\d{3})/(?:index\.html)?""")
         val GOG_SLUG = Regex("""[a-z0-9]+(?:[_-][a-z0-9]+)*""")
         val GOG_LOCALE = Regex("""[a-z]{2}(?:-[a-z]{2})?""", RegexOption.IGNORE_CASE)
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
@@ -140,6 +146,26 @@ enum class DataSource(val id: String) {
                 uri.scheme.equals("https", ignoreCase = true) &&
                     trustedHost &&
                     uri.userInfo == null &&
+                    (uri.port == -1 || uri.port == 443) &&
+                    uri.rawQuery == null &&
+                    uri.rawFragment == null
+            }
+        }
+
+        /** Accepts `MMDDYY-NNN` or a canonical English or Japanese Caribbeancom movie URL. */
+        fun caribbeancomProductId(value: String): String? {
+            CARIBBEANCOM_SKU.matchEntire(value)?.value?.let { return it }
+
+            val uri = runCatching { URI(value) }.getOrNull() ?: return null
+            val pathPattern = when (uri.host?.lowercase()) {
+                "www.caribbeancom.com" -> CARIBBEANCOM_JA_PATH
+                "en.caribbeancom.com" -> CARIBBEANCOM_EN_PATH
+                else -> return null
+            }
+            val productId = pathPattern.matchEntire(uri.path.orEmpty())?.groupValues?.get(1)
+            return productId?.takeIf {
+                uri.scheme.equals("https", ignoreCase = true) &&
+                    uri.rawUserInfo == null &&
                     (uri.port == -1 || uri.port == 443) &&
                     uri.rawQuery == null &&
                     uri.rawFragment == null

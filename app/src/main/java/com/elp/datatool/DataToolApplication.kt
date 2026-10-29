@@ -3,6 +3,7 @@ package com.elp.datatool
 import android.app.Application
 import com.elp.datatool.data.adapter.amazon.AmazonBookAdapter
 import com.elp.datatool.data.adapter.ave.AveAdapter
+import com.elp.datatool.data.adapter.caribbeancom.CaribbeancomAdapter
 import com.elp.datatool.data.adapter.fc2.Fc2Adapter
 import com.elp.datatool.data.adapter.gog.GogAdapter
 import com.elp.datatool.data.adapter.heyzo.HeyzoAdapter
@@ -42,6 +43,7 @@ class AppContainer(application: Application) {
         TokyoHotAdapter(httpClient),
         Fc2Adapter(httpClient),
         HeyzoAdapter(httpClient),
+        CaribbeancomAdapter(httpClient),
         GogAdapter(httpClient),
     )
 

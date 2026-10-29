@@ -36,7 +36,7 @@ crawl:
 graphql:
   ids: [unity-crawl]
 html:
-  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
 redirect:
   ids: [unity-crawl]
 search:
@@ -44,11 +44,11 @@ search:
 nextjs:
   ids: [unity-crawl]
 adapters:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
 rust:
-  ids: [rust-desktop-adapters, ave-adapter-research, heyzo-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
 localization:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, heyzo-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
 ave:
   ids: [ave-adapter-research, rust-desktop-adapters]
 adult-empire:
@@ -56,7 +56,7 @@ adult-empire:
 avfantasy:
   ids: [rust-desktop-adapters]
 carib:
-  ids: [rust-desktop-adapters]
+  ids: [caribbeancom-adapter-research, rust-desktop-adapters]
 caribpr:
   ids: [rust-desktop-adapters]
 heyzo:
@@ -75,3 +75,5 @@ fc2-ppv:
   ids: [fc2-adapter-research]
 json-ld:
   ids: [fc2-adapter-research, amazon-book-crawl, unity-crawl]
+charset:
+  ids: [caribbeancom-adapter-research]

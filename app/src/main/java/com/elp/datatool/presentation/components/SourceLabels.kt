@@ -19,6 +19,7 @@ val DataSource.nameRes: Int
         DataSource.TOKYO_HOT -> R.string.source_tokyo_hot
         DataSource.FC2 -> R.string.source_fc2
         DataSource.HEYZO -> R.string.source_heyzo
+        DataSource.CARIBBEANCOM -> R.string.source_caribbeancom
         DataSource.STEAM_STORE -> R.string.source_steam
         DataSource.IGDB -> R.string.source_igdb
         DataSource.GOG -> R.string.source_gog
@@ -33,6 +34,7 @@ val DataSource.shortLabelRes: Int
         DataSource.TOKYO_HOT -> R.string.source_short_tokyo_hot
         DataSource.FC2 -> R.string.source_short_fc2
         DataSource.HEYZO -> R.string.source_short_heyzo
+        DataSource.CARIBBEANCOM -> R.string.source_short_caribbeancom
         DataSource.STEAM_STORE -> R.string.source_short_steam
         DataSource.IGDB -> R.string.source_short_igdb
         DataSource.GOG -> R.string.source_short_gog
@@ -47,6 +49,7 @@ val DataSource.idLabelRes: Int
         DataSource.TOKYO_HOT -> R.string.id_label_tokyo_hot
         DataSource.FC2 -> R.string.id_label_fc2
         DataSource.HEYZO -> R.string.id_label_heyzo
+        DataSource.CARIBBEANCOM -> R.string.id_label_caribbeancom
         DataSource.STEAM_STORE -> R.string.id_label_steam
         DataSource.IGDB -> R.string.id_label_igdb
         DataSource.GOG -> R.string.id_label_gog
@@ -61,6 +64,7 @@ val DataSource.invalidMessageRes: Int
         DataSource.TOKYO_HOT -> R.string.invalid_tokyo_hot
         DataSource.FC2 -> R.string.invalid_fc2
         DataSource.HEYZO -> R.string.invalid_heyzo
+        DataSource.CARIBBEANCOM -> R.string.invalid_caribbeancom
         DataSource.STEAM_STORE -> R.string.invalid_steam
         DataSource.IGDB -> R.string.invalid_igdb
         DataSource.GOG -> R.string.invalid_gog
