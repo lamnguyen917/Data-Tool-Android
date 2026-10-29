@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.fc2
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -31,9 +32,12 @@ class Fc2Adapter(
             is ValidationResult.Valid -> validation.productId
             is ValidationResult.Invalid -> throw FetchException(FetchErrorKind.PARSE, "Invalid FC2 article ID")
         }
-        val page = http.get(productUrl(sku), FC2_HEADERS)
-        val parsed = withContext(parseDispatcher) {
-            Fc2Parser.parseProductPage(page.body, page.url, sku)
+        val url = productUrl(sku)
+        val (page, parsed) = withBrowserChallenge(url, FC2_DESKTOP_USER_AGENT) {
+            val loadedPage = http.get(url, FC2_HEADERS)
+            loadedPage to withContext(parseDispatcher) {
+                Fc2Parser.parseProductPage(loadedPage.body, loadedPage.url, sku)
+            }
         }
         val descriptionUrl = parsed.descriptionUrl
         if (descriptionUrl == null || !isTrustedDescriptionUrl(descriptionUrl, sku)) return parsed.result

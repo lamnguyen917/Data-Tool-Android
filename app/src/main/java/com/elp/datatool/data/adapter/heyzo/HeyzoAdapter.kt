@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.heyzo
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -32,9 +33,12 @@ class HeyzoAdapter(
             is ValidationResult.Invalid -> throw FetchException(FetchErrorKind.PARSE, "Invalid Heyzo SKU or product URL")
         }
 
-        val englishPage = http.get(englishProductUrl(sku), ENGLISH_HEADERS)
-        var result = withContext(parseDispatcher) {
-            HeyzoParser.parseEnglishProduct(englishPage.body, englishPage.url, sku)
+        val englishUrl = englishProductUrl(sku)
+        var result = withBrowserChallenge(englishUrl, DESKTOP_USER_AGENT) {
+            val englishPage = http.get(englishUrl, ENGLISH_HEADERS)
+            withContext(parseDispatcher) {
+                HeyzoParser.parseEnglishProduct(englishPage.body, englishPage.url, sku)
+            }
         }
 
         val japanese = try {

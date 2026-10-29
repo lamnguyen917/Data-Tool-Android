@@ -4,13 +4,16 @@ import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductResult
+import com.elp.datatool.domain.model.ProcessingVerification
 import com.elp.datatool.domain.model.QueueState
 import com.elp.datatool.domain.model.ResultStatus
+import com.elp.datatool.domain.model.VerifiedPage
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ResultRepository
 import com.elp.datatool.domain.repository.SettingsRepository
 import com.elp.datatool.domain.repository.SourceAdapter
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
@@ -42,13 +45,19 @@ class DefaultCollectionQueue(
     private val scope: CoroutineScope,
     private val clock: () -> Long = System::currentTimeMillis,
     private val retryBackoffMillis: Long = DEFAULT_BACKOFF_MILLIS,
+    private val importBrowserCookies: (url: String, cookieHeader: String) -> Unit = { _, _ -> },
 ) : CollectionQueue {
 
     private val adapters = adapters.associateBy { it.source }
     private val _state = MutableStateFlow(QueueState())
     override val state: StateFlow<QueueState> = _state.asStateFlow()
+    private val _verification = MutableStateFlow<ProcessingVerification?>(null)
+    override val verification: StateFlow<ProcessingVerification?> = _verification.asStateFlow()
 
     private var batchJob: Job? = null
+    private val verificationLock = Any()
+    private var activeVerification: CompletableDeferred<Boolean>? = null
+    private val verificationVersions = mutableMapOf<DataSource, Long>()
 
     override fun isSupported(source: DataSource) = source in adapters
 
@@ -87,6 +96,7 @@ class DefaultCollectionQueue(
     }
 
     override fun cancel() {
+        cancelVerification()
         batchJob?.cancel()
     }
 
@@ -102,6 +112,29 @@ class DefaultCollectionQueue(
         }
     }
 
+    override fun submitVerification(page: VerifiedPage) {
+        val deferred = synchronized(verificationLock) {
+            val current = activeVerification?.takeIf { it.isActive } ?: return
+            val request = _verification.value ?: return
+            importBrowserCookies(page.url, page.cookieHeader)
+            verificationVersions[request.source] = verificationVersion(request.source) + 1L
+            activeVerification = null
+            _verification.value = null
+            current
+        }
+        deferred.complete(true)
+    }
+
+    override fun cancelVerification() {
+        val deferred = synchronized(verificationLock) {
+            val current = activeVerification?.takeIf { it.isActive } ?: return
+            activeVerification = null
+            _verification.value = null
+            current
+        }
+        deferred.complete(false)
+    }
+
     private suspend fun collect(adapter: SourceAdapter, productId: String, useCache: Boolean): ProductResult {
         val key = ProductResult.keyOf(adapter.source, productId)
         if (useCache) cache.get(key)?.let { return it.copy(collectedAtMillis = clock()) }
@@ -109,8 +142,12 @@ class DefaultCollectionQueue(
         val current = settings.settings.value
         val maxAttempts = if (current.autoRetry) MAX_ATTEMPTS else 1
         var attempt = 0
+        var browserVerificationUsed = false
         while (true) {
             attempt++
+            val verificationVersionBeforeRequest = synchronized(verificationLock) {
+                verificationVersion(adapter.source)
+            }
             val kind = try {
                 val result = withTimeout(current.timeoutSeconds * 1000L) { adapter.fetch(productId) }
                     .copy(collectedAtMillis = clock())
@@ -121,6 +158,27 @@ class DefaultCollectionQueue(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: FetchException) {
+                if (
+                    e.kind == FetchErrorKind.BLOCKED &&
+                    e.challengeUrl != null &&
+                    !browserVerificationUsed
+                ) {
+                    val verified = awaitBrowserVerification(
+                        ProcessingVerification(
+                            source = adapter.source,
+                            productId = productId,
+                            challengeUrl = e.challengeUrl,
+                            userAgent = e.challengeUserAgent,
+                        ),
+                        verificationVersionBeforeRequest,
+                    )
+                    if (verified) {
+                        browserVerificationUsed = synchronized(verificationLock) {
+                            verificationVersion(adapter.source) > verificationVersionBeforeRequest
+                        }
+                        continue
+                    }
+                }
                 e.kind
             } catch (_: Exception) {
                 FetchErrorKind.PARSE
@@ -138,6 +196,24 @@ class DefaultCollectionQueue(
             delay(retryBackoffMillis * attempt)
         }
     }
+
+    /** Waits for the active browser or opens one without racing a just-completed verification. */
+    private suspend fun awaitBrowserVerification(
+        request: ProcessingVerification,
+        knownVersion: Long,
+    ): Boolean {
+        val deferred = synchronized(verificationLock) {
+            if (verificationVersion(request.source) > knownVersion) return true
+            activeVerification?.takeIf { it.isActive }
+                ?: CompletableDeferred<Boolean>().also {
+                    activeVerification = it
+                    _verification.value = request
+                }
+        }
+        return deferred.await()
+    }
+
+    private fun verificationVersion(source: DataSource): Long = verificationVersions[source] ?: 0L
 
     private companion object {
         const val MAX_ATTEMPTS = 3

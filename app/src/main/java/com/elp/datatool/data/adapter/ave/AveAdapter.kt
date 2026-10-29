@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.ave
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -66,10 +67,13 @@ class AveAdapter(
                 ?: throw FetchException(FetchErrorKind.NOT_FOUND, "Ave product $requestedSku not found")
         }
 
-        val englishPage = http.get(productUrl)
-        var result = withContext(parseDispatcher) {
-            AveParser.parseProduct(englishPage.body, englishPage.url, requestedSku)
+        val (englishPage, parsedResult) = withBrowserChallenge(productUrl) {
+            val loadedPage = http.get(productUrl)
+            loadedPage to withContext(parseDispatcher) {
+                AveParser.parseProduct(loadedPage.body, loadedPage.url, requestedSku)
+            }
         }
+        var result = parsedResult
 
         val japaneseUrl = toJapaneseUrl(englishPage.url)
         if (japaneseUrl != englishPage.url) {

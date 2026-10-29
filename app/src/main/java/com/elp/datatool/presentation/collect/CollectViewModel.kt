@@ -77,6 +77,7 @@ class CollectViewModel(
 
     private val _searchState = MutableStateFlow(SearchUiState())
     val searchState: StateFlow<SearchUiState> = _searchState.asStateFlow()
+    val processingVerification = queue.verification
 
     private val _events = Channel<CollectEvent>(Channel.BUFFERED)
     val events: Flow<CollectEvent> = _events.receiveAsFlow()
@@ -128,6 +129,10 @@ class CollectViewModel(
     }
 
     fun onCancelProcessing() = queue.cancel()
+
+    fun onProcessingVerified(page: VerifiedPage) = queue.submitVerification(page)
+
+    fun onProcessingVerificationCancelled() = queue.cancelVerification()
 
     fun onDismissSummary() = _uiState.update { it.copy(showSummary = false) }
 

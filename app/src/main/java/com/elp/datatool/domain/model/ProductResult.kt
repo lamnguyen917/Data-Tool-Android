@@ -87,12 +87,15 @@ enum class FetchErrorKind(val isTemporary: Boolean) {
 /**
  * @property challengeUrl page the user can open in the in-app browser to complete the site's
  * human verification. Only set for [FetchErrorKind.BLOCKED] failures that support it.
+ * @property challengeUserAgent user agent the browser must use when challenge cookies are bound
+ * to the requesting client. Defaults to the shared HTTP user agent when absent.
  */
 class FetchException(
     val kind: FetchErrorKind,
     message: String? = null,
     cause: Throwable? = null,
     val challengeUrl: String? = null,
+    val challengeUserAgent: String? = null,
 ) : Exception(message ?: kind.name, cause)
 
 /** A page the user reached in the in-app browser after completing a site challenge. */
@@ -101,6 +104,14 @@ data class VerifiedPage(
     val html: String,
     /** Raw `Cookie` header for [url] taken from the browser; empty when unavailable. */
     val cookieHeader: String = "",
+)
+
+/** One product request waiting for user-completed browser verification. */
+data class ProcessingVerification(
+    val source: DataSource,
+    val productId: String,
+    val challengeUrl: String,
+    val userAgent: String? = null,
 )
 
 /** A product returned by a keyword search. */

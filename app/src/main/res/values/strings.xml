@@ -170,6 +170,7 @@
     <string name="search_verify_action">Verify in browser</string>
     <string name="verify_title">Verify you are human</string>
     <string name="verify_hint">Complete the check on the page. Results load automatically when the site returns to the search page.</string>
+    <string name="verify_process_hint">Complete the check on the page. Processing resumes automatically after verification.</string>
 
     <plurals name="search_result_count">
         <item quantity="one">%d result</item>

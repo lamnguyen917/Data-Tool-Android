@@ -204,23 +204,17 @@ Search can be added later only after its endpoint, query encoding, pagination, e
 | Unknown HTTP 200 page without required product markers | `PARSE` |
 | Japanese failure after English success | Keep English result and omit `localized["ja"]` |
 
-The current `HttpClient` already maps HTTP 403 to `BLOCKED`. The Heyzo parser still needs soft-block detection for HTTP 200 responses containing Cloudflare or challenge text.
+The current `HttpClient` maps HTTP 403 to `BLOCKED`, and the Heyzo parser detects soft blocks in HTTP 200 responses containing Cloudflare or challenge text.
 
-Do not automatically retry `BLOCKED` responses as if they were transient network failures. A manual retry is reasonable only after access conditions change.
+Do not retry `BLOCKED` responses as ordinary transient failures. The processing queue may retry once after the user completes the browser verification flow described below.
 
 ## Browser verification decision
 
-The app already has an in-app browser verification mechanism for a source-specific search challenge. Do not automatically reuse it for Heyzo product pages.
+When a Heyzo product request is blocked, the adapter attaches the trusted product URL and its desktop user agent to the error. The processing queue then opens the in-app browser and waits for the user to complete the challenge. The app does not interact with, automate, or solve the challenge.
 
-First verify all of the following manually:
+Only one processing-verification WebView may be active at a time. If multiple concurrent items become blocked, they wait for the same verification result. After the browser reaches the exact trusted product path and the page no longer looks like a challenge, its cookies are imported into the shared HTTP client and every waiting item retries. A per-source verification generation prevents a late stale blocked response from opening a second WebView immediately after successful verification.
 
-- the challenge can be completed by the user in a normal browser;
-- the browser reaches the exact trusted Heyzo product URL;
-- the resulting cookies are sufficient for the shared HTTP client;
-- no login credential or paid-session data would be imported;
-- completion can be detected without interacting with the challenge widget.
-
-Until then, return `BLOCKED` with no bypass attempt.
+Each item may wait for browser verification only once per collection attempt. Closing the WebView releases all waiting items as `BLOCKED`; it does not leave queue jobs suspended. Login credentials, challenge automation, and paid-session bypasses are outside this flow.
 
 ## Cache design
 

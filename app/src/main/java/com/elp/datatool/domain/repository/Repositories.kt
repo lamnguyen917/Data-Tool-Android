@@ -7,6 +7,7 @@ import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
 import com.elp.datatool.domain.model.FetchException
 import com.elp.datatool.domain.model.ProductResult
+import com.elp.datatool.domain.model.ProcessingVerification
 import com.elp.datatool.domain.model.QueueState
 import com.elp.datatool.domain.model.SearchHit
 import com.elp.datatool.domain.model.ThemeMode
@@ -51,10 +52,13 @@ interface ProductSearchRepository {
 /** Runs collection batches and single retries, writing into [ResultRepository]. */
 interface CollectionQueue {
     val state: StateFlow<QueueState>
+    val verification: StateFlow<ProcessingVerification?>
     fun isSupported(source: DataSource): Boolean
     fun start(source: DataSource, productIds: List<String>)
     fun cancel()
     fun retry(source: DataSource, productId: String)
+    fun submitVerification(page: VerifiedPage)
+    fun cancelVerification()
 }
 
 interface ResponseCache {

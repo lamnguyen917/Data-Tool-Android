@@ -79,6 +79,8 @@ class HeyzoAdapterTest {
             fail("Expected FetchException")
         } catch (error: FetchException) {
             assertEquals(FetchErrorKind.BLOCKED, error.kind)
+            assertEquals(adapter.englishProductUrl("0123"), error.challengeUrl)
+            assertTrue(error.challengeUserAgent.orEmpty().contains("Windows NT"))
         }
         assertEquals(1, server.requestCount)
     }

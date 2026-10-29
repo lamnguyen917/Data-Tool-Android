@@ -52,5 +52,6 @@ class AppContainer(application: Application) {
         settings = settingsRepository,
         cache = productCache,
         scope = applicationScope,
+        importBrowserCookies = httpClient::importBrowserCookies,
     )
 }

@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -56,9 +57,46 @@ fun BrowserVerificationRoute(
     BrowserVerificationScreen(
         url = challengeUrl,
         sourceName = stringResource(collectState.source.nameRes),
+        hint = stringResource(R.string.verify_hint),
         onBack = onBack,
         onVerified = { page ->
             viewModel.onVerifiedPage(page)
+            onBack()
+        },
+    )
+}
+
+/** Opens the single browser challenge currently suspending the processing queue. */
+@Composable
+fun ProcessingBrowserVerificationRoute(
+    viewModel: CollectViewModel,
+    onBack: () -> Unit,
+) {
+    val verification = remember { viewModel.processingVerification.value }
+    if (verification == null) {
+        LaunchedEffect(Unit) { onBack() }
+        return
+    }
+
+    DisposableEffect(verification) {
+        onDispose {
+            if (viewModel.processingVerification.value == verification) {
+                viewModel.onProcessingVerificationCancelled()
+            }
+        }
+    }
+
+    BrowserVerificationScreen(
+        url = verification.challengeUrl,
+        sourceName = stringResource(verification.source.nameRes),
+        hint = stringResource(R.string.verify_process_hint),
+        userAgent = verification.userAgent ?: HttpClient.USER_AGENT,
+        onBack = {
+            viewModel.onProcessingVerificationCancelled()
+            onBack()
+        },
+        onVerified = { page ->
+            viewModel.onProcessingVerified(page)
             onBack()
         },
     )
@@ -68,9 +106,11 @@ fun BrowserVerificationRoute(
 fun BrowserVerificationScreen(
     url: String,
     sourceName: String,
+    hint: String,
     onBack: () -> Unit,
     onVerified: (VerifiedPage) -> Unit,
     modifier: Modifier = Modifier,
+    userAgent: String = HttpClient.USER_AGENT,
 ) {
     var progress by remember { mutableIntStateOf(0) }
     val currentOnVerified by rememberUpdatedState(onVerified)
@@ -92,7 +132,7 @@ fun BrowserVerificationScreen(
                 .fillMaxSize()
         ) {
             Text(
-                text = stringResource(R.string.verify_hint),
+                text = hint,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -109,6 +149,7 @@ fun BrowserVerificationScreen(
                     WebView(context).apply {
                         configure(
                             targetUrl = url,
+                            userAgent = userAgent,
                             onProgress = { progress = it },
                             onVerified = { page -> currentOnVerified(page) },
                         )
@@ -127,6 +168,7 @@ fun BrowserVerificationScreen(
 @SuppressLint("SetJavaScriptEnabled")
 private fun WebView.configure(
     targetUrl: String,
+    userAgent: String,
     onProgress: (Int) -> Unit,
     onVerified: (VerifiedPage) -> Unit,
 ) {
@@ -137,7 +179,7 @@ private fun WebView.configure(
     // imported cookies match the session the HTTP client presents.
     settings.javaScriptEnabled = true
     settings.domStorageEnabled = true
-    settings.userAgentString = HttpClient.USER_AGENT
+    settings.userAgentString = userAgent
     CookieManager.getInstance().apply {
         setAcceptCookie(true)
         setAcceptThirdPartyCookies(this@configure, true)
@@ -161,6 +203,7 @@ private fun WebView.configure(
                 if (submitted) return@evaluateJavascript
                 val html = runCatching { Json.parseToJsonElement(raw).jsonPrimitive.content }.getOrNull()
                 if (html.isNullOrBlank()) return@evaluateJavascript
+                if (looksLikeChallengeHtml(html)) return@evaluateJavascript
                 submitted = true
                 val cookies = CookieManager.getInstance().getCookie(url).orEmpty()
                 onVerified(VerifiedPage(url = url, html = html, cookieHeader = cookies))
@@ -174,5 +217,22 @@ private fun isTargetPage(current: Uri, target: Uri): Boolean =
     current.scheme.equals(target.scheme, ignoreCase = true) &&
         current.host.equals(target.host, ignoreCase = true) &&
         current.path.equals(target.path, ignoreCase = true)
+
+/** Prevents same-URL challenges from being submitted before the user completes them. */
+internal fun looksLikeChallengeHtml(html: String): Boolean {
+    val signal = html.lowercase()
+    return listOf(
+        "cf-challenge",
+        "cf-error",
+        "challenge-form",
+        "captcha",
+        "attention required",
+        "just a moment",
+        "g-recaptcha",
+        "hcaptcha",
+        "i am not a robot",
+        "verify you are human",
+    ).any(signal::contains)
+}
 
 private const val READ_HTML_SCRIPT = "document.documentElement.outerHTML"

@@ -16,13 +16,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -36,6 +37,7 @@ import com.elp.datatool.presentation.AppViewModelProvider
 import com.elp.datatool.presentation.collect.BrowserVerificationRoute
 import com.elp.datatool.presentation.collect.CollectRoute
 import com.elp.datatool.presentation.collect.CollectViewModel
+import com.elp.datatool.presentation.collect.ProcessingBrowserVerificationRoute
 import com.elp.datatool.presentation.collect.SearchProductsRoute
 import com.elp.datatool.presentation.results.ResultDetailRoute
 import com.elp.datatool.presentation.results.ResultDetailViewModel
@@ -49,6 +51,7 @@ object Routes {
     const val COLLECT = "collect"
     const val SEARCH = "collect/search"
     const val SEARCH_VERIFY = "collect/search/verify"
+    const val PROCESS_VERIFY = "collect/process/verify"
     const val RESULTS = "results"
     const val DETAIL = "results/detail/{${ResultDetailViewModel.KEY_ARG}}"
     const val SETTINGS = "settings"
@@ -70,9 +73,17 @@ enum class TopLevelDestination(
 
 @Composable
 fun DataToolNavHost(navController: NavHostController = rememberNavController()) {
+    val collectViewModel: CollectViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val processingVerification by collectViewModel.processingVerification.collectAsStateWithLifecycle()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val currentTopLevel = TopLevelDestination.entries.firstOrNull { it.route == currentRoute }
+
+    LaunchedEffect(processingVerification, currentRoute) {
+        if (processingVerification != null && currentRoute != Routes.PROCESS_VERIFY) {
+            navController.navigate(Routes.PROCESS_VERIFY) { launchSingleTop = true }
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
@@ -94,27 +105,27 @@ fun DataToolNavHost(navController: NavHostController = rememberNavController()) 
                 .consumeWindowInsets(padding),
         ) {
             composable(Routes.COLLECT) {
-                val viewModel: CollectViewModel = viewModel(factory = AppViewModelProvider.Factory)
                 CollectRoute(
-                    viewModel = viewModel,
+                    viewModel = collectViewModel,
                     onOpenSearch = { navController.navigate(Routes.SEARCH) },
                     onViewResults = { navController.navigateToTopLevel(Routes.RESULTS) },
                 )
             }
-            composable(Routes.SEARCH) { entry ->
-                // Share the Collect ViewModel so selected products land in the same input.
-                val collectEntry = remember(entry) { navController.getBackStackEntry(Routes.COLLECT) }
-                val viewModel: CollectViewModel = viewModel(collectEntry, factory = AppViewModelProvider.Factory)
+            composable(Routes.SEARCH) {
                 SearchProductsRoute(
-                    viewModel = viewModel,
+                    viewModel = collectViewModel,
                     onBack = { navController.popBackStack() },
                     onOpenVerification = { navController.navigate(Routes.SEARCH_VERIFY) },
                 )
             }
-            composable(Routes.SEARCH_VERIFY) { entry ->
-                val collectEntry = remember(entry) { navController.getBackStackEntry(Routes.COLLECT) }
-                val viewModel: CollectViewModel = viewModel(collectEntry, factory = AppViewModelProvider.Factory)
-                BrowserVerificationRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
+            composable(Routes.SEARCH_VERIFY) {
+                BrowserVerificationRoute(viewModel = collectViewModel, onBack = { navController.popBackStack() })
+            }
+            composable(Routes.PROCESS_VERIFY) {
+                ProcessingBrowserVerificationRoute(
+                    viewModel = collectViewModel,
+                    onBack = { navController.popBackStack() },
+                )
             }
             composable(Routes.RESULTS) {
                 ResultsRoute(

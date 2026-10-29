@@ -27,7 +27,7 @@ The Compose UI follows [`.visualizations/wireframe.html`](../.visualizations/wir
 | Steam Store | Not supported | Not implemented; the UI reports that the source is not available yet |
 | IGDB | Not supported | Not implemented; the UI reports that the source is not available yet |
 
-The Android application currently registers `UnityAssetStoreAdapter`, `AmazonBookAdapter`, `AveAdapter`, `TokyoHotAdapter`, `Fc2Adapter`, and `HeyzoAdapter`. It also includes the OkHttp client, `DefaultCollectionQueue` with bounded concurrency, timeout, temporary-error retry, cancellation and manual retry, expiring response cache, and Coil image loading. Parser tests use local fixtures under `app/src/test/resources`.
+The Android application currently registers `UnityAssetStoreAdapter`, `AmazonBookAdapter`, `AveAdapter`, `TokyoHotAdapter`, `Fc2Adapter`, and `HeyzoAdapter`. It also includes the OkHttp client, `DefaultCollectionQueue` with bounded concurrency, timeout, temporary-error retry, cancellation and manual retry, expiring response cache, and Coil image loading. When processing encounters a supported browser challenge, the queue opens one user-operated WebView; concurrent blocked items wait for that same verification, import its cookies, and retry. Parser tests use local fixtures under `app/src/test/resources`.
 
 The sibling Rust desktop project supplied the adapter references. Six adapters remain **implementation references only** and are not registered in the Android application:
 

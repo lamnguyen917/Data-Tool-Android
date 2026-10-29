@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.tokyohot
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -53,10 +54,14 @@ class TokyoHotAdapter(
                 )
         }
 
-        val englishPage = http.get(languageUrl(productUrl, ENGLISH_LANGUAGE))
-        var result = withContext(parseDispatcher) {
-            TokyoHotParser.parseProduct(englishPage.body, englishPage.url, requestedProductId)
+        val englishUrl = languageUrl(productUrl, ENGLISH_LANGUAGE)
+        val (englishPage, parsedResult) = withBrowserChallenge(englishUrl) {
+            val loadedPage = http.get(englishUrl)
+            loadedPage to withContext(parseDispatcher) {
+                TokyoHotParser.parseProduct(loadedPage.body, loadedPage.url, requestedProductId)
+            }
         }
+        var result = parsedResult
 
         val japaneseUrl = languageUrl(englishPage.url, JAPANESE_LANGUAGE)
         val localized = try {
@@ -84,8 +89,11 @@ class TokyoHotAdapter(
         ?: "$url?lang=$language"
 
     private suspend fun loadCandidates(query: String): List<TokyoHotParser.Candidate> {
-        val page = http.get(searchUrl(query))
-        return withContext(parseDispatcher) { TokyoHotParser.parseCandidates(page.body, page.url) }
+        val url = searchUrl(query)
+        return withBrowserChallenge(url) {
+            val page = http.get(url)
+            withContext(parseDispatcher) { TokyoHotParser.parseCandidates(page.body, page.url) }
+        }
     }
 
     private fun isTrustedProductUrl(value: String): Boolean {

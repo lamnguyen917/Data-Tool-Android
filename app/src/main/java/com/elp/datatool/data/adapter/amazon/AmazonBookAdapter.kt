@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.amazon
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -33,14 +34,16 @@ class AmazonBookAdapter(
     override suspend fun fetch(productId: String): ProductResult {
         val normalizedId = productId.uppercase()
         val normalizedUrl = seedUrl(normalizedId)
-        val page = requestMutex.withLock {
-            val waitMillis = requestIntervalMillis - (clock() - lastRequestAtMillis)
-            if (lastRequestAtMillis > 0L && waitMillis > 0L) delay(waitMillis)
-            lastRequestAtMillis = clock()
-            http.get(normalizedUrl)
-        }
-        return withContext(parseDispatcher) {
-            AmazonBookParser.parseProduct(page.body, normalizedId, normalizedUrl)
+        return withBrowserChallenge(normalizedUrl) {
+            val page = requestMutex.withLock {
+                val waitMillis = requestIntervalMillis - (clock() - lastRequestAtMillis)
+                if (lastRequestAtMillis > 0L && waitMillis > 0L) delay(waitMillis)
+                lastRequestAtMillis = clock()
+                http.get(normalizedUrl)
+            }
+            withContext(parseDispatcher) {
+                AmazonBookParser.parseProduct(page.body, normalizedId, normalizedUrl)
+            }
         }
     }
 

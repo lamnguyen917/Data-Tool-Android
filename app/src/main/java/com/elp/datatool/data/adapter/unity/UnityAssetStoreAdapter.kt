@@ -1,5 +1,6 @@
 package com.elp.datatool.data.adapter.unity
 
+import com.elp.datatool.data.adapter.withBrowserChallenge
 import com.elp.datatool.data.remote.HttpClient
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ProductResult
@@ -28,9 +29,12 @@ class UnityAssetStoreAdapter(
      * The middle path segment is required (see the crawl knowledge page).
      */
     override suspend fun fetch(productId: String): ProductResult {
-        val page = http.get(seedUrl(productId))
-        return withContext(parseDispatcher) {
-            UnityAssetStoreParser.parseProduct(page.body, page.url, productId)
+        val url = seedUrl(productId)
+        return withBrowserChallenge(url) {
+            val page = http.get(url)
+            withContext(parseDispatcher) {
+                UnityAssetStoreParser.parseProduct(page.body, page.url, productId)
+            }
         }
     }
 
