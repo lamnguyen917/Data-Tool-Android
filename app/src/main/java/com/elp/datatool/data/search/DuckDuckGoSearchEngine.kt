@@ -27,6 +27,10 @@ class DuckDuckGoSearchEngine(
         get() = when (this) {
             DataSource.UNITY_ASSET_STORE -> "assetstore.unity.com/packages"
             DataSource.AMAZON_BOOKS -> "amazon.com"
+            DataSource.AVE -> "aventertainments.com"
+            DataSource.TOKYO_HOT -> "tokyo-hot.com"
+            DataSource.FC2 -> "adult.contents.fc2.com"
+            DataSource.HEYZO -> "heyzo.com"
             DataSource.STEAM_STORE -> "store.steampowered.com/app"
             DataSource.IGDB -> "igdb.com/games"
             DataSource.GOG -> "gog.com"
@@ -86,6 +90,10 @@ internal object DuckDuckGoSearchParser {
         return when (source) {
             DataSource.UNITY_ASSET_STORE -> host == "assetstore.unity.com"
             DataSource.AMAZON_BOOKS -> AMAZON_HOST.matches(host)
+            DataSource.AVE -> host == "aventertainments.com" || host == "www.aventertainments.com"
+            DataSource.TOKYO_HOT -> host == "tokyo-hot.com" || host == "www.tokyo-hot.com"
+            DataSource.FC2 -> host == "adult.contents.fc2.com"
+            DataSource.HEYZO -> host == "www.heyzo.com" || host == "en.heyzo.com"
             DataSource.STEAM_STORE -> host == "store.steampowered.com"
             DataSource.IGDB -> host == "igdb.com" || host == "www.igdb.com"
             DataSource.GOG -> host == "gog.com" || host == "www.gog.com"
