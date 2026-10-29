@@ -116,14 +116,25 @@ class ResultsViewModel(
         val result = repository.get(key) ?: return
         val current = settings.settings.value
         _events.trySend(
-            ResultsEvent.Copy(CopyFormatter.line(result, current.copyLineFields, current.copyLineFormat), CopyKind.LINE)
+            ResultsEvent.Copy(
+                CopyFormatter.line(
+                    result,
+                    current.copyLineFieldsFor(result.source),
+                    current.copyLineFormatFor(result.source),
+                ),
+                CopyKind.LINE,
+            )
         )
     }
 
     fun onCopyDetails(key: String) {
         val result = repository.get(key) ?: return
+        val current = settings.settings.value
         _events.trySend(
-            ResultsEvent.Copy(CopyFormatter.details(result, settings.settings.value.copyDetailsTemplate), CopyKind.DETAILS)
+            ResultsEvent.Copy(
+                CopyFormatter.details(result, current.copyDetailsTemplateFor(result.source)),
+                CopyKind.DETAILS,
+            )
         )
     }
 
@@ -135,7 +146,11 @@ class ResultsViewModel(
             .filter { it.key in keys && it.status == ResultStatus.COMPLETED }
         if (selected.isEmpty()) return
         val text = selected.joinToString("\n") {
-            CopyFormatter.line(it, current.copyLineFields, current.copyLineFormat)
+            CopyFormatter.line(
+                it,
+                current.copyLineFieldsFor(it.source),
+                current.copyLineFormatFor(it.source),
+            )
         }
         _events.trySend(ResultsEvent.Copy(text, CopyKind.LINE, selected.size))
     }

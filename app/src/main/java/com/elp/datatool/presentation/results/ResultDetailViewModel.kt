@@ -19,8 +19,10 @@ class ResultDetailViewModel(
 ) : ViewModel() {
 
     /** Text for "Copy details", built from the template in Settings. */
-    fun detailsText(result: ProductResult): String =
-        CopyFormatter.details(result, settings.settings.value.copyDetailsTemplate)
+    fun detailsText(result: ProductResult): String = CopyFormatter.details(
+        result,
+        settings.settings.value.copyDetailsTemplateFor(result.source),
+    )
 
     private val key: String = checkNotNull(savedStateHandle[KEY_ARG])
 

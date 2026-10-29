@@ -137,4 +137,5 @@ val DataSource.displayName: String
         DataSource.HEYZO -> "Heyzo"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
+        DataSource.GOG -> "GOG"
     }

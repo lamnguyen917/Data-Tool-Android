@@ -137,6 +137,24 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun gog_acceptsIdSlugAndTrustedProductUrls() {
+        assertValid(DataSource.GOG, "1207658717", "1207658717")
+        assertValid(DataSource.GOG, "alien_nations", "alien_nations")
+        assertValid(DataSource.GOG, "https://www.gog.com/game/alien_nations", "alien_nations")
+        assertValid(DataSource.GOG, "https://www.gog.com/en/game/alien_nations?ref=test", "alien_nations")
+        assertValid(DataSource.GOG, "https://gog.com/pl/game/alien_nations#details", "alien_nations")
+    }
+
+    @Test
+    fun gog_rejectsUntrustedOrNonProductUrls() {
+        assertInvalid(DataSource.GOG, "Alien Nations", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.GOG, "http://www.gog.com/game/alien_nations", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.GOG, "https://www.gog.com.evil.test/game/alien_nations", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.GOG, "https://www.gog.com/en/games", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.GOG, "https://www.gog.com/en/game/alien_nations/extra", InvalidReason.BAD_FORMAT)
+    }
+
+    @Test
     fun blankInput_isEmpty() {
         assertInvalid(DataSource.STEAM_STORE, "   ", InvalidReason.EMPTY)
     }

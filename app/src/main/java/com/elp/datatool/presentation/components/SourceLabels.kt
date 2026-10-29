@@ -21,6 +21,7 @@ val DataSource.nameRes: Int
         DataSource.HEYZO -> R.string.source_heyzo
         DataSource.STEAM_STORE -> R.string.source_steam
         DataSource.IGDB -> R.string.source_igdb
+        DataSource.GOG -> R.string.source_gog
     }
 
 @get:StringRes
@@ -34,6 +35,7 @@ val DataSource.shortLabelRes: Int
         DataSource.HEYZO -> R.string.source_short_heyzo
         DataSource.STEAM_STORE -> R.string.source_short_steam
         DataSource.IGDB -> R.string.source_short_igdb
+        DataSource.GOG -> R.string.source_short_gog
     }
 
 @get:StringRes
@@ -47,6 +49,7 @@ val DataSource.idLabelRes: Int
         DataSource.HEYZO -> R.string.id_label_heyzo
         DataSource.STEAM_STORE -> R.string.id_label_steam
         DataSource.IGDB -> R.string.id_label_igdb
+        DataSource.GOG -> R.string.id_label_gog
     }
 
 @get:StringRes
@@ -60,6 +63,7 @@ val DataSource.invalidMessageRes: Int
         DataSource.HEYZO -> R.string.invalid_heyzo
         DataSource.STEAM_STORE -> R.string.invalid_steam
         DataSource.IGDB -> R.string.invalid_igdb
+        DataSource.GOG -> R.string.invalid_gog
     }
 
 @get:StringRes

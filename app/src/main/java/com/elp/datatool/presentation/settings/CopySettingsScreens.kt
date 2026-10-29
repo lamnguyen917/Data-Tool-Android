@@ -53,12 +53,14 @@ import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.presentation.components.BackButton
 import com.elp.datatool.presentation.components.DtTopBar
 import com.elp.datatool.presentation.components.FieldLabel
 import com.elp.datatool.presentation.components.displayTitle
 import com.elp.datatool.presentation.components.labelRes
+import com.elp.datatool.presentation.components.nameRes
 import com.elp.datatool.ui.icons.DtIcons
 import com.elp.datatool.ui.theme.CaptionTextStyle
 import com.elp.datatool.ui.theme.DataToolTheme
@@ -82,6 +84,27 @@ fun CopyLineSettingsRoute(viewModel: SettingsViewModel, onBack: () -> Unit) {
 }
 
 @Composable
+fun AdapterCopyLineSettingsRoute(
+    viewModel: SettingsViewModel,
+    source: DataSource,
+    onBack: () -> Unit,
+) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+    CopyLineSettingsScreen(
+        format = settings.copyLineFormatFor(source),
+        fields = settings.copyLineFieldsFor(source),
+        preview = remember(source) { viewModel.previewResult(source) },
+        onBack = onBack,
+        onFormatChange = { viewModel.onAdapterCopyLineFormatChange(source, it) },
+        onAdd = { viewModel.onAddAdapterCopyField(source, it) },
+        onRemove = { viewModel.onRemoveAdapterCopyField(source, it) },
+        onMove = { field, offset -> viewModel.onMoveAdapterCopyField(source, field, offset) },
+        onReset = { viewModel.onResetAdapterCopyLine(source) },
+        subtitle = stringResource(source.nameRes),
+    )
+}
+
+@Composable
 fun CopyLineSettingsScreen(
     format: LineFormat,
     fields: List<CopyField>,
@@ -93,6 +116,7 @@ fun CopyLineSettingsScreen(
     onMove: (CopyField, Int) -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
 ) {
     Scaffold(
         modifier = modifier,
@@ -100,6 +124,7 @@ fun CopyLineSettingsScreen(
         topBar = {
             DtTopBar(
                 title = stringResource(R.string.copy_line_title),
+                subtitle = subtitle,
                 navigationIcon = { BackButton(onBack) },
             )
         },
@@ -235,6 +260,23 @@ fun CopyDetailsSettingsRoute(viewModel: SettingsViewModel, onBack: () -> Unit) {
 }
 
 @Composable
+fun AdapterCopyDetailsSettingsRoute(
+    viewModel: SettingsViewModel,
+    source: DataSource,
+    onBack: () -> Unit,
+) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+    CopyDetailsSettingsScreen(
+        template = settings.copyDetailsTemplateFor(source),
+        preview = remember(source) { viewModel.previewResult(source) },
+        onBack = onBack,
+        onTemplateChange = { viewModel.onAdapterDetailsTemplateChange(source, it) },
+        onReset = { viewModel.onResetAdapterDetailsTemplate(source) },
+        subtitle = stringResource(source.nameRes),
+    )
+}
+
+@Composable
 fun CopyDetailsSettingsScreen(
     template: String,
     preview: ProductResult,
@@ -242,6 +284,7 @@ fun CopyDetailsSettingsScreen(
     onTemplateChange: (String) -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
 ) {
     // Local value keeps the cursor so placeholders are inserted where the user is typing.
     var value by remember { mutableStateOf(TextFieldValue(template, TextRange(template.length))) }
@@ -258,6 +301,7 @@ fun CopyDetailsSettingsScreen(
         topBar = {
             DtTopBar(
                 title = stringResource(R.string.copy_details_title),
+                subtitle = subtitle,
                 navigationIcon = { BackButton(onBack) },
             )
         },

@@ -133,3 +133,19 @@ heyzo-adapter-research:
     - heyzo crawl
     - heyzo moviepages
     - heyzo android migration
+
+gog-crawl:
+  title: GOG - game crawl
+  path: pages/gog-crawl.md
+  source: sources/gog-alien-nations-observations.md
+  status: verified
+  summary: >
+    Resolve and search through the public Catalog API, then enrich by numeric
+    product id through the Product API. Keep original and GOG store release
+    dates separate; use English HTML only for fields absent from JSON.
+  open_when:
+    - gog crawl
+    - gog product id
+    - gog slug
+    - gog catalog search
+    - gog product api

@@ -21,24 +21,26 @@ appid:
   ids: [steam-crawl]
 igdb:
   ids: [igdb-crawl]
+gog:
+  ids: [gog-crawl]
 games:
-  ids: [igdb-crawl, steam-crawl]
+  ids: [gog-crawl, igdb-crawl, steam-crawl]
 slug:
-  ids: [igdb-crawl]
+  ids: [gog-crawl, igdb-crawl]
 api:
-  ids: [igdb-crawl]
+  ids: [gog-crawl, igdb-crawl]
 json:
-  ids: [steam-crawl, igdb-crawl]
+  ids: [gog-crawl, steam-crawl, igdb-crawl]
 crawl:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl, igdb-crawl]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, igdb-crawl]
 graphql:
   ids: [unity-crawl]
 html:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
 redirect:
   ids: [unity-crawl]
 search:
-  ids: [unity-crawl, steam-crawl, igdb-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research]
+  ids: [unity-crawl, gog-crawl, steam-crawl, igdb-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research]
 nextjs:
   ids: [unity-crawl]
 adapters:

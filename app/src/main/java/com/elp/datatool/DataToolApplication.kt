@@ -4,6 +4,7 @@ import android.app.Application
 import com.elp.datatool.data.adapter.amazon.AmazonBookAdapter
 import com.elp.datatool.data.adapter.ave.AveAdapter
 import com.elp.datatool.data.adapter.fc2.Fc2Adapter
+import com.elp.datatool.data.adapter.gog.GogAdapter
 import com.elp.datatool.data.adapter.heyzo.HeyzoAdapter
 import com.elp.datatool.data.adapter.tokyohot.TokyoHotAdapter
 import com.elp.datatool.data.adapter.unity.UnityAssetStoreAdapter
@@ -13,6 +14,7 @@ import com.elp.datatool.data.repository.DefaultCollectionQueue
 import com.elp.datatool.data.repository.InMemoryResultRepository
 import com.elp.datatool.data.repository.PreferencesSettingsRepository
 import com.elp.datatool.data.repository.ProductCache
+import com.elp.datatool.data.search.DuckDuckGoSearchEngine
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ProductSearchRepository
 import com.elp.datatool.domain.repository.ResponseCache
@@ -40,12 +42,18 @@ class AppContainer(application: Application) {
         TokyoHotAdapter(httpClient),
         Fc2Adapter(httpClient),
         HeyzoAdapter(httpClient),
+        GogAdapter(httpClient),
     )
 
     val resultRepository: ResultRepository = InMemoryResultRepository()
     val settingsRepository: SettingsRepository = PreferencesSettingsRepository(application.applicationContext)
     val responseCache: ResponseCache = productCache
-    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(adapters, httpClient::importBrowserCookies)
+    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(
+        adapters = adapters,
+        settings = settingsRepository,
+        searchEngine = DuckDuckGoSearchEngine(httpClient),
+        importCookies = httpClient::importBrowserCookies,
+    )
     val collectionQueue: CollectionQueue = DefaultCollectionQueue(
         adapters = adapters,
         results = resultRepository,

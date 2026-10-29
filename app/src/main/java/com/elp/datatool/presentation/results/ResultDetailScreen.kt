@@ -238,6 +238,7 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
                 DataSource.AMAZON_BOOKS -> R.string.detail_authors
                 DataSource.AVE, DataSource.TOKYO_HOT, DataSource.HEYZO -> R.string.detail_performers
                 DataSource.FC2 -> R.string.detail_seller
+                DataSource.GOG -> R.string.detail_developer
                 else -> R.string.detail_publisher
             },
             result.creators.joinToString().ifEmpty { null },
@@ -256,7 +257,10 @@ private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.RATING to R.string.attr_rating,
     ProductAttributes.PUBLISHER to R.string.attr_publisher,
     ProductAttributes.PUBLICATION_DATE to R.string.attr_publication_date,
+    ProductAttributes.GOG_RELEASE_DATE to R.string.attr_gog_release_date,
     ProductAttributes.LANGUAGE to R.string.attr_language,
+    ProductAttributes.PLATFORMS to R.string.attr_platforms,
+    ProductAttributes.FEATURES to R.string.attr_features,
     ProductAttributes.PRINT_LENGTH to R.string.attr_print_length,
     ProductAttributes.ISBN_10 to R.string.attr_isbn_10,
     ProductAttributes.ISBN_13 to R.string.attr_isbn_13,

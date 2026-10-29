@@ -51,9 +51,11 @@ import com.elp.datatool.R
 import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.copy.LineFormat
 import com.elp.datatool.domain.model.AppSettings
+import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ThemeMode
 import com.elp.datatool.presentation.components.DtTopBar
 import com.elp.datatool.presentation.components.labelRes
+import com.elp.datatool.presentation.components.nameRes
 import com.elp.datatool.ui.theme.DataToolTheme
 import com.elp.datatool.ui.theme.EyebrowTextStyle
 import kotlin.math.roundToInt
@@ -69,6 +71,7 @@ fun SettingsRoute(
     viewModel: SettingsViewModel,
     onOpenCopyLine: () -> Unit,
     onOpenCopyDetails: () -> Unit,
+    onOpenAdapterSettings: (DataSource) -> Unit,
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -79,13 +82,21 @@ fun SettingsRoute(
             val message = when (event) {
                 SettingsEvent.CacheCleared -> R.string.settings_cache_cleared
                 SettingsEvent.HistoryCleared -> R.string.settings_history_cleared
+                is SettingsEvent.AdapterDataCleared -> R.string.settings_adapter_data_cleared
             }
-            snackbarHostState.showSnackbar(context.getString(message))
+            snackbarHostState.showSnackbar(
+                if (event is SettingsEvent.AdapterDataCleared) {
+                    context.getString(message, context.getString(event.source.nameRes))
+                } else {
+                    context.getString(message)
+                }
+            )
         }
     }
 
     SettingsScreen(
         settings = settings,
+        adapterSources = viewModel.adapterSources,
         snackbarHostState = snackbarHostState,
         onThemeModeChange = viewModel::onThemeModeChange,
         onParallelRequestsChange = viewModel::onParallelRequestsChange,
@@ -95,12 +106,14 @@ fun SettingsRoute(
         onClearHistory = viewModel::onClearHistory,
         onOpenCopyLine = onOpenCopyLine,
         onOpenCopyDetails = onOpenCopyDetails,
+        onOpenAdapterSettings = onOpenAdapterSettings,
     )
 }
 
 @Composable
 fun SettingsScreen(
     settings: AppSettings,
+    adapterSources: List<DataSource>,
     onThemeModeChange: (ThemeMode) -> Unit,
     onParallelRequestsChange: (Int) -> Unit,
     onTimeoutChange: (Int) -> Unit,
@@ -109,6 +122,7 @@ fun SettingsScreen(
     onClearHistory: () -> Unit,
     onOpenCopyLine: () -> Unit,
     onOpenCopyDetails: () -> Unit,
+    onOpenAdapterSettings: (DataSource) -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -190,6 +204,15 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.width(12.dp))
                 Switch(checked = settings.autoRetry, onCheckedChange = null)
+            }
+
+            SectionHeader(R.string.settings_adapters)
+            adapterSources.forEach { source ->
+                ActionRow(
+                    title = stringResource(source.nameRes),
+                    description = stringResource(R.string.settings_adapter_desc),
+                    onClick = { onOpenAdapterSettings(source) },
+                )
             }
 
             SectionHeader(R.string.settings_copy)
@@ -343,6 +366,7 @@ private fun SettingsScreenPreview() {
     DataToolTheme {
         SettingsScreen(
             settings = AppSettings(),
+            adapterSources = listOf(DataSource.UNITY_ASSET_STORE, DataSource.AMAZON_BOOKS),
             onThemeModeChange = {},
             onParallelRequestsChange = {},
             onTimeoutChange = {},
@@ -351,6 +375,7 @@ private fun SettingsScreenPreview() {
             onClearHistory = {},
             onOpenCopyLine = {},
             onOpenCopyDetails = {},
+            onOpenAdapterSettings = {},
         )
     }
 }

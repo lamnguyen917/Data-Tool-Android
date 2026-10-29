@@ -50,7 +50,10 @@ object ProductAttributes {
     const val RATING_COUNT = "rating_count"
     const val PUBLISHER = "publisher"
     const val PUBLICATION_DATE = "publication_date"
+    const val GOG_RELEASE_DATE = "gog_release_date"
     const val LANGUAGE = "language"
+    const val PLATFORMS = "platforms"
+    const val FEATURES = "features"
     const val PRINT_LENGTH = "print_length"
     const val ISBN_10 = "isbn_10"
     const val ISBN_13 = "isbn_13"
@@ -137,13 +140,40 @@ data class QueueState(
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
+/** Options scoped to one source adapter. */
+data class AdapterSettings(
+    val searchEngineFallbackEnabled: Boolean = false,
+    val customCopyEnabled: Boolean = false,
+    val copyLineFormat: LineFormat? = null,
+    val copyLineFields: List<CopyField>? = null,
+    val copyDetailsTemplate: String? = null,
+)
+
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val parallelRequests: Int = 3,
     val timeoutSeconds: Int = 30,
     val autoRetry: Boolean = true,
+    val adapterSettings: Map<DataSource, AdapterSettings> = emptyMap(),
     val copyLineFormat: LineFormat = CopyFormatter.DEFAULT_LINE_FORMAT,
     val copyLineFields: List<CopyField> = CopyFormatter.DEFAULT_LINE_FIELDS,
     val copyDetailsTemplate: String = CopyFormatter.DEFAULT_DETAILS_TEMPLATE,
     val selectedSource: DataSource = DataSource.UNITY_ASSET_STORE,
-)
+) {
+    fun settingsFor(source: DataSource): AdapterSettings = adapterSettings[source] ?: AdapterSettings()
+
+    fun copyLineFormatFor(source: DataSource): LineFormat {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyLineFormat ?: copyLineFormat else copyLineFormat
+    }
+
+    fun copyLineFieldsFor(source: DataSource): List<CopyField> {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyLineFields ?: copyLineFields else copyLineFields
+    }
+
+    fun copyDetailsTemplateFor(source: DataSource): String {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyDetailsTemplate ?: copyDetailsTemplate else copyDetailsTemplate
+    }
+}

@@ -33,7 +33,12 @@ object AppViewModelProvider {
         }
         initializer {
             val container = container()
-            SettingsViewModel(container.settingsRepository, container.resultRepository, container.responseCache)
+            SettingsViewModel(
+                container.settingsRepository,
+                container.resultRepository,
+                container.responseCache,
+                container.collectionQueue,
+            )
         }
     }
 

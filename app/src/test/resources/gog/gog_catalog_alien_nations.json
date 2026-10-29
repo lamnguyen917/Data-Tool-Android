@@ -1,0 +1,39 @@
+{
+  "pages": 1,
+  "productCount": 1,
+  "products": [
+    {
+      "id": "1207658717",
+      "slug": "alien_nations",
+      "title": "Alien Nations",
+      "developers": ["Neo Software Produktions"],
+      "publishers": ["THQ Nordic GmbH"],
+      "releaseDate": "1999.07.01",
+      "storeReleaseDate": "2014.12.19",
+      "operatingSystems": ["windows"],
+      "features": [
+        {"name": "Multi-player", "slug": "multi"},
+        {"name": "Single-player", "slug": "single"}
+      ],
+      "genres": [
+        {"name": "Strategy", "slug": "strategy"},
+        {"name": "Real-time", "slug": "realtime"},
+        {"name": "Fantasy", "slug": "fantasy"}
+      ],
+      "tags": [
+        {"name": "Fantasy", "slug": "fantasy"},
+        {"name": "Classic", "slug": "classic"}
+      ],
+      "coverVertical": "https://images.gog-statics.com/alien-nations.jpg",
+      "price": {
+        "finalMoney": {"amount": "5.99", "currency": "USD"}
+      },
+      "reviewsRating": 35,
+      "reviewsCount": 405,
+      "storeLink": "https://www.gog.com/en/game/alien_nations"
+    }
+  ],
+  "filters": {
+    "tags": [{"name": "Global filter value", "slug": "not-a-product-tag"}]
+  }
+}
