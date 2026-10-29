@@ -2,6 +2,7 @@ package com.elp.datatool.data.repository
 
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.model.AdapterSettings
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.FetchErrorKind
@@ -12,6 +13,7 @@ import com.elp.datatool.domain.model.ThemeMode
 import com.elp.datatool.domain.repository.ProductSearchRepository
 import com.elp.datatool.domain.repository.ResponseCache
 import com.elp.datatool.domain.repository.ResultRepository
+import com.elp.datatool.domain.repository.SearchEngine
 import com.elp.datatool.domain.repository.SettingsRepository
 import com.elp.datatool.domain.repository.SourceAdapter
 import java.util.concurrent.ConcurrentHashMap
@@ -43,15 +45,35 @@ class InMemoryResultRepository(
     override fun clear() {
         state.value = emptyList()
     }
+
+    override fun clear(source: DataSource) {
+        state.update { results -> results.filterNot { it.source == source } }
+    }
 }
 
-/** Routes searches to the adapter of the selected source. */
-class AdapterSearchRepository(adapters: List<SourceAdapter>) : ProductSearchRepository {
+/** Uses native adapter search first, then the optional public search-engine fallback. */
+class AdapterSearchRepository(
+    adapters: List<SourceAdapter>,
+    private val settings: SettingsRepository,
+    private val searchEngine: SearchEngine,
+) : ProductSearchRepository {
     private val adapters = adapters.associateBy { it.source }
 
     override suspend fun search(source: DataSource, query: String): List<SearchHit> {
         val adapter = adapters[source] ?: throw FetchException(FetchErrorKind.UNSUPPORTED)
-        return adapter.search(query)
+        val fallbackEnabled = settings.settings.value.settingsFor(source).searchEngineFallbackEnabled
+        val nativeHits = try {
+            adapter.search(query)
+        } catch (error: FetchException) {
+            val canFallback = error.kind == FetchErrorKind.NOT_FOUND || error.kind == FetchErrorKind.UNSUPPORTED
+            if (!fallbackEnabled || !canFallback) throw error
+            emptyList()
+        }
+        return if (nativeHits.isNotEmpty() || !fallbackEnabled) {
+            nativeHits
+        } else {
+            searchEngine.search(source, query)
+        }
     }
 }
 
@@ -77,6 +99,12 @@ class ProductCache(
 
     override fun clear() = entries.clear()
 
+    override fun clear(source: DataSource) {
+        entries.keys
+            .filter { it.startsWith("${source.id}:") }
+            .forEach(entries::remove)
+    }
+
     private companion object {
         const val DEFAULT_TTL_MILLIS = 30 * 60 * 1000L
     }
@@ -91,6 +119,9 @@ class InMemorySettingsRepository(initial: AppSettings = AppSettings()) : Setting
     override fun setParallelRequests(value: Int) = state.update { it.copy(parallelRequests = value) }
     override fun setTimeoutSeconds(value: Int) = state.update { it.copy(timeoutSeconds = value) }
     override fun setAutoRetry(enabled: Boolean) = state.update { it.copy(autoRetry = enabled) }
+    override fun setAdapterSettings(source: DataSource, adapterSettings: AdapterSettings) = state.update { settings ->
+        settings.copy(adapterSettings = settings.adapterSettings + (source to adapterSettings))
+    }
     override fun setCopyLineFormat(format: LineFormat) = state.update { it.copy(copyLineFormat = format) }
     override fun setCopyLineFields(fields: List<CopyField>) = state.update { it.copy(copyLineFields = fields) }
     override fun setCopyDetailsTemplate(template: String) = state.update { it.copy(copyDetailsTemplate = template) }

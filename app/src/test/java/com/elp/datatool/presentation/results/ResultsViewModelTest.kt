@@ -5,6 +5,8 @@ import com.elp.datatool.data.repository.InMemorySettingsRepository
 import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.model.AdapterSettings
+import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.presentation.FakeCollectionQueue
 import com.elp.datatool.presentation.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +49,27 @@ class ResultsViewModelTest {
         viewModel.onCopyDetails(SampleData.results.first().key)
 
         assertEquals(ResultsEvent.Copy("MicroSplat by Jason Booth", CopyKind.DETAILS), viewModel.events.first())
+    }
+
+    @Test
+    fun copyActions_useSettingsForTheResultAdapter() = runTest {
+        settings.setAdapterSettings(
+            DataSource.UNITY_ASSET_STORE,
+            AdapterSettings(
+                customCopyEnabled = true,
+                copyLineFormat = LineFormat.CSV,
+                copyLineFields = listOf(CopyField.TITLE, CopyField.SKU),
+                copyDetailsTemplate = "{sku}: {title}",
+            )
+        )
+        val viewModel = ResultsViewModel(repository, queue, settings)
+        val result = SampleData.results.first()
+
+        viewModel.onCopyLine(result.key)
+        viewModel.onCopyDetails(result.key)
+
+        assertEquals(ResultsEvent.Copy("MicroSplat,96478", CopyKind.LINE), viewModel.events.first())
+        assertEquals(ResultsEvent.Copy("96478: MicroSplat", CopyKind.DETAILS), viewModel.events.first())
     }
 
     @Test

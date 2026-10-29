@@ -9,6 +9,7 @@ import com.elp.datatool.data.repository.DefaultCollectionQueue
 import com.elp.datatool.data.repository.InMemoryResultRepository
 import com.elp.datatool.data.repository.PreferencesSettingsRepository
 import com.elp.datatool.data.repository.ProductCache
+import com.elp.datatool.data.search.DuckDuckGoSearchEngine
 import com.elp.datatool.domain.repository.CollectionQueue
 import com.elp.datatool.domain.repository.ProductSearchRepository
 import com.elp.datatool.domain.repository.ResponseCache
@@ -37,7 +38,11 @@ class AppContainer(application: Application) {
     val resultRepository: ResultRepository = InMemoryResultRepository()
     val settingsRepository: SettingsRepository = PreferencesSettingsRepository(application.applicationContext)
     val responseCache: ResponseCache = productCache
-    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(adapters)
+    val productSearchRepository: ProductSearchRepository = AdapterSearchRepository(
+        adapters = adapters,
+        settings = settingsRepository,
+        searchEngine = DuckDuckGoSearchEngine(httpClient),
+    )
     val collectionQueue: CollectionQueue = DefaultCollectionQueue(
         adapters = adapters,
         results = resultRepository,

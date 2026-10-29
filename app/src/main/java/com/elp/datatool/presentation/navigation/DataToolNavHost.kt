@@ -39,9 +39,13 @@ import com.elp.datatool.presentation.collect.SearchProductsRoute
 import com.elp.datatool.presentation.results.ResultDetailRoute
 import com.elp.datatool.presentation.results.ResultDetailViewModel
 import com.elp.datatool.presentation.results.ResultsRoute
+import com.elp.datatool.presentation.settings.AdapterSettingsRoute
+import com.elp.datatool.presentation.settings.AdapterCopyDetailsSettingsRoute
+import com.elp.datatool.presentation.settings.AdapterCopyLineSettingsRoute
 import com.elp.datatool.presentation.settings.CopyDetailsSettingsRoute
 import com.elp.datatool.presentation.settings.CopyLineSettingsRoute
 import com.elp.datatool.presentation.settings.SettingsRoute
+import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.ui.icons.DtIcons
 
 object Routes {
@@ -52,8 +56,15 @@ object Routes {
     const val SETTINGS = "settings"
     const val COPY_LINE_SETTINGS = "settings/copy-line"
     const val COPY_DETAILS_SETTINGS = "settings/copy-details"
+    const val ADAPTER_SOURCE_ARG = "sourceId"
+    const val ADAPTER_SETTINGS = "settings/adapter/{$ADAPTER_SOURCE_ARG}"
+    const val ADAPTER_COPY_LINE_SETTINGS = "settings/adapter/{$ADAPTER_SOURCE_ARG}/copy-line"
+    const val ADAPTER_COPY_DETAILS_SETTINGS = "settings/adapter/{$ADAPTER_SOURCE_ARG}/copy-details"
 
     fun detail(key: String) = "results/detail/${Uri.encode(key)}"
+    fun adapterSettings(source: DataSource) = "settings/adapter/${Uri.encode(source.id)}"
+    fun adapterCopyLineSettings(source: DataSource) = "settings/adapter/${Uri.encode(source.id)}/copy-line"
+    fun adapterCopyDetailsSettings(source: DataSource) = "settings/adapter/${Uri.encode(source.id)}/copy-details"
 }
 
 enum class TopLevelDestination(
@@ -126,7 +137,58 @@ fun DataToolNavHost(navController: NavHostController = rememberNavController()) 
                     viewModel = viewModel(factory = AppViewModelProvider.Factory),
                     onOpenCopyLine = { navController.navigate(Routes.COPY_LINE_SETTINGS) },
                     onOpenCopyDetails = { navController.navigate(Routes.COPY_DETAILS_SETTINGS) },
+                    onOpenAdapterSettings = { source ->
+                        navController.navigate(Routes.adapterSettings(source))
+                    },
                 )
+            }
+            composable(
+                route = Routes.ADAPTER_SETTINGS,
+                arguments = listOf(navArgument(Routes.ADAPTER_SOURCE_ARG) { type = NavType.StringType }),
+            ) { entry ->
+                val sourceId = entry.arguments?.getString(Routes.ADAPTER_SOURCE_ARG)
+                val source = DataSource.entries.firstOrNull { it.id == sourceId }
+                if (source != null) {
+                    AdapterSettingsRoute(
+                        viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                        source = source,
+                        onBack = { navController.popBackStack() },
+                        onOpenCopyLine = {
+                            navController.navigate(Routes.adapterCopyLineSettings(source))
+                        },
+                        onOpenCopyDetails = {
+                            navController.navigate(Routes.adapterCopyDetailsSettings(source))
+                        },
+                    )
+                }
+            }
+            composable(
+                route = Routes.ADAPTER_COPY_LINE_SETTINGS,
+                arguments = listOf(navArgument(Routes.ADAPTER_SOURCE_ARG) { type = NavType.StringType }),
+            ) { entry ->
+                val sourceId = entry.arguments?.getString(Routes.ADAPTER_SOURCE_ARG)
+                val source = DataSource.entries.firstOrNull { it.id == sourceId }
+                if (source != null) {
+                    AdapterCopyLineSettingsRoute(
+                        viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                        source = source,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
+            }
+            composable(
+                route = Routes.ADAPTER_COPY_DETAILS_SETTINGS,
+                arguments = listOf(navArgument(Routes.ADAPTER_SOURCE_ARG) { type = NavType.StringType }),
+            ) { entry ->
+                val sourceId = entry.arguments?.getString(Routes.ADAPTER_SOURCE_ARG)
+                val source = DataSource.entries.firstOrNull { it.id == sourceId }
+                if (source != null) {
+                    AdapterCopyDetailsSettingsRoute(
+                        viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                        source = source,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
             }
             composable(Routes.COPY_LINE_SETTINGS) {
                 CopyLineSettingsRoute(

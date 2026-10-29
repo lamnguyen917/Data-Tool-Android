@@ -95,13 +95,40 @@ data class QueueState(
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
+/** Options scoped to one source adapter. */
+data class AdapterSettings(
+    val searchEngineFallbackEnabled: Boolean = false,
+    val customCopyEnabled: Boolean = false,
+    val copyLineFormat: LineFormat? = null,
+    val copyLineFields: List<CopyField>? = null,
+    val copyDetailsTemplate: String? = null,
+)
+
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val parallelRequests: Int = 3,
     val timeoutSeconds: Int = 30,
     val autoRetry: Boolean = true,
+    val adapterSettings: Map<DataSource, AdapterSettings> = emptyMap(),
     val copyLineFormat: LineFormat = CopyFormatter.DEFAULT_LINE_FORMAT,
     val copyLineFields: List<CopyField> = CopyFormatter.DEFAULT_LINE_FIELDS,
     val copyDetailsTemplate: String = CopyFormatter.DEFAULT_DETAILS_TEMPLATE,
     val selectedSource: DataSource = DataSource.UNITY_ASSET_STORE,
-)
+) {
+    fun settingsFor(source: DataSource): AdapterSettings = adapterSettings[source] ?: AdapterSettings()
+
+    fun copyLineFormatFor(source: DataSource): LineFormat {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyLineFormat ?: copyLineFormat else copyLineFormat
+    }
+
+    fun copyLineFieldsFor(source: DataSource): List<CopyField> {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyLineFields ?: copyLineFields else copyLineFields
+    }
+
+    fun copyDetailsTemplateFor(source: DataSource): String {
+        val adapter = settingsFor(source)
+        return if (adapter.customCopyEnabled) adapter.copyDetailsTemplate ?: copyDetailsTemplate else copyDetailsTemplate
+    }
+}
