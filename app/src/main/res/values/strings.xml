@@ -61,6 +61,7 @@
     <string name="source_ave">Ave</string>
     <string name="source_tokyo_hot">Tokyo-Hot</string>
     <string name="source_fc2">FC2</string>
+    <string name="source_heyzo">Heyzo</string>
     <string name="source_steam">Steam Store</string>
     <string name="source_igdb">IGDB</string>
     <string name="source_short_unity">UNITY</string>
@@ -68,6 +69,7 @@
     <string name="source_short_ave">AVE</string>
     <string name="source_short_tokyo_hot">TOKYO-HOT</string>
     <string name="source_short_fc2">FC2</string>
+    <string name="source_short_heyzo">HEYZO</string>
     <string name="source_short_steam">STEAM</string>
     <string name="source_short_igdb">IGDB</string>
     <string name="id_label_unity">Package ID</string>
@@ -75,6 +77,7 @@
     <string name="id_label_ave">SKU</string>
     <string name="id_label_tokyo_hot">Product ID</string>
     <string name="id_label_fc2">Article ID</string>
+    <string name="id_label_heyzo">SKU</string>
     <string name="id_label_steam">App ID</string>
     <string name="id_label_igdb">Game ID</string>
     <string name="invalid_unity">Invalid package ID</string>
@@ -82,6 +85,7 @@
     <string name="invalid_ave">Enter an Ave SKU or AV Entertainments product URL</string>
     <string name="invalid_tokyo_hot">Enter a Tokyo-Hot product ID or product URL</string>
     <string name="invalid_fc2">Enter an FC2 article ID or product URL</string>
+    <string name="invalid_heyzo">Enter a four-digit Heyzo SKU or product URL</string>
     <string name="invalid_steam">App ID must contain digits only</string>
     <string name="invalid_igdb">Enter a game ID, slug or IGDB URL</string>
     <string name="product_id_format">%1$s %2$s</string>

@@ -34,7 +34,7 @@ crawl:
 graphql:
   ids: [unity-crawl]
 html:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research]
+  ids: [unity-crawl, amazon-book-crawl, steam-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
 redirect:
   ids: [unity-crawl]
 search:
@@ -42,11 +42,11 @@ search:
 nextjs:
   ids: [unity-crawl]
 adapters:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research]
 rust:
-  ids: [rust-desktop-adapters, ave-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, heyzo-adapter-research]
 localization:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, heyzo-adapter-research]
 ave:
   ids: [ave-adapter-research, rust-desktop-adapters]
 adult-empire:
@@ -58,7 +58,9 @@ carib:
 caribpr:
   ids: [rust-desktop-adapters]
 heyzo:
-  ids: [rust-desktop-adapters]
+  ids: [heyzo-adapter-research, rust-desktop-adapters]
+cloudflare:
+  ids: [heyzo-adapter-research]
 1pondo:
   ids: [rust-desktop-adapters]
 third-world-media:

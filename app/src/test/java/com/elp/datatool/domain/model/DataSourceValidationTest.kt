@@ -87,6 +87,48 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun heyzo_acceptsFourDigitSkuAndTrustedProductUrls() {
+        assertValid(DataSource.HEYZO, " 0123 ", "0123")
+        assertValid(
+            DataSource.HEYZO,
+            "https://www.heyzo.com/moviepages/0123/index.html",
+            "0123",
+        )
+        assertValid(
+            DataSource.HEYZO,
+            "https://en.heyzo.com/moviepages/9876/index.html",
+            "9876",
+        )
+        assertInvalid(DataSource.HEYZO, "123", InvalidReason.BAD_FORMAT)
+        assertInvalid(DataSource.HEYZO, "12345", InvalidReason.BAD_FORMAT)
+        assertInvalid(
+            DataSource.HEYZO,
+            "http://www.heyzo.com/moviepages/0123/index.html",
+            InvalidReason.BAD_FORMAT,
+        )
+        assertInvalid(
+            DataSource.HEYZO,
+            "https://www.heyzo.com.evil.test/moviepages/0123/index.html",
+            InvalidReason.BAD_FORMAT,
+        )
+        assertInvalid(
+            DataSource.HEYZO,
+            "https://www.heyzo.com:8443/moviepages/0123/index.html",
+            InvalidReason.BAD_FORMAT,
+        )
+        assertInvalid(
+            DataSource.HEYZO,
+            "https://www.heyzo.com/moviepages/0123/index.html?ref=test",
+            InvalidReason.BAD_FORMAT,
+        )
+        assertInvalid(
+            DataSource.HEYZO,
+            "https://www.heyzo.com/moviepages/0123/index.html/",
+            InvalidReason.BAD_FORMAT,
+        )
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

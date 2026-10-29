@@ -30,3 +30,4 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `ave-adapter-research` | [Ave adapter research](./pages/ave-adapter-research.md) | Ave input resolution, search, bilingual parsing, cache risks, Android mapping, and test plan |
 | `tokyo-hot-adapter-research` | [Tokyo-Hot adapter research](./pages/tokyo-hot-adapter-research.md) | live search selectors, exact `n0001` resolution, bilingual parsing, Android mapping, and verification |
 | `fc2-adapter-research` | [FC2 adapter research](./pages/fc2-adapter-research.md) | numeric article SKU, Product JSON-LD, description iframe, soft not-found behavior, search limitation, and implementation plan |
+| `heyzo-adapter-research` | [Heyzo adapter research](./pages/heyzo-adapter-research.md) | strict four-digit resolution, bilingual parsing, Cloudflare block behavior, Android mapping, and fixture plan |

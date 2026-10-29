@@ -134,6 +134,7 @@ val DataSource.displayName: String
         DataSource.AVE -> "Ave"
         DataSource.TOKYO_HOT -> "Tokyo-Hot"
         DataSource.FC2 -> "FC2"
+        DataSource.HEYZO -> "Heyzo"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
     }

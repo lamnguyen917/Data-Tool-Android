@@ -67,7 +67,7 @@ rust-desktop-adapters:
   summary: >
     Source-reviewed behavior, endpoints, selectors, field mappings, localization,
     tests, and known limitations for nine adapters registered in the sibling Rust
-    desktop application. Ave and Tokyo-Hot now have dedicated Android implementations.
+    desktop application. Ave, Tokyo-Hot, and Heyzo now have dedicated Android implementations.
   open_when:
     - rust adapter migration
     - ave adultempire avfantasy
@@ -118,3 +118,18 @@ fc2-adapter-research:
     - fc2 ppv
     - fc2 article 4871322
     - fc2 content market
+
+heyzo-adapter-research:
+  title: Heyzo adapter — source research and Android migration guide
+  path: pages/heyzo-adapter-research.md
+  source: sources/heyzo-adapter-observations.md
+  status: implemented
+  summary: >
+    Implemented four-digit SKU and trusted product-URL resolution, fixed English and
+    Japanese endpoints, separated localized metadata, Cloudflare block detection,
+    optional Japanese fallback, and fixture-based Android coverage.
+  open_when:
+    - heyzo adapter
+    - heyzo crawl
+    - heyzo moviepages
+    - heyzo android migration

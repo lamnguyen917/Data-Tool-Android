@@ -9,6 +9,7 @@ enum class DataSource(val id: String) {
     AVE("ave"),
     TOKYO_HOT("tokyo-hot"),
     FC2("fc2"),
+    HEYZO("heyzo"),
     STEAM_STORE("steam"),
     IGDB("igdb");
 
@@ -31,6 +32,8 @@ enum class DataSource(val id: String) {
 
             FC2 -> fc2ProductId(value)
 
+            HEYZO -> heyzoProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -49,6 +52,8 @@ enum class DataSource(val id: String) {
         val AVE_SKU = Regex("""[A-Z0-9_]{2,}-?[A-Z0-9_]?\d{2,5}""")
         val TOKYO_HOT_ID = Regex("""[A-Za-z0-9][A-Za-z0-9_-]*""")
         val FC2_ALIAS = Regex("""FC2[-\s]?PPV[-\s]?(\d+)""", RegexOption.IGNORE_CASE)
+        val HEYZO_SKU = Regex("""\d{4}""")
+        val HEYZO_PRODUCT_PATH = Regex("""/moviepages/(\d{4})/index\.html""")
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
         val STEAM_URL = Regex("""store\.steampowered\.com/app/(\d+)""")
         val AMAZON_URL = Regex(
@@ -113,6 +118,25 @@ enum class DataSource(val id: String) {
                 ?.get(1)
             return productId?.takeIf {
                 uri.scheme.equals("https", ignoreCase = true) && trustedHost
+            }
+        }
+
+        fun heyzoProductId(value: String): String? {
+            HEYZO_SKU.matchEntire(value)?.value?.let { return it }
+
+            val uri = runCatching { java.net.URI(value) }.getOrNull() ?: return null
+            val trustedHost = uri.host?.lowercase() in setOf("www.heyzo.com", "en.heyzo.com")
+            val productId = HEYZO_PRODUCT_PATH
+                .matchEntire(uri.path.orEmpty())
+                ?.groupValues
+                ?.get(1)
+            return productId?.takeIf {
+                uri.scheme.equals("https", ignoreCase = true) &&
+                    trustedHost &&
+                    uri.userInfo == null &&
+                    (uri.port == -1 || uri.port == 443) &&
+                    uri.rawQuery == null &&
+                    uri.rawFragment == null
             }
         }
 
