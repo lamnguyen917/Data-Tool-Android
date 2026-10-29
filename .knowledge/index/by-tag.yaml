@@ -21,23 +21,25 @@ appid:
   ids: [steam-crawl]
 igdb:
   ids: [igdb-crawl]
+gog:
+  ids: [gog-crawl]
 games:
-  ids: [igdb-crawl, steam-crawl]
+  ids: [gog-crawl, igdb-crawl, steam-crawl]
 slug:
-  ids: [igdb-crawl]
+  ids: [gog-crawl, igdb-crawl]
 api:
-  ids: [igdb-crawl]
+  ids: [gog-crawl, igdb-crawl]
 json:
-  ids: [steam-crawl, igdb-crawl]
+  ids: [gog-crawl, steam-crawl, igdb-crawl]
 crawl:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl, igdb-crawl]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, igdb-crawl]
 graphql:
   ids: [unity-crawl]
 html:
-  ids: [unity-crawl, amazon-book-crawl, steam-crawl]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl]
 redirect:
   ids: [unity-crawl]
 search:
-  ids: [unity-crawl, steam-crawl, igdb-crawl]
+  ids: [unity-crawl, gog-crawl, steam-crawl, igdb-crawl]
 nextjs:
   ids: [unity-crawl]

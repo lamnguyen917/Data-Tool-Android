@@ -17,7 +17,7 @@ source: ../sources/gog-alien-nations-observations.md
 
 # GOG - game crawl
 
-How to resolve, search, and extract game metadata from [GOG](https://www.gog.com). This page describes the adapter contract and source behavior; it does not document an implementation already present in the app.
+How to resolve, search, and extract game metadata from [GOG](https://www.gog.com). The implementation is under `data/adapter/gog` and follows the JSON-first contract described here.
 
 Sample: [Alien Nations](https://www.gog.com/en/game/alien_nations) (`id=1207658717`, `slug=alien_nations`).
 

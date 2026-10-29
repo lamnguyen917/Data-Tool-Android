@@ -63,4 +63,17 @@ class DuckDuckGoSearchEngineTest {
         assertEquals(listOf("1098119517"), results.map { it.productId })
         assertEquals("Effective Java", results.single().title)
     }
+
+    @Test
+    fun parserAcceptsLocalizedGogProductUrl() {
+        val html = """
+            <a class="result__a" href="https://www.gog.com/en/game/alien_nations">Alien Nations</a>
+            <a class="result__a" href="https://www.gog.com/en/games">Browse games</a>
+            <a class="result__a" href="https://www.gog.com.evil.test/game/fake_game">Fake</a>
+        """.trimIndent()
+
+        val results = DuckDuckGoSearchParser.parse(html, DataSource.GOG)
+
+        assertEquals(listOf("alien_nations"), results.map { it.productId })
+    }
 }

@@ -26,3 +26,4 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `amazon-book-crawl` | [Amazon book crawl](./pages/amazon-book-crawl.md) | ASIN / ISBN, `/dp/` URL, Amazon HTML selectors |
 | `steam-crawl` | [Steam Store crawl](./pages/steam-store-crawl.md) | AppID resolve, storesearch, Steam API / HTML |
 | `igdb-crawl` | [IGDB crawl](./pages/igdb-crawl.md) | slug / game id, IGDB API v4, involved_companies |
+| `gog-crawl` | [GOG game crawl](./pages/gog-crawl.md) | product id / slug, Catalog API, Product API, HTML fallback |

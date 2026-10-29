@@ -233,7 +233,11 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
             result.error?.let { "${stringResource(it.labelRes)}. ${stringResource(it.descriptionRes)}" },
         )
         DetailSection(
-            if (result.source == DataSource.AMAZON_BOOKS) R.string.detail_authors else R.string.detail_publisher,
+            when (result.source) {
+                DataSource.AMAZON_BOOKS -> R.string.detail_authors
+                DataSource.GOG -> R.string.detail_developer
+                else -> R.string.detail_publisher
+            },
             result.creators.joinToString().ifEmpty { null },
         )
         DetailSection(R.string.detail_category, result.categories.joinToString(" / ").ifEmpty { null })
@@ -249,7 +253,10 @@ private val ATTRIBUTE_LABELS = listOf(
     ProductAttributes.RATING to R.string.attr_rating,
     ProductAttributes.PUBLISHER to R.string.attr_publisher,
     ProductAttributes.PUBLICATION_DATE to R.string.attr_publication_date,
+    ProductAttributes.GOG_RELEASE_DATE to R.string.attr_gog_release_date,
     ProductAttributes.LANGUAGE to R.string.attr_language,
+    ProductAttributes.PLATFORMS to R.string.attr_platforms,
+    ProductAttributes.FEATURES to R.string.attr_features,
     ProductAttributes.PRINT_LENGTH to R.string.attr_print_length,
     ProductAttributes.ISBN_10 to R.string.attr_isbn_10,
     ProductAttributes.ISBN_13 to R.string.attr_isbn_13,

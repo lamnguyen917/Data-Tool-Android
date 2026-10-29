@@ -1,0 +1,23 @@
+{
+  "id": 1207658717,
+  "title": "Alien Nations",
+  "slug": "alien_nations",
+  "content_system_compatibility": {
+    "windows": true,
+    "osx": false,
+    "linux": false
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "English",
+    "fr": "français"
+  },
+  "release_date": "2014-12-19T12:00:00+0100",
+  "description": {
+    "lead": "Short description",
+    "full": "Build a kingdom.<br><ul><li>Trade</li><li>Research</li></ul>"
+  },
+  "images": {
+    "background": "//images.gog-statics.com/background.jpg"
+  }
+}

@@ -60,18 +60,22 @@
     <string name="source_amazon">Amazon Books</string>
     <string name="source_steam">Steam Store</string>
     <string name="source_igdb">IGDB</string>
+    <string name="source_gog">GOG</string>
     <string name="source_short_unity">UNITY</string>
     <string name="source_short_amazon">AMAZON</string>
     <string name="source_short_steam">STEAM</string>
     <string name="source_short_igdb">IGDB</string>
+    <string name="source_short_gog">GOG</string>
     <string name="id_label_unity">Package ID</string>
     <string name="id_label_amazon">ASIN</string>
     <string name="id_label_steam">App ID</string>
     <string name="id_label_igdb">Game ID</string>
+    <string name="id_label_gog">Product ID</string>
     <string name="invalid_unity">Invalid package ID</string>
     <string name="invalid_amazon">Enter a 10-character ASIN or product URL</string>
     <string name="invalid_steam">App ID must contain digits only</string>
     <string name="invalid_igdb">Enter a game ID, slug or IGDB URL</string>
+    <string name="invalid_gog">Enter a product ID, slug or GOG game URL</string>
     <string name="product_id_format">%1$s %2$s</string>
 
     <!-- Placeholder messages for features that are not built yet -->
@@ -199,6 +203,7 @@
     <string name="detail_title">Result details</string>
     <string name="detail_overview">Overview</string>
     <string name="detail_authors">Authors</string>
+    <string name="detail_developer">Developer</string>
     <string name="detail_publisher">Publisher</string>
     <string name="detail_category">Category</string>
     <string name="detail_url">Product URL</string>
@@ -209,7 +214,10 @@
     <string name="attr_rating">Rating</string>
     <string name="attr_publisher">Publisher</string>
     <string name="attr_publication_date">Publication date</string>
+    <string name="attr_gog_release_date">GOG release date</string>
     <string name="attr_language">Language</string>
+    <string name="attr_platforms">Platforms</string>
+    <string name="attr_features">Features</string>
     <string name="attr_print_length">Print length</string>
     <string name="attr_isbn_10">ISBN-10</string>
     <string name="attr_isbn_13">ISBN-13</string>

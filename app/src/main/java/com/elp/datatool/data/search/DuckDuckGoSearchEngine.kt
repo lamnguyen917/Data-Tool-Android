@@ -29,6 +29,7 @@ class DuckDuckGoSearchEngine(
             DataSource.AMAZON_BOOKS -> "amazon.com"
             DataSource.STEAM_STORE -> "store.steampowered.com/app"
             DataSource.IGDB -> "igdb.com/games"
+            DataSource.GOG -> "gog.com"
         }
 
     private companion object {
@@ -87,6 +88,7 @@ internal object DuckDuckGoSearchParser {
             DataSource.AMAZON_BOOKS -> AMAZON_HOST.matches(host)
             DataSource.STEAM_STORE -> host == "store.steampowered.com"
             DataSource.IGDB -> host == "igdb.com" || host == "www.igdb.com"
+            DataSource.GOG -> host == "gog.com" || host == "www.gog.com"
         }
     }
 }

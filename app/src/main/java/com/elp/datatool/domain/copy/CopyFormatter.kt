@@ -133,4 +133,5 @@ val DataSource.displayName: String
         DataSource.AMAZON_BOOKS -> "Amazon Books"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
+        DataSource.GOG -> "GOG"
     }
