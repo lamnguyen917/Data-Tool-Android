@@ -53,6 +53,7 @@ import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.copy.copyFields
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.presentation.components.BackButton
@@ -100,6 +101,7 @@ fun AdapterCopyLineSettingsRoute(
         onRemove = { viewModel.onRemoveAdapterCopyField(source, it) },
         onMove = { field, offset -> viewModel.onMoveAdapterCopyField(source, field, offset) },
         onReset = { viewModel.onResetAdapterCopyLine(source) },
+        source = source,
         subtitle = stringResource(source.nameRes),
     )
 }
@@ -117,6 +119,7 @@ fun CopyLineSettingsScreen(
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
+    source: DataSource? = null,
 ) {
     Scaffold(
         modifier = modifier,
@@ -175,6 +178,7 @@ fun CopyLineSettingsScreen(
                             SelectedFieldRow(
                                 position = index + 1,
                                 field = field,
+                                source = source,
                                 canMoveUp = index > 0,
                                 canMoveDown = index < fields.lastIndex,
                                 onMove = { offset -> onMove(field, offset) },
@@ -185,11 +189,11 @@ fun CopyLineSettingsScreen(
                 }
             }
 
-            val available = CopyField.entries.filterNot { it in fields }
+            val available = (source?.copyFields ?: CopyField.entries).filterNot { it in fields }
             if (available.isNotEmpty()) {
                 Spacer(Modifier.height(20.dp))
                 FieldLabel(stringResource(R.string.copy_line_available))
-                FieldChips(fields = available, showPlaceholder = false, icon = DtIcons.Plus, onClick = onAdd)
+                FieldChips(fields = available, source = source, showPlaceholder = false, icon = DtIcons.Plus, onClick = onAdd)
             }
 
             Spacer(Modifier.height(20.dp))
@@ -210,12 +214,13 @@ fun CopyLineSettingsScreen(
 private fun SelectedFieldRow(
     position: Int,
     field: CopyField,
+    source: DataSource?,
     canMoveUp: Boolean,
     canMoveDown: Boolean,
     onMove: (Int) -> Unit,
     onRemove: () -> Unit,
 ) {
-    val label = stringResource(field.labelRes)
+    val label = stringResource(field.labelRes(source))
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,6 +277,7 @@ fun AdapterCopyDetailsSettingsRoute(
         onBack = onBack,
         onTemplateChange = { viewModel.onAdapterDetailsTemplateChange(source, it) },
         onReset = { viewModel.onResetAdapterDetailsTemplate(source) },
+        source = source,
         subtitle = stringResource(source.nameRes),
     )
 }
@@ -285,6 +291,7 @@ fun CopyDetailsSettingsScreen(
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
+    source: DataSource? = null,
 ) {
     // Local value keeps the cursor so placeholders are inserted where the user is typing.
     var value by remember { mutableStateOf(TextFieldValue(template, TextRange(template.length))) }
@@ -335,7 +342,12 @@ fun CopyDetailsSettingsScreen(
 
             Spacer(Modifier.height(16.dp))
             FieldLabel(stringResource(R.string.copy_details_insert))
-            FieldChips(fields = CopyField.entries, showPlaceholder = true, icon = DtIcons.Plus) { field ->
+            FieldChips(
+                fields = source?.copyFields ?: CopyField.entries,
+                source = source,
+                showPlaceholder = true,
+                icon = DtIcons.Plus,
+            ) { field ->
                 val selection = value.selection
                 val text = value.text.replaceRange(selection.min, selection.max, field.placeholder)
                 val cursor = selection.min + field.placeholder.length
@@ -362,16 +374,17 @@ fun CopyDetailsSettingsScreen(
 @Composable
 private fun FieldChips(
     fields: List<CopyField>,
+    source: DataSource?,
     showPlaceholder: Boolean,
     icon: ImageVector,
     onClick: (CopyField) -> Unit,
 ) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         fields.forEach { field ->
-            val label = stringResource(field.labelRes)
+            val label = stringResource(field.labelRes(source))
             AssistChip(
                 onClick = { onClick(field) },
-                label = { Text(if (showPlaceholder) field.placeholder else label) },
+                label = { Text(if (showPlaceholder) "$label ${field.placeholder}" else label) },
                 leadingIcon = { Icon(icon, stringResource(R.string.copy_line_add, label), Modifier.size(14.dp)) },
                 shape = MaterialTheme.shapes.small,
             )
