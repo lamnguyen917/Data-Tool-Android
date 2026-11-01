@@ -11,6 +11,8 @@ import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.presentation.FakeCollectionQueue
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SettingsViewModelTest {
@@ -70,7 +72,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun adapterCopySettings_overrideGlobalValuesAndResetToGlobal() {
+    fun adapterCopySettings_overrideGlobalValuesAndResetToAdapterDefaults() {
         val source = DataSource.UNITY_ASSET_STORE
         viewModel.onAdapterCopyLineFormatChange(source, LineFormat.CSV)
         viewModel.onRemoveAdapterCopyField(source, CopyField.CATEGORIES)
@@ -97,8 +99,47 @@ class SettingsViewModelTest {
 
         val reset = settings.settings.value
         assertEquals(reset.copyLineFormat, reset.copyLineFormatFor(source))
-        assertEquals(reset.copyLineFields, reset.copyLineFieldsFor(source))
-        assertEquals(reset.copyDetailsTemplate, reset.copyDetailsTemplateFor(source))
+        assertEquals(CopyFormatter.defaultLineFields(source), reset.copyLineFieldsFor(source))
+        assertEquals(CopyFormatter.defaultDetailsTemplate(source), reset.copyDetailsTemplateFor(source))
+    }
+
+    @Test
+    fun adapterCopySettings_useAdapterSpecificFieldsAndDefaults() {
+        val source = DataSource.AMAZON_BOOKS
+        viewModel.onCustomCopySettingsChange(source, true)
+
+        val enabled = settings.settings.value
+        assertEquals(CopyFormatter.defaultLineFields(source), enabled.copyLineFieldsFor(source))
+        assertTrue(CopyField.ISBN_13 in enabled.copyLineFieldsFor(source))
+        assertTrue("{isbn_13}" in enabled.copyDetailsTemplateFor(source))
+
+        // Unity-only and GOG-only fields cannot be added to Amazon.
+        viewModel.onAddAdapterCopyField(source, CopyField.UNITY_VERSIONS)
+        viewModel.onAddAdapterCopyField(source, CopyField.PLATFORMS)
+        viewModel.onAddAdapterCopyField(source, CopyField.PRINT_LENGTH)
+
+        val fields = settings.settings.value.copyLineFieldsFor(source)
+        assertFalse(CopyField.UNITY_VERSIONS in fields)
+        assertFalse(CopyField.PLATFORMS in fields)
+        assertEquals(CopyField.PRINT_LENGTH, fields.last())
+    }
+
+    @Test
+    fun adapterCopySettings_dropStoredFieldsTheAdapterDoesNotCollect() {
+        val source = DataSource.AMAZON_BOOKS
+        settings.setAdapterSettings(
+            source,
+            AdapterSettings(customCopyEnabled = true, copyLineFields = listOf(CopyField.SKU, CopyField.VERSION)),
+        )
+
+        assertEquals(listOf(CopyField.SKU), settings.settings.value.copyLineFieldsFor(source))
+    }
+
+    @Test
+    fun previewResult_usesSampleOfTheSameSource() {
+        assertEquals(DataSource.AMAZON_BOOKS, viewModel.previewResult(DataSource.AMAZON_BOOKS).source)
+        assertEquals("Pearson", viewModel.previewResult(DataSource.AMAZON_BOOKS).attributes["publisher"])
+        assertEquals(DataSource.GOG, viewModel.previewResult(DataSource.GOG).source)
     }
 
     @Test

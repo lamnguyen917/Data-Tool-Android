@@ -5,6 +5,7 @@ import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.copy.copyFields
 import com.elp.datatool.domain.model.AdapterSettings
 import com.elp.datatool.domain.model.AppSettings
 import com.elp.datatool.domain.model.DataSource
@@ -46,11 +47,12 @@ class SettingsViewModel(
             .maxByOrNull { it.collectedAtMillis }
             ?: SampleData.results.first()
 
+    /** The newest result of [source], or that source's own sample so the preview shows its metadata. */
     fun previewResult(source: DataSource): ProductResult = resultRepository.results.value
         .filter { it.source == source && it.status == ResultStatus.COMPLETED }
         .maxByOrNull { it.collectedAtMillis }
-        ?: SampleData.results.firstOrNull { it.source == source }
-        ?: SampleData.results.first().copy(source = source)
+        ?: SampleData.copyPreviews[source]
+        ?: ProductResult(source = source, productId = "12345", status = ResultStatus.COMPLETED, title = "Sample")
 
     fun onThemeModeChange(mode: ThemeMode) = settingsRepository.setThemeMode(mode)
 
@@ -74,7 +76,7 @@ class SettingsViewModel(
 
     fun onAddAdapterCopyField(source: DataSource, field: CopyField) {
         val fields = settings.value.copyLineFieldsFor(source)
-        if (field !in fields) updateAdapterSettings(source) {
+        if (field !in fields && field in source.copyFields) updateAdapterSettings(source) {
             it.copy(customCopyEnabled = true, copyLineFields = fields + field)
         }
     }

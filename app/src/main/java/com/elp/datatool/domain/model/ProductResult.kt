@@ -3,6 +3,7 @@ package com.elp.datatool.domain.model
 import com.elp.datatool.domain.copy.CopyField
 import com.elp.datatool.domain.copy.CopyFormatter
 import com.elp.datatool.domain.copy.LineFormat
+import com.elp.datatool.domain.copy.copyFields
 
 /** Normalized metadata collected for one product. */
 data class ProductResult(
@@ -125,13 +126,20 @@ data class AppSettings(
         return if (adapter.customCopyEnabled) adapter.copyLineFormat ?: copyLineFormat else copyLineFormat
     }
 
+    /**
+     * Custom adapter columns fall back to the adapter's own defaults, never to the global list,
+     * and are limited to the fields that adapter collects.
+     */
     fun copyLineFieldsFor(source: DataSource): List<CopyField> {
         val adapter = settingsFor(source)
-        return if (adapter.customCopyEnabled) adapter.copyLineFields ?: copyLineFields else copyLineFields
+        if (!adapter.customCopyEnabled) return copyLineFields
+        val fields = adapter.copyLineFields ?: return CopyFormatter.defaultLineFields(source)
+        return fields.filter { it in source.copyFields }
     }
 
     fun copyDetailsTemplateFor(source: DataSource): String {
         val adapter = settingsFor(source)
-        return if (adapter.customCopyEnabled) adapter.copyDetailsTemplate ?: copyDetailsTemplate else copyDetailsTemplate
+        if (!adapter.customCopyEnabled) return copyDetailsTemplate
+        return adapter.copyDetailsTemplate ?: CopyFormatter.defaultDetailsTemplate(source)
     }
 }
