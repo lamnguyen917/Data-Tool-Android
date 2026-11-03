@@ -136,6 +136,7 @@ val DataSource.displayName: String
         DataSource.FC2 -> "FC2"
         DataSource.HEYZO -> "Heyzo"
         DataSource.CARIBBEANCOM -> "Caribbeancom"
+        DataSource.ONE_PONDO -> "1pondo"
         DataSource.STEAM_STORE -> "Steam Store"
         DataSource.IGDB -> "IGDB"
         DataSource.GOG -> "GOG"

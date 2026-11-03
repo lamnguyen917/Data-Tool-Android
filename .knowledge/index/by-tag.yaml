@@ -28,11 +28,11 @@ games:
 slug:
   ids: [gog-crawl, igdb-crawl]
 api:
-  ids: [gog-crawl, igdb-crawl]
+  ids: [gog-crawl, igdb-crawl, 1pondo-adapter-research]
 json:
-  ids: [gog-crawl, steam-crawl, igdb-crawl]
+  ids: [gog-crawl, steam-crawl, igdb-crawl, 1pondo-adapter-research]
 crawl:
-  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, igdb-crawl]
+  ids: [unity-crawl, amazon-book-crawl, gog-crawl, steam-crawl, igdb-crawl, 1pondo-adapter-research]
 graphql:
   ids: [unity-crawl]
 html:
@@ -40,15 +40,15 @@ html:
 redirect:
   ids: [unity-crawl]
 search:
-  ids: [unity-crawl, gog-crawl, steam-crawl, igdb-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research]
+  ids: [unity-crawl, gog-crawl, steam-crawl, igdb-crawl, rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, 1pondo-adapter-research]
 nextjs:
   ids: [unity-crawl]
 adapters:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, fc2-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research, 1pondo-adapter-research]
 rust:
-  ids: [rust-desktop-adapters, ave-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research, 1pondo-adapter-research]
 localization:
-  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research]
+  ids: [rust-desktop-adapters, ave-adapter-research, tokyo-hot-adapter-research, heyzo-adapter-research, caribbeancom-adapter-research, 1pondo-adapter-research]
 ave:
   ids: [ave-adapter-research, rust-desktop-adapters]
 adult-empire:
@@ -64,7 +64,7 @@ heyzo:
 cloudflare:
   ids: [heyzo-adapter-research]
 1pondo:
-  ids: [rust-desktop-adapters]
+  ids: [1pondo-adapter-research, rust-desktop-adapters]
 third-world-media:
   ids: [rust-desktop-adapters]
 tokyo-hot:

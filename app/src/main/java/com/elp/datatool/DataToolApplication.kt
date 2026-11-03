@@ -7,6 +7,7 @@ import com.elp.datatool.data.adapter.caribbeancom.CaribbeancomAdapter
 import com.elp.datatool.data.adapter.fc2.Fc2Adapter
 import com.elp.datatool.data.adapter.gog.GogAdapter
 import com.elp.datatool.data.adapter.heyzo.HeyzoAdapter
+import com.elp.datatool.data.adapter.onepondo.OnePondoAdapter
 import com.elp.datatool.data.adapter.tokyohot.TokyoHotAdapter
 import com.elp.datatool.data.adapter.unity.UnityAssetStoreAdapter
 import com.elp.datatool.data.remote.HttpClient
@@ -44,6 +45,7 @@ class AppContainer(application: Application) {
         Fc2Adapter(httpClient),
         HeyzoAdapter(httpClient),
         CaribbeancomAdapter(httpClient),
+        OnePondoAdapter(httpClient),
         GogAdapter(httpClient),
     )
 

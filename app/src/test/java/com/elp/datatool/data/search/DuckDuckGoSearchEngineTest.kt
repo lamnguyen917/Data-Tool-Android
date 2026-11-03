@@ -76,4 +76,31 @@ class DuckDuckGoSearchEngineTest {
 
         assertEquals(listOf("alien_nations"), results.map { it.productId })
     }
+
+    @Test
+    fun searchScopesAndFiltersOnePondoMovieUrls() = runBlocking {
+        server.enqueue(
+            MockResponse().setBody(
+                """
+                <a class="result__a" href="https://www.1pondo.tv/movies/010121_001/">Sample movie</a>
+                <a class="result__a" href="https://www.1pondo.tv/movies/010121_001/">Duplicate</a>
+                <a class="result__a" href="https://1pondo.tv/movies/010121_002/">Wrong host</a>
+                <a class="result__a" href="https://www.1pondo.tv/search/?s=sample">Search page</a>
+                <a class="result__a" href="https://www.1pondo.tv.evil.test/movies/010121_003/">Fake</a>
+                """.trimIndent(),
+            ),
+        )
+        val engine = DuckDuckGoSearchEngine(
+            http = HttpClient(HttpClient.createOkHttpClient()),
+            baseUrl = server.url("/html/").toString(),
+        )
+
+        val results = engine.search(DataSource.ONE_PONDO, "sample")
+
+        assertEquals(listOf("010121_001"), results.map { it.productId })
+        assertEquals(
+            "site:1pondo.tv/movies sample",
+            server.takeRequest().requestUrl?.queryParameter("q"),
+        )
+    }
 }

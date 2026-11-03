@@ -1,0 +1,51 @@
+{
+  "MovieID": "010121_001",
+  "Title": "Japanese Sample Title",
+  "TitleEn": "English Sample Title",
+  "Desc": "Japanese sample description.",
+  "DescEn": null,
+  "ActressesJa": ["Japanese Performer", "Shared Performer"],
+  "ActressesEn": ["English Performer", "Shared Performer", "English Performer"],
+  "ActressesList": {
+    "10": {
+      "NameJa": "Japanese Performer",
+      "NameEn": "English Performer"
+    }
+  },
+  "Release": "2024-02-29",
+  "Duration": 3654,
+  "Series": "Japanese Series",
+  "SeriesEn": "English Series",
+  "AvgRating": 2.9,
+  "UC": [101, 102, 103, 101],
+  "UCNAME": ["Japanese Category A", "Japanese Category B", "Japanese Category C", "Japanese Category A"],
+  "UCNAMEEn": ["English Category A", "", "English Category C", "English Category A"],
+  "UcNameList": {
+    "101": {
+      "NameJa": "Japanese Category A",
+      "NameEn": "English Category A"
+    },
+    "102": {
+      "NameJa": "Japanese Category B",
+      "NameEn": ""
+    },
+    "103": {
+      "NameJa": "Japanese Category C",
+      "NameEn": "English Category C"
+    }
+  },
+  "ThumbHigh": "https://www.1pondo.tv.evil.test/moviepages/010121_001/images/str.jpg",
+  "MovieThumb": "https://www.1pondo.tv/moviepages/010121_001/images/thum_b.jpg",
+  "Status": true,
+  "NoListDisplay": false,
+  "MemberFiles": [
+    {
+      "URL": "https://members.example.test/secret-download"
+    }
+  ],
+  "SampleFiles": [
+    {
+      "URL": "https://samples.example.test/sample"
+    }
+  ]
+}

@@ -240,6 +240,7 @@ private fun DetailContent(result: ProductResult, modifier: Modifier = Modifier) 
                 DataSource.TOKYO_HOT,
                 DataSource.HEYZO,
                 DataSource.CARIBBEANCOM,
+                DataSource.ONE_PONDO,
                 -> R.string.detail_performers
                 DataSource.FC2 -> R.string.detail_seller
                 DataSource.GOG -> R.string.detail_developer

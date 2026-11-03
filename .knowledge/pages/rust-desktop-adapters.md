@@ -2,7 +2,7 @@
 id: rust-desktop-adapters
 title: Rust desktop adapters — implementation reference
 status: source-reviewed
-updated: 2026-10-28
+updated: 2026-10-30
 tags:
   - adapters
   - rust
@@ -14,7 +14,7 @@ source: ../sources/rust-desktop-adapter-observations.md
 
 # Rust desktop adapters — implementation reference
 
-This page summarizes nine adapters registered by the sibling Rust desktop application. Ave has now been implemented in `DataToolAndroid`; the other entries remain migration references and none of the target websites were live-verified by this source review.
+This page summarizes nine adapters registered by the sibling Rust desktop application. Dedicated research pages supersede this source-only overview where linked; several adapters have since been live-verified or implemented in `DataToolAndroid`.
 
 Related: [source-review observations](../sources/rust-desktop-adapter-observations.md)
 
@@ -28,7 +28,7 @@ Related: [source-review observations](../sources/rust-desktop-adapter-observatio
 | Carib | `caribbeancom` | `MMDDYY-NNN` or movie URL | No | English + Japanese | Implemented on Android; see [Caribbeancom research](./caribbeancom-adapter-research.md) |
 | CaribPr | `caribbeancompr` | `MMDDYY_NNN` or URL | No | Japanese only | Partial; top-level English metadata is empty |
 | Heyzo | `heyzo` | Four-digit SKU or movie URL | No | English + Japanese | Parser implemented |
-| 1pondo | `1pondo` | `MMDDYY_NNN` or JSON URL | No | Declared Japanese | Stub; JSON is fetched but not mapped |
+| 1pondo | `1pondo` | `MMDDYY_NNN` or JSON URL | No | English + Japanese JSON | Implemented on Android; see [1pondo research](./1pondo-adapter-research.md) |
 | ThirdWorldMedia | `third-world-media` | URL | No | English | Not implemented |
 | Tokyo-Hot | `tokyo-hot` | `kNNNN`, `nNNNN`, URL, or keyword | Resolver only | English + Japanese | Parser implemented; integration test for `n0001` |
 
@@ -167,13 +167,13 @@ four-digit SKU or /moviepages/{sku}/ URL
 
 ### 1pondo
 
-The adapter only resolves the SKU and downloads:
+The Rust adapter only resolves the SKU and downloads:
 
 ```text
 https://www.1pondo.tv/dyn/phpauto/movie_details/movie_id/{sku}.json
 ```
 
-No JSON fields are deserialized or mapped. A port must first define the JSON schema, add fixtures, implement block/not-found handling, and map both shared and localized fields.
+No JSON fields are deserialized or mapped. The current endpoint, schema, public product route, localized fields, not-found behavior, search limitations, security rules, and Android test plan are now live-verified in the dedicated [1pondo adapter research](./1pondo-adapter-research.md).
 
 ### ThirdWorldMedia
 

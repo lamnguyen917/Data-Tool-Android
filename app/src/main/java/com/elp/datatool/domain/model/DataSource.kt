@@ -12,6 +12,7 @@ enum class DataSource(val id: String) {
     FC2("fc2"),
     HEYZO("heyzo"),
     CARIBBEANCOM("caribbeancom"),
+    ONE_PONDO("1pondo"),
     STEAM_STORE("steam"),
     IGDB("igdb"),
     GOG("gog");
@@ -39,6 +40,8 @@ enum class DataSource(val id: String) {
 
             CARIBBEANCOM -> caribbeancomProductId(value)
 
+            ONE_PONDO -> onePondoProductId(value)
+
             IGDB -> DIGITS.matchEntire(value)?.value
                 ?: IGDB_URL.find(value)?.groupValues?.get(1)
                 ?: IGDB_SLUG.matchEntire(value)?.value
@@ -64,6 +67,10 @@ enum class DataSource(val id: String) {
         val CARIBBEANCOM_SKU = Regex("""\d{6}-\d{3}""")
         val CARIBBEANCOM_JA_PATH = Regex("""/moviepages/(\d{6}-\d{3})/(?:index\.html)?""")
         val CARIBBEANCOM_EN_PATH = Regex("""/eng/moviepages/(\d{6}-\d{3})/(?:index\.html)?""")
+        val ONE_PONDO_SKU = Regex("""\d{6}_\d{3}""")
+        val ONE_PONDO_PRODUCT_PATH = Regex("""/movies/(\d{6}_\d{3})/?""")
+        val ONE_PONDO_METADATA_PATH =
+            Regex("""/dyn/phpauto/movie_details/movie_id/(\d{6}_\d{3})\.json""")
         val GOG_SLUG = Regex("""[a-z0-9]+(?:[_-][a-z0-9]+)*""")
         val GOG_LOCALE = Regex("""[a-z]{2}(?:-[a-z]{2})?""", RegexOption.IGNORE_CASE)
         val UNITY_URL = Regex("""assetstore\.unity\.com/packages/\S*?-(\d+)(?:[/?#]|$)""")
@@ -170,6 +177,26 @@ enum class DataSource(val id: String) {
                     uri.rawQuery == null &&
                     uri.rawFragment == null
             }
+        }
+
+        /** Accepts a 1pondo SKU or one of the site's two canonical product URL forms. */
+        fun onePondoProductId(value: String): String? {
+            ONE_PONDO_SKU.matchEntire(value)?.value?.let { return it }
+
+            val uri = runCatching { URI(value) }.getOrNull() ?: return null
+            if (!uri.scheme.equals("https", ignoreCase = true) ||
+                !uri.host.equals("www.1pondo.tv", ignoreCase = true) ||
+                uri.rawUserInfo != null ||
+                (uri.port != -1 && uri.port != 443) ||
+                uri.rawQuery != null ||
+                uri.rawFragment != null
+            ) {
+                return null
+            }
+            return (ONE_PONDO_PRODUCT_PATH.matchEntire(uri.rawPath.orEmpty())
+                ?: ONE_PONDO_METADATA_PATH.matchEntire(uri.rawPath.orEmpty()))
+                ?.groupValues
+                ?.get(1)
         }
 
         fun String.removePrefixIgnoreCase(prefix: String): String =

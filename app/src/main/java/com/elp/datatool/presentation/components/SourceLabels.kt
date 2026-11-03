@@ -20,6 +20,7 @@ val DataSource.nameRes: Int
         DataSource.FC2 -> R.string.source_fc2
         DataSource.HEYZO -> R.string.source_heyzo
         DataSource.CARIBBEANCOM -> R.string.source_caribbeancom
+        DataSource.ONE_PONDO -> R.string.source_one_pondo
         DataSource.STEAM_STORE -> R.string.source_steam
         DataSource.IGDB -> R.string.source_igdb
         DataSource.GOG -> R.string.source_gog
@@ -35,6 +36,7 @@ val DataSource.shortLabelRes: Int
         DataSource.FC2 -> R.string.source_short_fc2
         DataSource.HEYZO -> R.string.source_short_heyzo
         DataSource.CARIBBEANCOM -> R.string.source_short_caribbeancom
+        DataSource.ONE_PONDO -> R.string.source_short_one_pondo
         DataSource.STEAM_STORE -> R.string.source_short_steam
         DataSource.IGDB -> R.string.source_short_igdb
         DataSource.GOG -> R.string.source_short_gog
@@ -50,6 +52,7 @@ val DataSource.idLabelRes: Int
         DataSource.FC2 -> R.string.id_label_fc2
         DataSource.HEYZO -> R.string.id_label_heyzo
         DataSource.CARIBBEANCOM -> R.string.id_label_caribbeancom
+        DataSource.ONE_PONDO -> R.string.id_label_one_pondo
         DataSource.STEAM_STORE -> R.string.id_label_steam
         DataSource.IGDB -> R.string.id_label_igdb
         DataSource.GOG -> R.string.id_label_gog
@@ -65,6 +68,7 @@ val DataSource.invalidMessageRes: Int
         DataSource.FC2 -> R.string.invalid_fc2
         DataSource.HEYZO -> R.string.invalid_heyzo
         DataSource.CARIBBEANCOM -> R.string.invalid_caribbeancom
+        DataSource.ONE_PONDO -> R.string.invalid_one_pondo
         DataSource.STEAM_STORE -> R.string.invalid_steam
         DataSource.IGDB -> R.string.invalid_igdb
         DataSource.GOG -> R.string.invalid_gog

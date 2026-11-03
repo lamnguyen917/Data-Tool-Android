@@ -149,6 +149,22 @@ caribbeancom-adapter-research:
     - carib moviepages
     - carib android migration
 
+1pondo-adapter-research:
+  title: 1pondo adapter — live JSON research and Android implementation
+  path: pages/1pondo-adapter-research.md
+  source: sources/1pondo-adapter-observations.md
+  status: implemented
+  summary: >
+    Strict MMDDYY_NNN and trusted URL resolution, live-verified public product
+    JSON schema, English and Japanese field mapping, HTML 404 behavior, SPA and
+    WebSocket search limits, implemented search-engine fallback, sitemap, Android
+    mapping, privacy filtering, browser verification, and fixture-based tests.
+  open_when:
+    - 1pondo adapter
+    - ippondo crawl
+    - 1pondo movie json
+    - 1pondo android migration
+
 gog-crawl:
   title: GOG - game crawl
   path: pages/gog-crawl.md

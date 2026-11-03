@@ -156,6 +156,34 @@ class DataSourceValidationTest {
     }
 
     @Test
+    fun onePondo_acceptsSkuAndTrustedProductUrls() {
+        assertValid(DataSource.ONE_PONDO, " 010121_001 ", "010121_001")
+        assertValid(
+            DataSource.ONE_PONDO,
+            "https://www.1pondo.tv/movies/010121_001/",
+            "010121_001",
+        )
+        assertValid(DataSource.ONE_PONDO, "https://www.1pondo.tv/movies/010121_001", "010121_001")
+        assertValid(
+            DataSource.ONE_PONDO,
+            "https://www.1pondo.tv/dyn/phpauto/movie_details/movie_id/010121_001.json",
+            "010121_001",
+        )
+        listOf(
+            "010121-001",
+            "10121_001",
+            "010121_0010",
+            "http://www.1pondo.tv/movies/010121_001/",
+            "https://1pondo.tv/movies/010121_001/",
+            "https://www.1pondo.tv.evil.test/movies/010121_001/",
+            "https://www.1pondo.tv:8443/movies/010121_001/",
+            "https://www.1pondo.tv/movies/010121_001/?ref=test",
+            "https://www.1pondo.tv/movies%2F010121_001/",
+            "https://www.1pondo.tv/moviepages/010121_001/images/str.jpg",
+        ).forEach { assertInvalid(DataSource.ONE_PONDO, it, InvalidReason.BAD_FORMAT) }
+    }
+
+    @Test
     fun igdb_acceptsIdSlugAndUrl() {
         assertValid(DataSource.IGDB, "1942", "1942")
         assertValid(DataSource.IGDB, "hollow-knight", "hollow-knight")

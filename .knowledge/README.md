@@ -32,4 +32,5 @@ The superseded v1 layout is preserved under [`archive/legacy-v1/`](./archive/leg
 | `fc2-adapter-research` | [FC2 adapter research](./pages/fc2-adapter-research.md) | numeric article SKU, Product JSON-LD, description iframe, soft not-found behavior, search limitation, and implementation plan |
 | `heyzo-adapter-research` | [Heyzo adapter research](./pages/heyzo-adapter-research.md) | strict four-digit resolution, bilingual parsing, Cloudflare block behavior, Android mapping, and fixture plan |
 | `caribbeancom-adapter-research` | [Caribbeancom adapter research](./pages/caribbeancom-adapter-research.md) | `MMDDYY-NNN` resolution, live-verified bilingual selectors, EUC-JP decoding, English soft not-found, SKU-derived date, and Android plan |
+| `1pondo-adapter-research` | [1pondo adapter research](./pages/1pondo-adapter-research.md) | implemented strict SKU/URL resolution, public product JSON parsing, localization, search fallback, block handling, and tests |
 | `gog-crawl` | [GOG game crawl](./pages/gog-crawl.md) | product id / slug, Catalog API, Product API, HTML fallback |
