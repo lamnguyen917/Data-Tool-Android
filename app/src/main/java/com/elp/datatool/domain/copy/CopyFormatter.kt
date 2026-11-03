@@ -21,6 +21,15 @@ enum class CopyField(val key: String) {
     FILE_SIZE("file_size"),
     ASSET_COUNT("asset_count"),
     TAGS("tags"),
+    PUBLISHER("publisher"),
+    PUBLICATION_DATE("publication_date"),
+    GOG_RELEASE_DATE("gog_release_date"),
+    LANGUAGE("language"),
+    PRINT_LENGTH("print_length"),
+    ISBN_10("isbn_10"),
+    ISBN_13("isbn_13"),
+    PLATFORMS("platforms"),
+    FEATURES("features"),
     IMAGE_URL("image_url"),
     DESCRIPTION("description");
 
@@ -48,6 +57,15 @@ enum class CopyField(val key: String) {
         FILE_SIZE -> result.attributes[ProductAttributes.FILE_SIZE].orEmpty()
         ASSET_COUNT -> result.attributes[ProductAttributes.ASSET_COUNT].orEmpty()
         TAGS -> result.attributes[ProductAttributes.TAGS].orEmpty()
+        PUBLISHER -> result.attributes[ProductAttributes.PUBLISHER].orEmpty()
+        PUBLICATION_DATE -> result.attributes[ProductAttributes.PUBLICATION_DATE].orEmpty()
+        GOG_RELEASE_DATE -> result.attributes[ProductAttributes.GOG_RELEASE_DATE].orEmpty()
+        LANGUAGE -> result.attributes[ProductAttributes.LANGUAGE].orEmpty()
+        PRINT_LENGTH -> result.attributes[ProductAttributes.PRINT_LENGTH].orEmpty()
+        ISBN_10 -> result.attributes[ProductAttributes.ISBN_10].orEmpty()
+        ISBN_13 -> result.attributes[ProductAttributes.ISBN_13].orEmpty()
+        PLATFORMS -> result.attributes[ProductAttributes.PLATFORMS].orEmpty()
+        FEATURES -> result.attributes[ProductAttributes.FEATURES].orEmpty()
         IMAGE_URL -> result.imageUrl.orEmpty()
         DESCRIPTION -> result.description.orEmpty()
     }
@@ -87,7 +105,94 @@ object CopyFormatter {
         {description}
     """.trimIndent()
 
-    private val PLACEHOLDER = Regex("""\{([a-z_]+)\}""")
+    /** Default columns for an adapter's custom copy settings. */
+    fun defaultLineFields(source: DataSource): List<CopyField> = when (source) {
+        DataSource.UNITY_ASSET_STORE -> DEFAULT_LINE_FIELDS
+        DataSource.AMAZON_BOOKS -> listOf(
+            CopyField.SKU,
+            CopyField.TITLE,
+            CopyField.AUTHOR,
+            CopyField.PUBLISHER,
+            CopyField.PUBLICATION_DATE,
+            CopyField.ISBN_13,
+            CopyField.URL,
+        )
+        DataSource.GOG -> listOf(
+            CopyField.SKU,
+            CopyField.TITLE,
+            CopyField.AUTHOR,
+            CopyField.PUBLISHER,
+            CopyField.PUBLICATION_DATE,
+            CopyField.PLATFORMS,
+            CopyField.URL,
+        )
+        DataSource.STEAM_STORE, DataSource.IGDB -> DEFAULT_LINE_FIELDS
+    }.filter { it in source.copyFields }
+
+    /** Default template for an adapter's custom copy settings. */
+    fun defaultDetailsTemplate(source: DataSource): String = when (source) {
+        DataSource.UNITY_ASSET_STORE -> """
+            {title}
+            Package ID: {sku}
+            Publisher: {author}
+            Categories: {categories}
+            Price: {price}
+            Rating: {rating}
+            Version: {version}
+            Unity versions: {unity_versions}
+            File size: {file_size}
+            URL: {url}
+
+            {description}
+        """.trimIndent()
+        DataSource.AMAZON_BOOKS -> """
+            {title}
+            ASIN: {sku}
+            Author: {author}
+            Publisher: {publisher}
+            Publication date: {publication_date}
+            Language: {language}
+            Print length: {print_length}
+            ISBN-10: {isbn_10}
+            ISBN-13: {isbn_13}
+            Categories: {categories}
+            Rating: {rating}
+            URL: {url}
+
+            {description}
+        """.trimIndent()
+        DataSource.GOG -> """
+            {title}
+            Product ID: {sku}
+            Developer: {author}
+            Publisher: {publisher}
+            Release date: {publication_date}
+            GOG release date: {gog_release_date}
+            Genres: {categories}
+            Platforms: {platforms}
+            Languages: {language}
+            Price: {price}
+            Rating: {rating}
+            URL: {url}
+
+            {description}
+        """.trimIndent()
+        DataSource.STEAM_STORE, DataSource.IGDB -> """
+            {title}
+            ID: {sku}
+            Developer: {author}
+            Publisher: {publisher}
+            Release date: {publication_date}
+            Categories: {categories}
+            Price: {price}
+            Rating: {rating}
+            URL: {url}
+
+            {description}
+        """.trimIndent()
+    }
+
+    private val PLACEHOLDER = Regex("""\{([a-z0-9_]+)\}""")
 
     /** One delimited line. CSV follows RFC 4180 quoting; TSV flattens tabs and line breaks. */
     fun line(result: ProductResult, fields: List<CopyField>, format: LineFormat): String =
@@ -125,6 +230,62 @@ object CopyFormatter {
             value
         }
 }
+
+private val COMMON_COPY_FIELDS = listOf(
+    CopyField.SKU,
+    CopyField.TITLE,
+    CopyField.AUTHOR,
+    CopyField.CATEGORIES,
+    CopyField.URL,
+    CopyField.SOURCE,
+    CopyField.IMAGE_URL,
+    CopyField.DESCRIPTION,
+)
+
+/**
+ * Fields this source actually collects, in display order. Adapter copy settings only offer
+ * these, because each adapter produces a different set of metadata.
+ */
+val DataSource.copyFields: List<CopyField>
+    get() = COMMON_COPY_FIELDS + when (this) {
+        DataSource.UNITY_ASSET_STORE -> listOf(
+            CopyField.PRICE,
+            CopyField.RATING,
+            CopyField.VERSION,
+            CopyField.LATEST_RELEASE,
+            CopyField.FIRST_PUBLISHED,
+            CopyField.UNITY_VERSIONS,
+            CopyField.FILE_SIZE,
+            CopyField.ASSET_COUNT,
+            CopyField.TAGS,
+        )
+        DataSource.AMAZON_BOOKS -> listOf(
+            CopyField.PUBLISHER,
+            CopyField.PUBLICATION_DATE,
+            CopyField.LANGUAGE,
+            CopyField.PRINT_LENGTH,
+            CopyField.ISBN_10,
+            CopyField.ISBN_13,
+            CopyField.RATING,
+        )
+        DataSource.GOG -> listOf(
+            CopyField.PUBLISHER,
+            CopyField.PUBLICATION_DATE,
+            CopyField.GOG_RELEASE_DATE,
+            CopyField.PLATFORMS,
+            CopyField.LANGUAGE,
+            CopyField.FEATURES,
+            CopyField.TAGS,
+            CopyField.PRICE,
+            CopyField.RATING,
+        )
+        DataSource.STEAM_STORE, DataSource.IGDB -> listOf(
+            CopyField.PUBLISHER,
+            CopyField.PUBLICATION_DATE,
+            CopyField.PRICE,
+            CopyField.RATING,
+        )
+    }
 
 /** English source name used in copied and exported data (UI labels use string resources). */
 val DataSource.displayName: String

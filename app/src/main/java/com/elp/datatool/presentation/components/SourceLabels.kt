@@ -118,9 +118,34 @@ val CopyField.labelRes: Int
         CopyField.FILE_SIZE -> R.string.field_file_size
         CopyField.ASSET_COUNT -> R.string.field_asset_count
         CopyField.TAGS -> R.string.field_tags
+        CopyField.PUBLISHER -> R.string.field_publisher
+        CopyField.PUBLICATION_DATE -> R.string.field_publication_date
+        CopyField.GOG_RELEASE_DATE -> R.string.field_gog_release_date
+        CopyField.LANGUAGE -> R.string.field_language
+        CopyField.PRINT_LENGTH -> R.string.field_print_length
+        CopyField.ISBN_10 -> R.string.field_isbn_10
+        CopyField.ISBN_13 -> R.string.field_isbn_13
+        CopyField.PLATFORMS -> R.string.field_platforms
+        CopyField.FEATURES -> R.string.field_features
         CopyField.IMAGE_URL -> R.string.field_image_url
         CopyField.DESCRIPTION -> R.string.field_description
     }
+
+/** Field label as the given adapter names it; [source] null means the global, adapter-neutral label. */
+@StringRes
+fun CopyField.labelRes(source: DataSource?): Int = when {
+    source == null -> labelRes
+    this == CopyField.SKU -> source.idLabelRes
+    this == CopyField.AUTHOR -> when (source) {
+        DataSource.UNITY_ASSET_STORE -> R.string.field_publisher
+        DataSource.AMAZON_BOOKS -> R.string.field_author
+        DataSource.GOG -> R.string.field_creator_developer
+        DataSource.STEAM_STORE, DataSource.IGDB -> labelRes
+    }
+    this == CopyField.PUBLICATION_DATE && source == DataSource.GOG -> R.string.field_release_date
+    this == CopyField.CATEGORIES && source == DataSource.GOG -> R.string.field_genres
+    else -> labelRes
+}
 
 /** "Package ID 96478" style label. */
 @Composable

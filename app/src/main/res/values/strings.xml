@@ -52,6 +52,18 @@
     <string name="field_file_size">File size</string>
     <string name="field_asset_count">Assets</string>
     <string name="field_tags">Tags</string>
+    <string name="field_publisher">Publisher</string>
+    <string name="field_publication_date">Publication date</string>
+    <string name="field_release_date">Release date</string>
+    <string name="field_gog_release_date">GOG release date</string>
+    <string name="field_language">Language</string>
+    <string name="field_print_length">Print length</string>
+    <string name="field_isbn_10">ISBN-10</string>
+    <string name="field_isbn_13">ISBN-13</string>
+    <string name="field_platforms">Platforms</string>
+    <string name="field_features">Features</string>
+    <string name="field_genres">Genres</string>
+    <string name="field_creator_developer">Developer</string>
     <string name="field_image_url">Image URL</string>
     <string name="field_description">Description</string>
 

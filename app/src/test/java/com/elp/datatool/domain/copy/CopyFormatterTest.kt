@@ -1,10 +1,12 @@
 package com.elp.datatool.domain.copy
 
+import com.elp.datatool.data.sample.SampleData
 import com.elp.datatool.domain.model.DataSource
 import com.elp.datatool.domain.model.ProductAttributes
 import com.elp.datatool.domain.model.ProductResult
 import com.elp.datatool.domain.model.ResultStatus
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CopyFormatterTest {
@@ -95,5 +97,40 @@ class CopyFormatterTest {
     fun price_freeProduct() {
         val free = result.copy(attributes = mapOf(ProductAttributes.IS_FREE to "true"))
         assertEquals("Free", CopyField.PRICE.valueOf(free))
+    }
+
+    @Test
+    fun adapterDefaults_onlyUseFieldsTheAdapterCollects() {
+        DataSource.entries.forEach { source ->
+            val fields = source.copyFields
+            assertTrue(CopyFormatter.defaultLineFields(source).all { it in fields })
+            Regex("""\{([a-z0-9_]+)\}""").findAll(CopyFormatter.defaultDetailsTemplate(source)).forEach { match ->
+                val field = CopyField.fromKey(match.groupValues[1])
+                assertTrue("$source template uses ${match.value}", field != null && field in fields)
+            }
+        }
+    }
+
+    @Test
+    fun details_amazonDefaultTemplateUsesBookMetadata() {
+        val book = SampleData.copyPreviews.getValue(DataSource.AMAZON_BOOKS)
+
+        val text = CopyFormatter.details(book, CopyFormatter.defaultDetailsTemplate(DataSource.AMAZON_BOOKS))
+
+        assertTrue(text.contains("Publisher: Pearson"))
+        assertTrue(text.contains("ISBN-13: 978-0132350884"))
+        assertTrue(text.contains("Print length: 464 pages"))
+        assertTrue(text.contains("Rating: 4.7 (6,214)"))
+    }
+
+    @Test
+    fun line_gogDefaultFieldsUseGameMetadata() {
+        val game = SampleData.copyPreviews.getValue(DataSource.GOG)
+
+        assertEquals(
+            "1207664663\tThe Witcher 3: Wild Hunt\tCD PROJEKT RED\tCD PROJEKT RED\t2015-05-19\tWindows\t" +
+                "https://www.gog.com/en/game/the_witcher_3_wild_hunt",
+            CopyFormatter.line(game, CopyFormatter.defaultLineFields(DataSource.GOG), LineFormat.TSV),
+        )
     }
 }
